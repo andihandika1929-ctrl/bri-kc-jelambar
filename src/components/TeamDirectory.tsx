@@ -150,7 +150,7 @@ export default function TeamDirectory() {
   };
 
   return (
-    <section id="tim-bisnis" className="relative py-16 md:py-24 bg-slate-50 overflow-hidden">
+    <section id="tim-bisnis" className="relative py-16 md:py-20 bg-slate-50 overflow-hidden">
       {/* Background Decorative Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#00529C_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -517,46 +517,6 @@ export default function TeamDirectory() {
             </div>
           </div>
         )}
-
-        {/* Branch Official Help & Consultation Notice */}
-        <div className="mt-14 bg-gradient-to-r from-[#003d75] via-[#00529C] to-[#003d75] text-white rounded-2xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
-          <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-blue-400/20 rounded-full blur-2xl pointer-events-none" />
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-blue-100 text-xs font-semibold uppercase tracking-wider mb-2 border border-white/10">
-                <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-                Layanan Tatap Muka & Helpdesk Kantor Cabang
-              </div>
-              <h4 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                Ingin Bertemu Langsung di Kantor Cabang Jakarta Jelambar?
-              </h4>
-              <p className="text-slate-200 text-sm leading-relaxed">
-                Kunjungi kami di <strong>Jalan Makaliwe Raya No. 35 C Wijaya Kusuma, Grogol, Jakarta Barat 11450</strong>. 
-                Jam operasional: Senin – Jumat (08.00 – 15.00 WIB). Layanan konsultasi kredit komersial, 
-                SME, pembukaan rekening institusi, dan mesin EDC dapat dijadwalkan terlebih dahulu dengan RM terkait.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Jalan+Makaliwe+Raya+No+35C+Wijaya+Kusuma+Grogol+Jakarta+Barat"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-100 text-[#00529C] font-bold text-sm shadow-md transition-all duration-200 text-center"
-              >
-                <Building2 className="w-4 h-4 text-[#00529C]" />
-                <span>Petunjuk Arah Google Maps</span>
-              </a>
-              <a
-                href="tel:1500017"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/20 transition-colors text-center"
-              >
-                <Phone className="w-4 h-4" />
-                <span>Call BRI 1500017</span>
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Floating Toast Notification when copying */}

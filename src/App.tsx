@@ -291,7 +291,7 @@ export default function App() {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all"
               >
                 <Building2 className="w-4 h-4 text-[#00529C]" />
-                <span>Jaringan 7 Unit Kerja Supervisi</span>
+                <span>Jaringan 8 Unit Kerja Supervisi</span>
               </a>
             </div>
 
@@ -306,7 +306,7 @@ export default function App() {
                 <div className="text-xs text-slate-500 font-medium mt-0.5">Respon Cepat WhatsApp</div>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-2xl font-extrabold text-[#00529C]">7 Unit</div>
+                <div className="text-2xl font-extrabold text-[#00529C]">8 Unit</div>
                 <div className="text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi KC Jelambar</div>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
@@ -393,22 +393,22 @@ export default function App() {
       {/* 5. Team Directory Component */}
       <TeamDirectory />
 
-      {/* 6. Branch Network & Supervising Units (7 Official Units) */}
+      {/* 6. Branch Network & Supervising Units (8 Official Units) */}
       <section id="unit-supervisi" className="py-16 bg-white border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#00529C] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
               <Building2 className="w-3.5 h-3.5 text-[#00529C]" />
-              <span>Regional Office Jakarta 3 • Supervisi 7 Kantor Unit</span>
+              <span>Regional Office Jakarta 3 • Supervisi 8 Kantor Unit</span>
             </div>
             <h2 className="text-xs font-bold uppercase tracking-widest text-[#00529C] mb-2">
               JARINGAN KANTOR & SUPERVISI
             </h2>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              7 Unit Kerja di Bawah Supervisi BRI KC Jakarta Jelambar
+              8 Unit Kerja di Bawah Supervisi BRI KC Jakarta Jelambar
             </h3>
             <p className="text-sm text-slate-500 mt-2">
-              Jangkauan pelayanan perbankan mikro, retail, simpanan, dan merchant yang tersebar strategis di seluruh wilayah Jelambar, Angke, Pejagalan, Kapuk, dan sekitarnya.
+              Jangkauan pelayanan perbankan mikro, retail, simpanan, dan merchant yang tersebar strategis di seluruh wilayah Jelambar, Grogol, Angke, Pejagalan, Kapuk, dan sekitarnya.
             </p>
           </div>
 
@@ -551,7 +551,7 @@ export default function App() {
               </div>
 
               <p className="text-slate-600 text-xs leading-relaxed">
-                Kantor Cabang pengelola supervisi 7 Kantor Unit di Jakarta Barat, menghadirkan layanan perbankan terpadu bagi nasabah personal, UMKM, dan korporasi.
+                Kantor Cabang pengelola supervisi 8 Kantor Unit di Jakarta Barat, menghadirkan layanan perbankan terpadu bagi nasabah personal, UMKM, dan korporasi.
               </p>
 
               <div className="space-y-2.5 text-xs text-slate-600 pt-2">

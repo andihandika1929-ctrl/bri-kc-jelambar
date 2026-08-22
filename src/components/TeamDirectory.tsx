@@ -191,7 +191,7 @@ export default function TeamDirectory() {
               <div className="text-xs text-slate-500 font-medium mt-0.5">Konsultasi WhatsApp</div>
             </div>
             <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
-              <div className="text-2xl font-bold text-[#003d75]">7 Unit</div>
+              <div className="text-2xl font-bold text-[#003d75]">8 Unit</div>
               <div className="text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi Cabang</div>
             </div>
           </div>

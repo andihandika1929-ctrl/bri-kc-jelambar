@@ -102,5 +102,18 @@ export const branchUnits: BranchUnit[] = [
       { label: 'EDC Merchant & QRIS Bisnis', dotColor: 'bg-[#00529C]' },
       { label: 'Giro Dagang & Perusahaan', dotColor: 'bg-[#00529C]' },
     ]
+  },
+  {
+    id: 'unit-grogol',
+    name: 'BRI Unit Grogol',
+    shortName: 'Unit Grogol',
+    address: 'Jl. Muwardi II No.43 14, RT.14/RW.3, Grogol, Kec. Grogol petamburan, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11450',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Grogol+Jl+Muwardi+II+No+43+Jakarta+Barat',
+    areaTag: 'Kawasan Pendidikan & Niaga',
+    specializations: [
+      { label: 'KUR Mikro & Kupedes', dotColor: 'bg-[#00529C]' },
+      { label: 'Simpedes & BritAma Bisnis', dotColor: 'bg-[#00529C]' },
+      { label: 'ATM / CRM Setor Tarik 24 Jam', dotColor: 'bg-emerald-500' },
+    ]
   }
 ];

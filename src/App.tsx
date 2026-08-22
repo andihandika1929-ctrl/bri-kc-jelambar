@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TeamDirectory from './components/TeamDirectory';
 import HeroCarousel from './components/HeroCarousel';
+import { branchUnits } from './data/units';
 import {
   Building2,
   Phone,
@@ -290,7 +291,7 @@ export default function App() {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all"
               >
                 <Building2 className="w-4 h-4 text-[#00529C]" />
-                <span>Jaringan 8 Unit Kerja Supervisi</span>
+                <span>Jaringan 7 Unit Kerja Supervisi</span>
               </a>
             </div>
 
@@ -305,7 +306,7 @@ export default function App() {
                 <div className="text-xs text-slate-500 font-medium mt-0.5">Respon Cepat WhatsApp</div>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-2xl font-extrabold text-[#00529C]">8 Unit</div>
+                <div className="text-2xl font-extrabold text-[#00529C]">7 Unit</div>
                 <div className="text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi KC Jelambar</div>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
@@ -392,281 +393,82 @@ export default function App() {
       {/* 5. Team Directory Component */}
       <TeamDirectory />
 
-      {/* 6. Branch Network & Supervising Units (8 Official Units) */}
+      {/* 6. Branch Network & Supervising Units (7 Official Units) */}
       <section id="unit-supervisi" className="py-16 bg-white border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#00529C] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
               <Building2 className="w-3.5 h-3.5 text-[#00529C]" />
-              <span>Regional Office Jakarta 3 • Supervisi 8 Kantor Unit</span>
+              <span>Regional Office Jakarta 3 • Supervisi 7 Kantor Unit</span>
             </div>
             <h2 className="text-xs font-bold uppercase tracking-widest text-[#00529C] mb-2">
               JARINGAN KANTOR & SUPERVISI
             </h2>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              8 Unit Kerja di Bawah Supervisi BRI KC Jakarta Jelambar
+              7 Unit Kerja di Bawah Supervisi BRI KC Jakarta Jelambar
             </h3>
             <p className="text-sm text-slate-500 mt-2">
-              Jangkauan pelayanan perbankan mikro, retail, simpanan, dan merchant yang tersebar strategis di seluruh wilayah Jelambar, Grogol, Angke, Pejagalan, dan sekitarnya.
+              Jangkauan pelayanan perbankan mikro, retail, simpanan, dan merchant yang tersebar strategis di seluruh wilayah Jelambar, Angke, Pejagalan, Kapuk, dan sekitarnya.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {/* 1. Unit Grogol */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {branchUnits.map((unit) => (
+              <div
+                key={unit.id}
+                className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                      {unit.shortName}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Grogol
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Grogol
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Kyai Tapa No. 101, Grogol, Jakarta Barat</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>KUR Mikro & Kupedes</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Simpedes & BritAma Bisnis</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>ATM / CRM Setor Tarik 24 Jam</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Kawasan Pendidikan & Niaga</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
 
-            {/* 2. Unit Pejagalan */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Pejagalan
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Pejagalan
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Pejagalan Raya No. 42, Penjaringan / Jakbar</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>KUR Mikro Sektor Perdagangan</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>QRIS Dinamis & Mesin EDC</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Pendaftaran AgenBRILink</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Sentra Pasar & Niaga</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
+                  <a
+                    href={unit.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block group/link"
+                    title={`Buka peta lokasi Google Maps ${unit.name}`}
+                  >
+                    <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover/link:text-[#00529C] transition-colors flex items-center gap-1">
+                      <span>{unit.name}</span>
+                      <ExternalLink className="w-3.5 h-3.5 opacity-60 text-[#00529C]" />
+                    </h4>
+                    <div className="flex items-start gap-1.5 text-[11px] text-slate-500 mb-3 group-hover/link:text-[#00529C] transition-colors">
+                      <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
+                      <span className="line-clamp-2 leading-relaxed group-hover/link:underline">{unit.address}</span>
+                    </div>
+                  </a>
 
-            {/* 3. Unit Dutamas */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
+                  <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
+                    {unit.specializations.map((spec, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5">
+                        <span className={`w-1.5 h-1.5 rounded-full ${spec.dotColor || 'bg-[#00529C]'}`} />
+                        <span>{spec.label}</span>
+                      </div>
+                    ))}
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Dutamas
-                  </span>
                 </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Dutamas
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Komplek Ruko Taman Dutamas Blok A, Jelambar</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Pinjaman Usaha Ritel & Ruko</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Simpanan Giro & Deposito</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-700"></span>Konsultasi Mantri Finansial</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Kawasan Komersial Ruko</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
 
-            {/* 4. Unit Angke */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Unit Angke
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Angke
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Tubagus Angke Raya No. 45, Jakarta Barat</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Mesin EDC Android & Soundbox</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Kupedes Cepat & Modal Kerja</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Layanan Kasir & CRM Teller</div>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                  <span className="text-slate-400 font-medium">{unit.areaTag}</span>
+                  <a
+                    href={unit.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#00529C] font-bold hover:underline flex items-center gap-1"
+                  >
+                    <span>Buka Maps</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Sentra Kuliner & Retail</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-
-            {/* 5. Unit Kapuk Raya */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Kapuk Raya
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Kapuk Raya
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Kapuk Raya No. 88, Cengkareng / Grogol</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Pembiayaan Industri Kecil</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Tabungan Payroll Pegawai</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>KUR Super Mikro Ringan</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Kawasan Pergudangan</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-
-            {/* 6. Unit Keamanan */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Keamanan
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Keamanan
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Keamanan Raya No. 15, Keagungan / Jelambar</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>KUR Mikro Klaster Pedagang</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Asuransi Mikro AM-KKM</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Aktivasi Digital BRImo Bisnis</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Klaster Usaha Mikro</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-
-            {/* 7. Unit Wijaya Kusuma */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Wijaya Kusuma
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Wijaya Kusuma
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Wijaya Kusuma No. 28, Jelambar, Jakbar</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Perbankan Komunitas UMKM</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Pinjaman Musiman & Kupedes</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Layanan Kasir & Pembayaran</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Sentra Pemukiman & UMKM</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-
-            {/* 8. Unit Pinangsia Timur */}
-            <div className="group bg-slate-50 hover:bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Unit Pinangsia Timur
-                  </span>
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover:text-[#00529C] transition-colors">
-                  BRI Unit Pinangsia Timur
-                </h4>
-                <div className="flex items-start gap-1 text-[11px] text-slate-500 mb-3">
-                  <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
-                  <span>Jl. Pinangsia Timur No. 33, Glodok / Taman Sari</span>
-                </div>
-                <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Solusi Transaksi Grosir & B2B</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>EDC Merchant & QRIS Bisnis</div>
-                  <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#00529C]"></span>Giro Dagang & Perusahaan</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-medium">Sentra Perdagangan Grosir</span>
-                <a href="#tim-bisnis" className="text-[#00529C] font-bold hover:underline flex items-center gap-0.5">
-                  Mantri <ChevronRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -749,7 +551,7 @@ export default function App() {
               </div>
 
               <p className="text-slate-600 text-xs leading-relaxed">
-                Kantor Cabang pengelola supervisi 8 Kantor Unit di Jakarta Barat, menghadirkan layanan perbankan terpadu bagi nasabah personal, UMKM, dan korporasi.
+                Kantor Cabang pengelola supervisi 7 Kantor Unit di Jakarta Barat, menghadirkan layanan perbankan terpadu bagi nasabah personal, UMKM, dan korporasi.
               </p>
 
               <div className="space-y-2.5 text-xs text-slate-600 pt-2">

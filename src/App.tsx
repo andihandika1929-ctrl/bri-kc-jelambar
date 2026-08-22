@@ -692,6 +692,10 @@ export default function App() {
                   <span>Senin - Jumat: 08.00 - 15.00 WIB</span>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
+                  <Phone className="w-4 h-4 text-[#00529C]" />
+                  <a href="tel:02156981105" className="text-[#00529C] hover:underline font-semibold">(021) 56981105</a>
+                </div>
+                <div className="flex items-center gap-1.5 font-medium">
                   <Mail className="w-4 h-4 text-[#00529C]" />
                   <a href="mailto:kcjelambarbri@gmail.com" className="text-[#00529C] hover:underline font-semibold">kcjelambarbri@gmail.com</a>
                 </div>
@@ -755,7 +759,9 @@ export default function App() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-[#00529C] flex-shrink-0" />
-                  <span>(021) 566-8901 / 566-8902</span>
+                  <a href="tel:02156981105" className="text-slate-600 hover:text-[#00529C] font-semibold transition-colors">
+                    (021) 56981105
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#00529C] flex-shrink-0" />

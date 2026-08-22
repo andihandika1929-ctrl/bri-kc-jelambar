@@ -34,6 +34,7 @@ import {
   PiggyBank,
   BadgePercent,
   Store,
+  RotateCcw,
   LayoutGrid
 } from 'lucide-react';
 
@@ -53,6 +54,8 @@ export default function TeamDirectory() {
         return <BadgePercent className="w-4 h-4" />;
       case 'PiggyBank':
         return <PiggyBank className="w-4 h-4" />;
+      case 'RotateCcw':
+        return <RotateCcw className="w-4 h-4" />;
       default:
         return <LayoutGrid className="w-4 h-4" />;
     }
@@ -67,6 +70,8 @@ export default function TeamDirectory() {
         matchesTab = member.segment === 'Lending' || member.segment === 'Mikro';
       } else if (activeTab === 'funding') {
         matchesTab = member.segment === 'Funding';
+      } else if (activeTab === 'restrukturisasi') {
+        matchesTab = member.segment === 'Collection' || member.segment === 'CRR';
       }
 
       // 2. Search query filtering
@@ -87,7 +92,9 @@ export default function TeamDirectory() {
           (topicNorm.includes('kur') && spec.toLowerCase().includes('kur')) ||
           (topicNorm.includes('giro') && (spec.toLowerCase().includes('giro') || spec.toLowerCase().includes('payroll'))) ||
           (topicNorm.includes('kmk') && spec.toLowerCase().includes('kmk')) ||
-          (topicNorm.includes('kupedes') && spec.toLowerCase().includes('kupedes'))
+          (topicNorm.includes('kupedes') && spec.toLowerCase().includes('kupedes')) ||
+          (topicNorm.includes('restrukturisasi') && (spec.toLowerCase().includes('restrukturisasi') || spec.toLowerCase().includes('recovery'))) ||
+          (topicNorm.includes('angsuran') && (spec.toLowerCase().includes('angsuran') || spec.toLowerCase().includes('portofolio')))
         );
       }
 
@@ -101,6 +108,7 @@ export default function TeamDirectory() {
       all: teamMembers.length,
       lending: teamMembers.filter((m) => m.segment === 'Lending' || m.segment === 'Mikro').length,
       funding: teamMembers.filter((m) => m.segment === 'Funding').length,
+      restrukturisasi: teamMembers.filter((m) => m.segment === 'Collection' || m.segment === 'CRR').length,
     };
   }, []);
 
@@ -140,6 +148,18 @@ export default function TeamDirectory() {
           dot: 'bg-indigo-600',
           label: 'Kredit Mikro & KUR',
         };
+      case 'Collection':
+        return {
+          bg: 'bg-sky-50 text-[#00529C] border-sky-200',
+          dot: 'bg-[#00529C]',
+          label: 'Collection & Portofolio',
+        };
+      case 'CRR':
+        return {
+          bg: 'bg-teal-50 text-teal-800 border-teal-200',
+          dot: 'bg-teal-700',
+          label: 'Restrukturisasi & CRR',
+        };
       default:
         return {
           bg: 'bg-slate-100 text-slate-700 border-slate-200',
@@ -172,8 +192,8 @@ export default function TeamDirectory() {
           </h2>
 
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Terhubung langsung dengan <strong>7 Relationship Manager resmi BRI KC Jakarta Jelambar</strong>. 
-            Konsultasikan kebutuhan kredit usaha, simpanan giro/deposito, serta pembiayaan mikro KUR dengan respon cepat via WhatsApp.
+            Terhubung langsung dengan <strong>{teamMembers.length} Relationship Manager resmi BRI KC Jakarta Jelambar</strong>. 
+            Konsultasikan kebutuhan kredit usaha, simpanan giro/deposito, pembiayaan mikro KUR, restrukturisasi komersial, hingga penanganan portofolio via WhatsApp.
           </p>
 
           {/* Quick Statistics Strip */}
@@ -183,8 +203,8 @@ export default function TeamDirectory() {
               <div className="text-xs text-slate-500 font-medium mt-0.5">Petugas Resmi KC Jelambar</div>
             </div>
             <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
-              <div className="text-2xl font-bold text-[#00529C]">3 Segmen</div>
-              <div className="text-xs text-slate-500 font-medium mt-0.5">Kredit, Simpanan & Mikro</div>
+              <div className="text-2xl font-bold text-[#00529C]">4 Segmen</div>
+              <div className="text-xs text-slate-500 font-medium mt-0.5">Kredit, Dana, CRR & Mikro</div>
             </div>
             <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
               <div className="text-2xl font-bold text-emerald-600">Respon Cepat</div>
@@ -247,7 +267,7 @@ export default function TeamDirectory() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari nama RM, layanan (KUR, KMK, Giro, Deposito, Payroll)..."
+                placeholder="Cari nama RM, layanan (KUR, KMK, Giro, Deposito, Restrukturisasi)..."
                 className="w-full pl-10 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00529C]/30 focus:border-[#00529C] transition-all"
               />
               {searchQuery && (
@@ -330,7 +350,8 @@ export default function TeamDirectory() {
                 member.phone,
                 member.name,
                 member.role,
-                selectedTopic !== 'Semua Topik' ? selectedTopic : undefined
+                selectedTopic !== 'Semua Topik' ? selectedTopic : undefined,
+                member.customWhatsAppText
               );
 
               return (
@@ -345,7 +366,11 @@ export default function TeamDirectory() {
                         ? 'bg-[#00529C]'
                         : member.segment === 'Lending'
                         ? 'bg-blue-600'
-                        : 'bg-indigo-500'
+                        : member.segment === 'Mikro'
+                        ? 'bg-indigo-500'
+                        : member.segment === 'CRR'
+                        ? 'bg-teal-600'
+                        : 'bg-sky-600'
                     }`}
                   />
 
@@ -358,7 +383,7 @@ export default function TeamDirectory() {
                           className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-100 text-[#00529C] font-extrabold text-lg sm:text-xl flex items-center justify-center border-2 border-blue-200 shadow-sm group-hover:scale-105 transition-transform duration-300 select-none"
                           title={member.name}
                         >
-                          {getInitials(member.name)}
+                          {getInitials(member.name, member.initials)}
                         </div>
                         <span
                           className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"
@@ -542,7 +567,7 @@ export default function TeamDirectory() {
 
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-full bg-blue-100 text-[#00529C] font-black text-base flex items-center justify-center border border-blue-200 flex-shrink-0 select-none">
-                {getInitials(selectedRMForModal.name)}
+                {getInitials(selectedRMForModal.name, selectedRMForModal.initials)}
               </div>
               <div>
                 <h4 className="font-bold text-slate-900 text-base">{selectedRMForModal.name}</h4>
@@ -577,7 +602,9 @@ export default function TeamDirectory() {
                 Pratinjau Pesan WhatsApp:
               </div>
               <p className="text-xs text-slate-700 italic">
-                &ldquo;Halo Bapak/Ibu {selectedRMForModal.name}, saya ingin konsultasi mengenai layanan {customInquiryService || 'perbankan'}...&rdquo;
+                {customInquiryService
+                  ? `“Halo Bapak/Ibu ${selectedRMForModal.name}, saya ingin berkonsultasi mengenai layanan ${customInquiryService}...”`
+                  : `“${selectedRMForModal.customWhatsAppText || `Halo Bapak/Ibu ${selectedRMForModal.name}, saya tertarik untuk konsultasi...`}”`}
               </p>
             </div>
 
@@ -593,7 +620,8 @@ export default function TeamDirectory() {
                   selectedRMForModal.phone,
                   selectedRMForModal.name,
                   selectedRMForModal.role,
-                  customInquiryService || undefined
+                  customInquiryService || undefined,
+                  selectedRMForModal.customWhatsAppText
                 )}
                 target="_blank"
                 rel="noopener noreferrer"

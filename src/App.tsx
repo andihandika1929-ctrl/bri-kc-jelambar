@@ -310,8 +310,8 @@ export default function App() {
                 <div className="text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi KC Jelambar</div>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-2xl font-extrabold text-[#00529C]">3 Segmen</div>
-                <div className="text-xs text-slate-500 font-medium mt-0.5">Kredit, Simpanan & Mikro</div>
+                <div className="text-2xl font-extrabold text-[#00529C]">4 Segmen</div>
+                <div className="text-xs text-slate-500 font-medium mt-0.5">Kredit, Dana, CRR & Mikro</div>
               </div>
             </div>
           </div>

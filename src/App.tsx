@@ -60,21 +60,21 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] overflow-x-hidden w-full max-w-full relative">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] overflow-x-hidden w-full max-w-full relative p-0 m-0">
       {/* 1. Real-time Branch Operational Status Bar & 2. Navbar Header */}
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 pointer-events-auto ${
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 pointer-events-auto border-none shadow-none m-0 p-0 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100'
+            ? 'bg-white/95 backdrop-blur-md shadow-xs'
             : 'bg-transparent border-transparent shadow-none'
         }`}
       >
-        {/* Real-time Top Operational Bar */}
+        {/* Real-time Top Operational Bar (Border-none, Zero Gap) */}
         <TopOperationalBar />
 
-        {/* Main Dynamic Navbar Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="flex items-center justify-between h-16 sm:h-20">
+        {/* Main Dynamic Navbar Container (Zero Margins, Border-none) */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-none shadow-none m-0">
+          <div className="flex items-center justify-between h-16 sm:h-20 border-none shadow-none m-0">
             {/* BRI KC Jelambar Logo & Identity */}
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <img
@@ -119,7 +119,7 @@ export default function App() {
             </div>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium whitespace-nowrap flex-shrink-0">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium whitespace-nowrap flex-shrink-0 border-none shadow-none m-0">
               <a
                 href="#beranda"
                 className={`transition-colors duration-300 whitespace-nowrap ${
@@ -343,8 +343,8 @@ export default function App() {
         )}
       </header>
 
-      {/* 3. Hero Section (Official BRI Full-Width Hero Carousel & Floating 'I WANT' Bar) */}
-      <section id="beranda" className="relative w-full max-w-full overflow-hidden pt-8 sm:pt-10">
+      {/* 3. Hero Section (Official BRI Full-Width Hero Carousel & Floating 'I WANT' Bar - Zero Gaps / Seamless) */}
+      <section id="beranda" className="relative w-full max-w-full overflow-hidden p-0 m-0 border-none shadow-none">
         <HeroCarousel />
       </section>
 
@@ -675,7 +675,7 @@ export default function App() {
       </section>
 
       {/* 10. Modern Corporate Blue Footer (Official Bank BRI Guidelines: #003B99) */}
-      <footer className="bg-[#003B99] text-white text-xs pt-14 sm:pt-16 pb-12 border-t border-blue-900/40 w-full max-w-full">
+      <footer className="bg-[#003B99] text-white text-xs pt-14 sm:pt-16 pb-12 border-none shadow-none w-full max-w-full m-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 sm:mb-12 w-full">
             {/* Col 1: Logo & Branch Profile */}

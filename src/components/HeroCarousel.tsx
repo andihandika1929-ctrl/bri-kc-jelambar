@@ -182,10 +182,10 @@ export default function HeroCarousel() {
   };
 
   return (
-    <div className="relative w-full max-w-full overflow-hidden bg-transparent">
-      {/* 1. Full-Bleed Clean Hero Banner Carousel (Zero black borders) */}
+    <div className="relative w-full max-w-full overflow-hidden bg-transparent p-0 m-0 border-none shadow-none">
+      {/* 1. Full-Bleed Clean Hero Banner Carousel (Zero black borders / Zero gaps) */}
       <div
-        className="relative w-full overflow-hidden bg-transparent"
+        className="relative w-full overflow-hidden bg-transparent p-0 m-0 border-none shadow-none"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={handleTouchStart}
@@ -198,7 +198,7 @@ export default function HeroCarousel() {
         <div className="absolute bottom-0 inset-x-0 h-24 md:h-36 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none z-10" />
 
         {/* Aspect Ratio Container */}
-        <div className="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] lg:aspect-[28/10] min-h-[300px] xs:min-h-[340px] sm:min-h-[440px] md:min-h-[520px] lg:min-h-[600px] max-h-[700px] bg-slate-900">
+        <div className="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] lg:aspect-[28/10] min-h-[300px] xs:min-h-[340px] sm:min-h-[440px] md:min-h-[520px] lg:min-h-[600px] max-h-[700px] bg-slate-900 p-0 m-0 border-none shadow-none">
           {bannerSlides.map((slide, index) => {
             const isActive = index === currentSlide;
             return (

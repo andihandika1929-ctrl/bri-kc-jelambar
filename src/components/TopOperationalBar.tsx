@@ -73,7 +73,7 @@ export default function TopOperationalBar() {
   }, []);
 
   return (
-    <div className="w-full bg-[#0052CC] text-white text-[11px] sm:text-xs py-1.5 px-3 sm:px-6 border-b border-blue-400/20 relative z-50">
+    <div className="w-full bg-[#0052CC] text-white text-[11px] sm:text-xs py-1.5 px-3 sm:px-6 border-none shadow-none m-0 relative z-50">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-4">
         {/* Real-time Status Indicator */}
         <div className="flex items-center gap-2 truncate">

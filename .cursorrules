@@ -90,6 +90,7 @@ Wajib mematuhi nomenklatur baku kantor cabang Bank BRI (tanpa istilah direksi / 
 
 - Framework: React 18, TypeScript, Tailwind CSS v3.4, Lucide React icons, Vite 5.
 - Fixed Navigation: Seluruh header/navbar menggunakan `fixed top-0 left-0 right-0 w-full z-[999] bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200` dengan safe top padding `pt-32 sm:pt-36 md:pt-40` pada hero section di bawahnya agar konten tidak tertimpa.
+- Halaman Aktivitas (`/aktivitas`): Menampilkan status resmi "Pembaruan Sistem Informasi" (Under Construction / Segera Hadir) yang mobile-friendly tanpa data dummy.
 - Filter Tabs & Quick Pills: Container tombol filter kategori menggunakan `flex flex-wrap items-center justify-center gap-2 md:gap-3 max-w-4xl mx-auto px-4 mt-6 mb-4` dengan tombol `px-4 py-2 text-xs md:text-sm font-semibold rounded-full whitespace-nowrap` agar tidak terpotong pada layar mobile/tablet.
 - Responsivitas & Overflow:
   * Container root wajib memiliki `overflow-x-hidden w-full max-w-full`. Tidak boleh ada `overflow-y: hidden` di html/body/root yang memotong vertical window scroll.

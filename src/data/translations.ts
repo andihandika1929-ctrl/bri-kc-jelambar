@@ -237,6 +237,9 @@ export const translations = {
       readTime: 'Waktu Baca:',
       emptyTitle: 'Tidak Ada Berita yang Ditemukan',
       emptyDesc: 'Coba gunakan kata kunci pencarian lain atau pilih kategori "Semua Berita".',
+      maintenanceBadge: 'PEMBARUAN SISTEM INFORMASI',
+      maintenanceTitle: 'Kanal Aktivitas & Publikasi Cabang Sedang Disiapkan',
+      maintenanceDesc: 'Kanal dokumentasi kegiatan, rilis informasi resmi, dan publikasi program BRI KC Jakarta Jelambar sedang dalam tahap penataan berkala untuk menyajikan informasi terkini yang akurat dan transparan.',
     },
 
     // Organization & Structure Page
@@ -495,6 +498,9 @@ export const translations = {
       readTime: 'Read Time:',
       emptyTitle: 'No News Found',
       emptyDesc: 'Please try searching with other keywords or select the "All News" category.',
+      maintenanceBadge: 'SYSTEM UPDATE',
+      maintenanceTitle: 'Branch Activities & Publications Channel Coming Soon',
+      maintenanceDesc: 'The official activity documentation and publication channel of BRI KC Jakarta Jelambar is undergoing regular updates to present accurate and transparent information.',
     },
 
     // Organization & Structure Page
@@ -753,6 +759,9 @@ export const translations = {
       readTime: '预计阅读：',
       emptyTitle: '未找到相关新闻动态',
       emptyDesc: '请尝试其他搜索关键词或选择“全部动态”分类。',
+      maintenanceBadge: '系统更新',
+      maintenanceTitle: '支行动态与官方发布专区正在筹备中',
+      maintenanceDesc: 'BRI KC Jakarta Jelambar 的官方活动记录与发布专区正在进行定期系统维护与内容编排，以呈现最新且透明的信息。',
     },
 
     // Organization & Structure Page

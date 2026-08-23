@@ -116,7 +116,7 @@ Wajib diurutkan secara alfabetis (A - Z):
 - **Anti Horizontal Overflow**: Root wrapper wajib menggunakan `overflow-x-hidden w-full max-w-full`.
 - **Zero Gap Header**: Tidak boleh ada jarak atau divider putih antara TopBar, Navbar, dan Hero Carousel (`p-0 m-0 border-none shadow-none`).
 - **Multi-Language Switcher (i18n)**: Mendukung 3 bahasa (🇮🇩 ID: Bahasa Indonesia, 🇬🇧 EN: English, 🇨🇳 ZH: 中文) melalui `LanguageProvider` dan `useLanguage()` hook dengan persistensi `localStorage`.
-- **Rute Terpisah & Navigasi**: Halaman Beranda (`/` / `#beranda`), Aktivitas & Berita (`/aktivitas` / `#aktivitas`), dan Struktur Organisasi & Jobdesk (`/struktur` / `#struktur`).
+- **Rute Terpisah & Navigasi**: Halaman Beranda (`/` / `#beranda`), Aktivitas & Berita (`/aktivitas` / `#aktivitas` - Status Pembaruan Sistem Informasi / Under Construction Card), dan Struktur Organisasi & Jobdesk (`/struktur` / `#struktur`).
 - **Nomenklatur Baku Struktur Organisasi Cabang**:
   * Pimpinan Kantor Cabang: Adi Sujarwanto (Pemimpin Cabang / Branch Office Head - Solo Header)
   * Manajer Operasional & Bisnis: Jaka Farisa (MOL), Dwiyanto Ario Putro (MBK), Denis Sepriyanto (MBM), Eugenia Javanica (MDT)

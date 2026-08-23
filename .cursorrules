@@ -1,0 +1,76 @@
+# ==============================================================================
+# CURSOR & AI CODING RULES - BRI KC JAKARTA JELAMBAR PORTAL
+# ==============================================================================
+
+# 1. IDENTITAS & PROFIL RESMI KANTOR CABANG
+- Nama Unit Kerja : PT Bank Rakyat Indonesia (Persero) Tbk — Kantor Cabang Jakarta Jelambar
+- Supervisi Wilayah: Regional Office Jakarta 3 (Supervisi 8 Kantor Unit Kerja di Jakarta Barat)
+- Alamat Kantor    : Jalan Makaliwe Raya No. 35 C Wijaya Kusuma, RT.2/RW.5, Grogol, Kec. Grogol Petamburan, Kota Jakarta Barat, DKI Jakarta 11450
+- Telepon Resmi    : (021) 56981105 (Format link: tel:02156981105)
+- Email Resmi      : kcjelambarbri@gmail.com (Format link: mailto:kcjelambarbri@gmail.com)
+- Jam Operasional  : Senin – Jumat pukul 08.00 – 15.00 WIB
+
+# 2. BRAND COLOR PALETTE SYSTEM (MODERN BANK BRI GUIDELINES)
+Semua kode CSS/Tailwind HARUS mematuhi palet warna resmi berikut (JANGAN gunakan warna navy/gelap kusam):
+- Primary Brand Blue   : `#0052CC` (Header, Navbar Brand, Tombol Utama, Judul Section, Slider, Border Tab Aktif)
+- Secondary Blue       : `#2563EB` (Aksen interaktif, badge icon highlight)
+- Button Hover Blue    : `#1D4ED8` (State hover tombol utama `hover:bg-[#1D4ED8]`)
+- Corporate Footer Blue: `#003B99` (Latar belakang Footer resmi dengan teks putih dan muted `#DBEAFE`)
+- Soft Blue Tint       : `#EFF6FF` (`bg-blue-50`) & `#DBEAFE` (`bg-blue-100` / `border-blue-200`) (Background box kalkulator, avatar AVA UI, badge segmen)
+- Pure Clean White     : `#FFFFFF` (Surface kartu utama dengan border `border-slate-200/90` dan `shadow-sm`)
+- Clean Slate Body     : `#F8FAFC` (Background utama seluruh body halaman)
+- Secondary Accent     : `#F37021` (Badge promo khusus bunga/DP) & `#059669` / `#10B981` (WhatsApp & status online)
+- ZERO TOLERANCE: Dilarang menggunakan warna navy usang seperti `#00529C`, `#003366`, `#003d75`, `#002D62`, atau background hitam pekat.
+
+# 3. STRUKTUR & URUTAN KOMPONEN HALAMAN UTAMA (App.tsx)
+Urutan 10 bagian wajib pada landing page:
+1. TopOperationalBar (Status Operasional Real-time WIB, Live Clock, Hotline 1500017, Sabrina WA)
+2. Navbar Header (Sticky `bg-white/95 backdrop-blur-md`, Logo BRI, Nav Links, Tombol Panduan Berkas & Konsultasi RM)
+3. Hero Section (HeroCarousel Banner + Floating "I WANT" selector)
+4. Welcome & Profile Branch (Profil KC Jelambar, Quick Actions, Statistik Strip)
+5. Layanan Bisnis & Digital (#layanan - Simpanan, Kredit SME, Solusi Merchant, Restrukturisasi)
+6. Tim RM Directory (#tim-bisnis - 10 Relationship Manager resmi)
+7. Dynamic Loan Calculator (#simulasi - KPR, KKB Kendaraan, BRIguna)
+8. Jaringan Supervisi 8 Kantor Unit (#unit-supervisi - Angke s.d Wijaya Kusuma)
+9. Panduan Dokumen & FAQ Layanan (#panduan - Accordion checklist persyaratan & tombol buka modal)
+10. Lokasi & Alamat Cabang (#lokasi - Google Maps deep link & nomor (021) 56981105)
+11. Modern Corporate Footer (`bg-[#003B99]` - Legalitas OJK & LPS)
+
+# 4. STANDAR DIRECTORY TIM RELATIONSHIP MANAGER (data/team.ts)
+- Format Foto: Wajib Avatar Inisial Bulat (AVA UI):
+  `w-14 h-14 rounded-full bg-blue-100 text-[#0052CC] font-black flex items-center justify-center border-2 border-blue-200`
+- Total 10 RM Resmi Terverifikasi:
+  1. Ahmad Firdaus (RM Dana & Funding, AF, 0813-4090-2924)
+  2. Syafira Febrianty (RM Dana & Funding, SF, 0877-7745-0533)
+  3. Dani Faisal (RM Dana & Funding, DF, 0858-6718-3671)
+  4. Utama Farid (RM Kredit Komersial & SME, UF, 0813-3078-5880)
+  5. Fahmi Sidik (RM SME, FS, 0877-6271-545)
+  6. Adam Werna Kusuma (RM Kredit Mikro & KUR, AW, 0812-9452-0098)
+  7. Rezki Fitra Ridhoni (RM Kredit Mikro & KUR, RF, 0822-8338-2914)
+  8. Afriyadie Ramadhan (RM Kredit Mikro & KUR, AR, 0812-8454-6809)
+  9. Sutan Pardamean Hasibuan (RM Collection, ST, 0877-7393-3322)
+  10. Yasin Nugraha (RM CRR, YN, 0821-7777-3888)
+- Tombol WA: `https://wa.me/62...` dengan parameter `text` otomatis.
+- Fitur Salin Kontak: Tombol salin nomor telepon dengan floating toast feedback.
+
+# 5. STANDAR JARINGAN 8 KANTOR UNIT SUPERVISI (data/units.ts)
+Wajib terurut alfabetis (A - Z):
+1. BRI Unit Angke
+2. BRI Unit Dutamas
+3. BRI Unit Grogol
+4. BRI Unit Kapuk Raya
+5. BRI Unit Keamanan
+6. BRI Unit Pejagalan
+7. BRI Unit Pinangsia Timur
+8. BRI Unit Wijaya Kusuma
+Setiap kartu unit harus memiliki tautan langsung ke Google Maps (`target="_blank" rel="noopener noreferrer"`).
+
+# 6. STANDAR TEKNIS & KUALITAS KODE (REACT + TYPESCRIPT + VITE)
+- Framework: React 18, TypeScript, Tailwind CSS v3.4, Lucide React icons, Vite 5.
+- Responsivitas & Overflow:
+  * Container root wajib memiliki `overflow-x-hidden w-full max-w-full`.
+  * Standar container: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`.
+  * Grid responsif: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` atau `lg:grid-cols-4`.
+  * Tombol aksi dalam kartu harus adaptif (`flex-col sm:flex-row`).
+- Tidak boleh ada jeda/gap pixel putih liar antara TopBar, Navbar, dan Hero Carousel Banner (`p-0 m-0 border-none shadow-none`).
+- Wajib verifikasi build sebelum selesai: `npm run build` harus sukses dengan 0 error / warning TypeScript.

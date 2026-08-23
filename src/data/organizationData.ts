@@ -1332,11 +1332,11 @@ export const organizationData: OrgPerson[] = [
   {
     id: 'l5-atin',
     name: 'Atin Prihatin',
-    role: 'Team Support (Backoffice)',
+    role: 'Team Support Operasional (Backoffice)',
     roleI18n: {
-      id: 'Team Support (Backoffice)',
-      en: 'Team Support (Backoffice Processing)',
-      zh: '后台综合运营支持专员 (Backoffice)'
+      id: 'Team Support Operasional (Backoffice)',
+      en: 'Operations Support Staff (Backoffice)',
+      zh: '后台运营支持专员'
     },
     level: 5,
     departmentKey: 'frontline_support',
@@ -1346,21 +1346,50 @@ export const organizationData: OrgPerson[] = [
       en: 'Operational Support, IT & Backoffice Cluster',
       zh: '运营保障、IT与后台综合事务组'
     },
-    departmentName: 'Divisi Pembukuan & Keuangan Intern',
+    departmentName: 'Penunjang Operasional & Layanan Cabang',
+    departmentNameI18n: {
+      id: 'Penunjang Operasional & Layanan Cabang',
+      en: 'Branch Operations & Service Support',
+      zh: '支行运营与服务支持部'
+    },
     initials: 'AP',
     jobdesk: [
-      'Pembukuan transaksi intern cabang, rekonsiliasi pos gl-account harian, dan verifikasi warkat backoffice.',
-      'Penyusunan neraca dan laporan laba rugi cabang harian/bulanan serta rekonsiliasi pos keuangan.'
-    ]
+      'Asistensi penatausahaan dan verifikasi kelengkapan berkas administrasi operasional kantor cabang.',
+      'Mendukung rekonsiliasi data penunjang dokumen transaksi harian serta pengarsipan internal backoffice.',
+      'Membantu kelancaran koordinasi administrasi antar-unit kerja penunjang layanan operasional.'
+    ],
+    jobdeskI18n: {
+      id: [
+        'Asistensi penatausahaan dan verifikasi kelengkapan berkas administrasi operasional kantor cabang.',
+        'Mendukung rekonsiliasi data penunjang dokumen transaksi harian serta pengarsipan internal backoffice.',
+        'Membantu kelancaran koordinasi administrasi antar-unit kerja penunjang layanan operasional.'
+      ],
+      en: [
+        'Assisting daily operational documentation, administrative filing, and verification of branch transaction documents.',
+        'Supporting daily transactional data reconciliation and internal backoffice filing management.',
+        'Facilitating inter-unit administrative coordination to ensure smooth branch operational support.'
+      ],
+      zh: [
+        '协助办理支行日常运营文件整理、后台行政事务支持及内部档案管理。',
+        '支持每日交易辅助单据对账以及后台内部档案管理与合规维护。',
+        '协助各支持部门间的日常行政协调，确保支行前后台运营高效顺畅。'
+      ]
+    },
+    kpis: ['Tertib Arsip Operasional', 'Ketelitian Verifikasi', 'Dukungan Layanan'],
+    kpisI18n: {
+      id: ['Tertib Arsip Operasional', 'Ketelitian Verifikasi', 'Dukungan Layanan'],
+      en: ['Operational Filing Order', 'Verification Accuracy', 'Service Support'],
+      zh: ['运营档案规范', '单据核对准确率', '后台支持效率']
+    }
   },
   {
     id: 'l5-rakhmad',
     name: 'Rakhmad Dwi Yunianto',
-    role: 'Team Support (Backoffice)',
+    role: 'Team Support Administrasi (Backoffice)',
     roleI18n: {
-      id: 'Team Support (Backoffice)',
-      en: 'Team Support (Backoffice Logistics)',
-      zh: '后台后勤与保障专员 (Backoffice)'
+      id: 'Team Support Administrasi (Backoffice)',
+      en: 'Administration Support Staff (Backoffice)',
+      zh: '后台行政支持专员'
     },
     level: 5,
     departmentKey: 'frontline_support',
@@ -1370,12 +1399,41 @@ export const organizationData: OrgPerson[] = [
       en: 'Operational Support, IT & Backoffice Cluster',
       zh: '运营保障、IT与后台综合事务组'
     },
-    departmentName: 'Divisi Umum & Rumah Tangga Cabang',
+    departmentName: 'Penunjang Operasional & Layanan Cabang',
+    departmentNameI18n: {
+      id: 'Penunjang Operasional & Layanan Cabang',
+      en: 'Branch Operations & Service Support',
+      zh: '支行运营与服务支持部'
+    },
     initials: 'RD',
     jobdesk: [
-      'Pengelolaan logistik operasional, pengadaan ATK/formulir perbankan, dan kelancaran sarana gedung kantor.',
-      'Pengelolaan inventaris gedung kantor, sarana operasional armada dinas, dan fasilitas penunjang kerja cabang.'
-    ]
+      'Asistensi pencatatan dan pengelolaan tertib administrasi dokumen operasional cabang.',
+      'Membantu verifikasi data penunjang pelaporan internal serta penataan dokumen fisik operasional.',
+      'Mendukung kelancaran pelaksanaan tugas-tugas administratif backoffice secara terpadu.'
+    ],
+    jobdeskI18n: {
+      id: [
+        'Asistensi pencatatan dan pengelolaan tertib administrasi dokumen operasional cabang.',
+        'Membantu verifikasi data penunjang pelaporan internal serta penataan dokumen fisik operasional.',
+        'Mendukung kelancaran pelaksanaan tugas-tugas administratif backoffice secara terpadu.'
+      ],
+      en: [
+        'Assisting operational documentation, administrative filing, and internal office support.',
+        'Supporting data verification for internal reports and physical operational file organization.',
+        'Ensuring integrated execution of general backoffice administrative workflows.'
+      ],
+      zh: [
+        '协助办理支行日常运营文件整理、后台行政事务支持及内部档案管理。',
+        '协助核对内部管理报告辅助数据并做好纸质档案分类存放。',
+        '全面支持后台日常综合行政事务的高效运转与协同执行。'
+      ]
+    },
+    kpis: ['Administrasi Terpadu', 'Kelengkapan Dokumen', 'Disiplin Rekonsiliasi'],
+    kpisI18n: {
+      id: ['Administrasi Terpadu', 'Kelengkapan Dokumen', 'Disiplin Rekonsiliasi'],
+      en: ['Integrated Administration', 'Document Completeness', 'Reconciliation Discipline'],
+      zh: ['综合行政规范', '单据完整性', '对账执行力']
+    }
   }
 ];
 

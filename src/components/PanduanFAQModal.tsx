@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   faqList,
   faqCategories,
@@ -30,8 +30,7 @@ import {
   ExternalLink,
   ShieldCheck,
   Layers,
-  Sparkles,
-  Printer
+  Sparkles
 } from 'lucide-react';
 
 interface PanduanFAQModalProps {
@@ -48,8 +47,39 @@ export default function PanduanFAQModal({
   const { t, language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [expandedId, setExpandedId] = useState<string>(faqList[0].id);
+  const [expandedId, setExpandedId] = useState<string>(faqList[0]?.id || '');
   const [copiedGroup, setCopiedGroup] = useState<string | null>(null);
+
+  // Sync initial category when modal opens
+  useEffect(() => {
+    if (isOpen && initialCategory) {
+      setSelectedCategory(initialCategory);
+    }
+  }, [isOpen, initialCategory]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow === 'hidden' ? '' : originalOverflow || 'unset';
+      };
+    }
+  }, [isOpen]);
+
+  // Handle ESC key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, onClose]);
 
   // Filtered FAQ list
   const filteredFAQs = useMemo(() => {
@@ -109,13 +139,20 @@ export default function PanduanFAQModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
+    <div
+      className="fixed inset-0 z-[1000] bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 overflow-y-auto animate-in fade-in duration-150"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       {/* Modal Container */}
-      <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden relative animate-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] sm:max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden relative animate-in zoom-in-95 duration-200 z-[1001]">
         
-        {/* Modal Header (Modern Brand Blue) */}
-        <div className="bg-[#0052CC] text-white p-5 sm:p-6 flex items-center justify-between border-b border-blue-400/20 relative flex-shrink-0">
-          <div className="flex items-center gap-3 min-w-0 pr-8">
+        {/* Sticky Modal Header (Modern Brand Blue #0052CC) */}
+        <div className="sticky top-0 z-20 bg-[#0052CC] text-white p-4 sm:p-6 flex items-center justify-between border-b border-blue-400/20 shadow-xs flex-shrink-0">
+          <div className="flex items-center gap-3 min-w-0 pr-4">
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 flex-shrink-0">
               <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
@@ -134,12 +171,13 @@ export default function PanduanFAQModal({
             </div>
           </div>
 
+          {/* High-contrast Round Close Button (X) */}
           <button
             onClick={onClose}
-            className="text-white/80 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors flex-shrink-0 cursor-pointer"
-            aria-label="Tutup Modal Panduan"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer flex-shrink-0 shadow-xs active:scale-95"
+            aria-label="Tutup Panduan"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -167,7 +205,7 @@ export default function PanduanFAQModal({
             )}
           </div>
 
-          {/* Category Filter Pills */}
+          {/* Category Filter Pills (Responsive Wrap & Scroll) */}
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1">
             {faqCategories.map((cat) => {
               const isSelected = selectedCategory === cat.id;
@@ -190,7 +228,7 @@ export default function PanduanFAQModal({
         </div>
 
         {/* Accordion FAQ Content List (Scrollable) */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4 max-h-[calc(92vh-220px)]">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
           {filteredFAQs.length > 0 ? (
             filteredFAQs.map((item) => {
               const isExpanded = expandedId === item.id;
@@ -350,17 +388,17 @@ export default function PanduanFAQModal({
           )}
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500 flex-shrink-0">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-[#0052CC]" />
-            <span>Dokumen diverifikasi resmi oleh Tim Bisnis BRI KC Jakarta Jelambar</span>
+        {/* Modal Sticky Bottom Footer */}
+        <div className="sticky bottom-0 z-20 p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs text-slate-500 flex-shrink-0">
+          <div className="flex items-center gap-1.5 justify-center sm:justify-start">
+            <ShieldCheck className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
+            <span className="text-[11px] sm:text-xs">Dokumen diverifikasi resmi oleh Tim Bisnis BRI KC Jakarta Jelambar</span>
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition-colors cursor-pointer"
+            className="w-full sm:w-auto px-6 py-2.5 bg-[#0052CC] hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-xs cursor-pointer text-center"
           >
-            Tutup
+            {language === 'zh' ? '关闭指南' : language === 'en' ? 'Close Guide' : 'Tutup Panduan'}
           </button>
         </div>
       </div>

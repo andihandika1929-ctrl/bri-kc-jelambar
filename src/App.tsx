@@ -511,28 +511,21 @@ function MainApp() {
               {t.welcome.desc}
             </p>
 
-            {/* Quick Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 sm:mb-10 w-full sm:w-auto">
+            {/* Primary Action Buttons (Clean 2-Button Focus) */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-8 sm:mb-10 w-full sm:w-auto">
               <a
                 href="#tim-bisnis"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all hover:scale-[1.02] text-center"
               >
-                <Users className="w-4 h-4 text-white" />
+                <MessageCircle className="w-4 h-4 fill-white text-[#0052CC]" />
                 <span>{t.welcome.btnTeam}</span>
               </a>
               <button
-                onClick={() => navigateTo('activities')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 hover:border-[#0052CC] text-slate-800 font-bold text-sm shadow-xs transition-all text-center cursor-pointer"
+                onClick={() => openFAQModal('all')}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 hover:border-[#0052CC] hover:text-[#0052CC] text-slate-800 font-bold text-sm shadow-xs transition-all text-center cursor-pointer"
               >
-                <Newspaper className="w-4 h-4 text-[#0052CC]" />
-                <span>{t.nav.activities}</span>
-              </button>
-              <button
-                onClick={() => navigateTo('org')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all text-center cursor-pointer"
-              >
-                <Network className="w-4 h-4 text-[#0052CC]" />
-                <span>{t.nav.org}</span>
+                <FileText className="w-4 h-4 text-[#0052CC]" />
+                <span>{t.welcome.btnFaq}</span>
               </button>
             </div>
 

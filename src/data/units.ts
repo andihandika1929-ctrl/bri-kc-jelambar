@@ -21,8 +21,8 @@ export const branchUnits: BranchUnit[] = [
     areaTag: 'Sentra Kuliner & Retail',
     specializations: [
       { label: 'Mesin EDC Android & Soundbox', dotColor: 'bg-emerald-500' },
-      { label: 'Kupedes Cepat & Modal Kerja', dotColor: 'bg-[#00529C]' },
-      { label: 'Layanan Kasir & CRM Teller', dotColor: 'bg-[#00529C]' },
+      { label: 'Kupedes Cepat & Modal Kerja', dotColor: 'bg-[#0052CC]' },
+      { label: 'Layanan Kasir & CRM Teller', dotColor: 'bg-[#0052CC]' },
     ]
   },
   {
@@ -33,9 +33,9 @@ export const branchUnits: BranchUnit[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Dutamas+Blok+A3+Jalan+Kusuma+No+37+Jakarta+Barat',
     areaTag: 'Kawasan Komersial Ruko',
     specializations: [
-      { label: 'Pinjaman Usaha Ritel & Ruko', dotColor: 'bg-[#00529C]' },
-      { label: 'Simpanan Giro & Deposito', dotColor: 'bg-[#00529C]' },
-      { label: 'Konsultasi Mantri Finansial', dotColor: 'bg-blue-700' },
+      { label: 'Pinjaman Usaha Ritel & Ruko', dotColor: 'bg-[#0052CC]' },
+      { label: 'Simpanan Giro & Deposito', dotColor: 'bg-[#0052CC]' },
+      { label: 'Konsultasi Mantri Finansial', dotColor: 'bg-[#2563EB]' },
     ]
   },
   {
@@ -46,8 +46,8 @@ export const branchUnits: BranchUnit[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Grogol+Jl+Muwardi+II+No+43+Jakarta+Barat',
     areaTag: 'Kawasan Pendidikan & Niaga',
     specializations: [
-      { label: 'KUR Mikro & Kupedes', dotColor: 'bg-[#00529C]' },
-      { label: 'Simpedes & BritAma Bisnis', dotColor: 'bg-[#00529C]' },
+      { label: 'KUR Mikro & Kupedes', dotColor: 'bg-[#0052CC]' },
+      { label: 'Simpedes & BritAma Bisnis', dotColor: 'bg-[#0052CC]' },
       { label: 'ATM / CRM Setor Tarik 24 Jam', dotColor: 'bg-emerald-500' },
     ]
   },
@@ -59,9 +59,9 @@ export const branchUnits: BranchUnit[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Kapuk+Raya+No+4A+Cengkareng+Jakarta+Barat',
     areaTag: 'Kawasan Pergudangan',
     specializations: [
-      { label: 'Pembiayaan Industri Kecil', dotColor: 'bg-[#00529C]' },
-      { label: 'Tabungan Payroll Pegawai', dotColor: 'bg-[#00529C]' },
-      { label: 'KUR Super Mikro Ringan', dotColor: 'bg-blue-600' },
+      { label: 'Pembiayaan Industri Kecil', dotColor: 'bg-[#0052CC]' },
+      { label: 'Tabungan Payroll Pegawai', dotColor: 'bg-[#0052CC]' },
+      { label: 'KUR Super Mikro Ringan', dotColor: 'bg-[#2563EB]' },
     ]
   },
   {
@@ -72,9 +72,9 @@ export const branchUnits: BranchUnit[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Keamanan+Jl+Keamanan+No+46+Taman+Sari+Jakarta+Barat',
     areaTag: 'Klaster Usaha Mikro',
     specializations: [
-      { label: 'KUR Mikro Klaster Pedagang', dotColor: 'bg-[#00529C]' },
+      { label: 'KUR Mikro Klaster Pedagang', dotColor: 'bg-[#0052CC]' },
       { label: 'Asuransi Mikro AM-KKM', dotColor: 'bg-emerald-500' },
-      { label: 'Aktivasi Digital BRImo Bisnis', dotColor: 'bg-[#00529C]' },
+      { label: 'Aktivasi Digital BRImo Bisnis', dotColor: 'bg-[#0052CC]' },
     ]
   },
   {
@@ -85,9 +85,9 @@ export const branchUnits: BranchUnit[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Pejagalan+Jl+Pejagalan+Raya+No+13+Jakarta+Barat',
     areaTag: 'Sentra Pasar & Niaga',
     specializations: [
-      { label: 'KUR Mikro Sektor Perdagangan', dotColor: 'bg-[#00529C]' },
+      { label: 'KUR Mikro Sektor Perdagangan', dotColor: 'bg-[#0052CC]' },
       { label: 'QRIS Dinamis & Mesin EDC', dotColor: 'bg-emerald-500' },
-      { label: 'Pendaftaran AgenBRILink', dotColor: 'bg-[#00529C]' },
+      { label: 'Pendaftaran AgenBRILink', dotColor: 'bg-[#0052CC]' },
     ]
   },
   {
@@ -99,8 +99,8 @@ export const branchUnits: BranchUnit[] = [
     areaTag: 'Sentra Perdagangan Grosir',
     specializations: [
       { label: 'Solusi Transaksi Grosir & B2B', dotColor: 'bg-emerald-500' },
-      { label: 'EDC Merchant & QRIS Bisnis', dotColor: 'bg-[#00529C]' },
-      { label: 'Giro Dagang & Perusahaan', dotColor: 'bg-[#00529C]' },
+      { label: 'EDC Merchant & QRIS Bisnis', dotColor: 'bg-[#0052CC]' },
+      { label: 'Giro Dagang & Perusahaan', dotColor: 'bg-[#0052CC]' },
     ]
   },
   {
@@ -111,8 +111,8 @@ export const branchUnits: BranchUnit[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BRI+Unit+Wijaya+Kusuma+Jl+Jelambar+Baru+Raya+No+29+A+Jakarta+Barat',
     areaTag: 'Sentra Pemukiman & UMKM',
     specializations: [
-      { label: 'Perbankan Komunitas UMKM', dotColor: 'bg-[#00529C]' },
-      { label: 'Pinjaman Musiman & Kupedes', dotColor: 'bg-[#00529C]' },
+      { label: 'Perbankan Komunitas UMKM', dotColor: 'bg-[#0052CC]' },
+      { label: 'Pinjaman Musiman & Kupedes', dotColor: 'bg-[#0052CC]' },
       { label: 'Layanan Kasir & Pembayaran', dotColor: 'bg-emerald-500' },
     ]
   }

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import TeamDirectory from './components/TeamDirectory';
+import TopOperationalBar from './components/TopOperationalBar';
 import HeroCarousel from './components/HeroCarousel';
+import TeamDirectory from './components/TeamDirectory';
+import LoanCalculator from './components/LoanCalculator';
+import PanduanFAQSection from './components/PanduanFAQSection';
+import PanduanFAQModal from './components/PanduanFAQModal';
+import ScrollToTop from './components/ScrollToTop';
 import { branchUnits } from './data/units';
 import { teamMembers } from './data/team';
 import {
@@ -23,12 +28,16 @@ import {
   Users,
   CheckCircle2,
   Mail,
-  RotateCcw
+  RotateCcw,
+  Calculator,
+  FileText
 } from 'lucide-react';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [faqModalOpen, setFaqModalOpen] = useState(false);
+  const [faqModalCategory, setFaqModalCategory] = useState('all');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,16 +54,24 @@ export default function App() {
     };
   }, []);
 
+  const openFAQModal = (category: string = 'all') => {
+    setFaqModalCategory(category);
+    setFaqModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] overflow-x-hidden w-full max-w-full relative">
-      {/* 1 & 2. Dynamic Sticky Navbar on Scroll (Official bri.co.id Style) */}
+      {/* 1. Real-time Branch Operational Status Bar & 2. Navbar Header */}
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 pointer-events-auto ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-slate-100'
+            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100'
             : 'bg-transparent border-transparent shadow-none'
         }`}
       >
+        {/* Real-time Top Operational Bar */}
+        <TopOperationalBar />
+
         {/* Main Dynamic Navbar Container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex items-center justify-between h-16 sm:h-20">
@@ -76,7 +93,7 @@ export default function App() {
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <span
                     className={`text-sm sm:text-base md:text-lg font-black tracking-tight leading-none transition-colors duration-300 truncate ${
-                      isScrolled ? 'text-[#00529C]' : 'text-white drop-shadow-md'
+                      isScrolled ? 'text-[#0052CC]' : 'text-white drop-shadow-md'
                     }`}
                   >
                     KC Jakarta Jelambar
@@ -84,7 +101,7 @@ export default function App() {
                   <span
                     className={`hidden xs:inline-flex px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                       isScrolled
-                        ? 'bg-blue-50 text-[#00529C] border border-blue-200'
+                        ? 'bg-blue-50 text-[#0052CC] border border-blue-200'
                         : 'bg-white/20 text-white border border-white/30 backdrop-blur-xs'
                     }`}
                   >
@@ -102,12 +119,12 @@ export default function App() {
             </div>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium whitespace-nowrap flex-shrink-0">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium whitespace-nowrap flex-shrink-0">
               <a
                 href="#beranda"
                 className={`transition-colors duration-300 whitespace-nowrap ${
                   isScrolled
-                    ? 'text-slate-700 hover:text-[#00529C]'
+                    ? 'text-slate-700 hover:text-[#0052CC]'
                     : 'text-white hover:text-blue-200 drop-shadow-md'
                 }`}
               >
@@ -117,7 +134,7 @@ export default function App() {
                 href="#layanan"
                 className={`transition-colors duration-300 whitespace-nowrap ${
                   isScrolled
-                    ? 'text-slate-700 hover:text-[#00529C]'
+                    ? 'text-slate-700 hover:text-[#0052CC]'
                     : 'text-white hover:text-blue-200 drop-shadow-md'
                 }`}
               >
@@ -127,27 +144,47 @@ export default function App() {
                 href="#tim-bisnis"
                 className={`transition-colors duration-300 whitespace-nowrap ${
                   isScrolled
-                    ? 'text-slate-700 hover:text-[#00529C]'
+                    ? 'text-slate-700 hover:text-[#0052CC]'
                     : 'text-white hover:text-blue-200 drop-shadow-md'
                 }`}
               >
                 Tim RM
               </a>
               <a
+                href="#simulasi"
+                className={`transition-colors duration-300 whitespace-nowrap ${
+                  isScrolled
+                    ? 'text-slate-700 hover:text-[#0052CC]'
+                    : 'text-white hover:text-blue-200 drop-shadow-md'
+                }`}
+              >
+                Simulasi
+              </a>
+              <a
                 href="#unit-supervisi"
                 className={`transition-colors duration-300 whitespace-nowrap ${
                   isScrolled
-                    ? 'text-slate-700 hover:text-[#00529C]'
+                    ? 'text-slate-700 hover:text-[#0052CC]'
                     : 'text-white hover:text-blue-200 drop-shadow-md'
                 }`}
               >
                 Unit Kerja
               </a>
               <a
+                href="#panduan"
+                className={`transition-colors duration-300 whitespace-nowrap ${
+                  isScrolled
+                    ? 'text-slate-700 hover:text-[#0052CC]'
+                    : 'text-white hover:text-blue-200 drop-shadow-md'
+                }`}
+              >
+                Panduan & FAQ
+              </a>
+              <a
                 href="#lokasi"
                 className={`transition-colors duration-300 whitespace-nowrap ${
                   isScrolled
-                    ? 'text-slate-700 hover:text-[#00529C]'
+                    ? 'text-slate-700 hover:text-[#0052CC]'
                     : 'text-white hover:text-blue-200 drop-shadow-md'
                 }`}
               >
@@ -155,11 +192,24 @@ export default function App() {
               </a>
             </nav>
 
-            {/* Header Right Action Button (Official BRI Blue Pill Shape) */}
-            <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+            {/* Header Right Action Button (Modern BRI Blue Pill Shape) */}
+            <div className="hidden sm:flex items-center gap-2.5 flex-shrink-0">
+              <button
+                onClick={() => openFAQModal('all')}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold border transition-all cursor-pointer ${
+                  isScrolled
+                    ? 'border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-[#0052CC] hover:text-[#0052CC]'
+                    : 'border-white/30 text-white bg-white/10 hover:bg-white/20 backdrop-blur-xs'
+                }`}
+                title="Buka Panduan Berkas & Syarat"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Panduan Berkas</span>
+              </button>
+
               <a
                 href="#tim-bisnis"
-                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#00529C] hover:bg-[#003d75] text-white text-xs sm:text-sm font-extrabold shadow-md shadow-blue-900/20 transition-all active:scale-95 hover:scale-105 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-extrabold shadow-md shadow-blue-600/20 transition-all active:scale-95 hover:scale-105 whitespace-nowrap"
               >
                 <MessageCircle className="w-4 h-4 fill-white" />
                 <span>Konsultasi RM</span>
@@ -186,7 +236,7 @@ export default function App() {
         {/* Mobile Dropdown Drawer */}
         {mobileMenuOpen && (
           <div
-            className={`lg:hidden px-4 pt-3 pb-6 space-y-2 transition-all duration-300 shadow-2xl border-b ${
+            className={`lg:hidden px-4 pt-3 pb-6 space-y-2 transition-all duration-300 shadow-2xl border-b max-h-[80vh] overflow-y-auto ${
               isScrolled
                 ? 'bg-white/98 text-slate-800 border-slate-200'
                 : 'bg-slate-950/95 backdrop-blur-xl border-white/15 text-white'
@@ -220,6 +270,15 @@ export default function App() {
               Direktori Tim Relationship Manager ({teamMembers.length} RM)
             </a>
             <a
+              href="#simulasi"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`block px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
+              }`}
+            >
+              Simulasi Angsuran Kredit (KPR, KKB, BRIguna)
+            </a>
+            <a
               href="#unit-supervisi"
               onClick={() => setMobileMenuOpen(false)}
               className={`block px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
@@ -227,6 +286,15 @@ export default function App() {
               }`}
             >
               Jaringan 8 Kantor Unit Supervisi
+            </a>
+            <a
+              href="#panduan"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`block px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
+              }`}
+            >
+              Panduan Dokumen & FAQ Layanan
             </a>
             <a
               href="#lokasi"
@@ -239,6 +307,17 @@ export default function App() {
             </a>
 
             <div className="pt-3 border-t border-slate-200/40 space-y-2">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openFAQModal('all');
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border border-[#0052CC]/30 bg-blue-50 text-[#0052CC]"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Buka Modal Panduan Persyaratan Berkas</span>
+              </button>
+
               <a
                 href="tel:02156981105"
                 className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-colors ${
@@ -247,14 +326,14 @@ export default function App() {
                     : 'border-white/20 text-white bg-white/5'
                 }`}
               >
-                <Phone className="w-4 h-4 text-[#00529C]" />
+                <Phone className="w-4 h-4 text-[#0052CC]" />
                 <span>Telepon Cabang: (021) 56981105</span>
               </a>
 
               <a
                 href="#tim-bisnis"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#00529C] hover:bg-[#003d75] text-white text-sm font-bold shadow-md text-center"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-sm font-bold shadow-md text-center"
               >
                 <MessageCircle className="w-4 h-4 fill-white" />
                 <span>Konsultasi Relationship Manager</span>
@@ -264,8 +343,8 @@ export default function App() {
         )}
       </header>
 
-      {/* 3. Official BRI Style Full-Width Hero Carousel & Floating 'I WANT' Bar */}
-      <section id="beranda" className="relative w-full max-w-full overflow-hidden">
+      {/* 3. Hero Section (Official BRI Full-Width Hero Carousel & Floating 'I WANT' Bar) */}
+      <section id="beranda" className="relative w-full max-w-full overflow-hidden pt-8 sm:pt-10">
         <HeroCarousel />
       </section>
 
@@ -273,14 +352,14 @@ export default function App() {
       <section className="pt-10 sm:pt-14 md:pt-16 pb-12 sm:pb-14 bg-gradient-to-b from-[#F8FAFC] to-white border-b border-slate-200 w-full max-w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#00529C] text-xs font-bold uppercase tracking-wider mb-4 border border-blue-200">
-              <Building2 className="w-4 h-4 text-[#00529C]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider mb-4 border border-blue-200">
+              <Building2 className="w-4 h-4 text-[#0052CC]" />
               <span>Portal Profil Resmi Kantor Cabang</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
               Melayani Setulus Hati, Menggerakkan Ekonomi{' '}
-              <span className="text-[#00529C]">
+              <span className="text-[#0052CC]">
                 Jakarta Barat
               </span>
             </h2>
@@ -296,24 +375,31 @@ export default function App() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 sm:mb-10 w-full sm:w-auto">
               <a
                 href="#tim-bisnis"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#00529C] hover:bg-[#003d75] text-white font-bold text-sm shadow-md shadow-blue-900/20 transition-all hover:scale-[1.02] text-center"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all hover:scale-[1.02] text-center"
               >
                 <Users className="w-4 h-4 text-white" />
                 <span>Lihat Struktur Tim & Chat RM</span>
               </a>
               <a
-                href="#unit-supervisi"
+                href="#simulasi"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all text-center"
               >
-                <Building2 className="w-4 h-4 text-[#00529C]" />
-                <span>Jaringan 8 Unit Kerja Supervisi</span>
+                <Calculator className="w-4 h-4 text-[#0052CC]" />
+                <span>Simulasi Angsuran Kredit</span>
               </a>
+              <button
+                onClick={() => openFAQModal('all')}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0052CC] font-bold text-sm border border-blue-200 transition-all text-center cursor-pointer"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Panduan Berkas & FAQ</span>
+              </button>
             </div>
 
             {/* Statistics Cards Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-left w-full">
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-xl sm:text-2xl font-black text-[#00529C]">100%</div>
+                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">100%</div>
                 <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Petugas Resmi Terverifikasi</div>
               </div>
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
@@ -321,11 +407,11 @@ export default function App() {
                 <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Respon Cepat WhatsApp</div>
               </div>
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-xl sm:text-2xl font-black text-[#00529C]">8 Unit</div>
+                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">8 Unit</div>
                 <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi KC Jelambar</div>
               </div>
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-xl sm:text-2xl font-black text-[#00529C]">4 Segmen</div>
+                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">4 Segmen</div>
                 <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Kredit, Dana, CRR & Mikro</div>
               </div>
             </div>
@@ -333,11 +419,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. Core Banking Services Highlights */}
+      {/* 4. Layanan Bisnis & Digital (Core Banking Services Highlights) */}
       <section id="layanan" className="py-14 sm:py-16 bg-white border-b border-slate-200 w-full max-w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#00529C] mb-2">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[#0052CC] mb-2">
               PORTOFOLIO LAYANAN UNGGULAN
             </h2>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
@@ -347,9 +433,9 @@ export default function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
             {/* Service 1 */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-[#00529C]/40 hover:shadow-md transition-all flex flex-col justify-between w-full">
+            <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-[#0052CC]/40 hover:shadow-md transition-all flex flex-col justify-between w-full">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#0052CC] flex items-center justify-center mb-4">
                   <PiggyBank className="w-6 h-6" />
                 </div>
                 <h4 className="font-bold text-slate-900 text-base mb-2">Simpanan & Cash Management</h4>
@@ -357,15 +443,23 @@ export default function App() {
                   Giro Rupiah & Valas, Payroll BRI, Deposito Berjangka dengan bunga kompetitif, dan Cash Management System (CMS).
                 </p>
               </div>
-              <a href="#tim-bisnis" className="text-xs font-bold text-[#00529C] hover:text-[#003d75] flex items-center gap-1 mt-2">
-                Konsultasi RM Dana <ChevronRight className="w-3.5 h-3.5" />
-              </a>
+              <div className="flex items-center justify-between pt-2">
+                <a href="#tim-bisnis" className="text-xs font-bold text-[#0052CC] hover:text-[#1D4ED8] flex items-center gap-1">
+                  Konsultasi RM Dana <ChevronRight className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={() => openFAQModal('giro')}
+                  className="text-[11px] font-semibold text-slate-500 hover:text-[#0052CC] underline cursor-pointer"
+                >
+                  Syarat Giro
+                </button>
+              </div>
             </div>
 
             {/* Service 2 */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-[#00529C]/40 hover:shadow-md transition-all flex flex-col justify-between w-full">
+            <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-[#0052CC]/40 hover:shadow-md transition-all flex flex-col justify-between w-full">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#0052CC] flex items-center justify-center mb-4">
                   <CreditCard className="w-6 h-6" />
                 </div>
                 <h4 className="font-bold text-slate-900 text-base mb-2">Kredit Komersial & SME</h4>
@@ -373,9 +467,17 @@ export default function App() {
                   Kredit Modal Kerja (KMK), Kredit Investasi pengembangan pabrik/ruko, serta fasilitas Bank Garansi tender.
                 </p>
               </div>
-              <a href="#tim-bisnis" className="text-xs font-bold text-[#00529C] hover:text-[#003d75] flex items-center gap-1 mt-2">
-                Konsultasi RM Kredit <ChevronRight className="w-3.5 h-3.5" />
-              </a>
+              <div className="flex items-center justify-between pt-2">
+                <a href="#tim-bisnis" className="text-xs font-bold text-[#0052CC] hover:text-[#1D4ED8] flex items-center gap-1">
+                  Konsultasi RM Kredit <ChevronRight className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={() => openFAQModal('sme')}
+                  className="text-[11px] font-semibold text-slate-500 hover:text-[#0052CC] underline cursor-pointer"
+                >
+                  Syarat SME
+                </button>
+              </div>
             </div>
 
             {/* Service 3 */}
@@ -389,9 +491,17 @@ export default function App() {
                   Pengadaan mesin EDC Android modern, QRIS Statis/Dinamis kasir, BRI Soundbox, dan settlement dana cepat.
                 </p>
               </div>
-              <a href="#tim-bisnis" className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 mt-2">
-                Konsultasi Merchant <ChevronRight className="w-3.5 h-3.5" />
-              </a>
+              <div className="flex items-center justify-between pt-2">
+                <a href="#tim-bisnis" className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                  Konsultasi Merchant <ChevronRight className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={() => openFAQModal('merchant')}
+                  className="text-[11px] font-semibold text-slate-500 hover:text-emerald-700 underline cursor-pointer"
+                >
+                  Syarat EDC
+                </button>
+              </div>
             </div>
 
             {/* Service 4 */}
@@ -405,26 +515,37 @@ export default function App() {
                   Penataan skema kewajiban kredit komersial, keringanan angsuran usaha, dan konsultasi recovery pembiayaan.
                 </p>
               </div>
-              <a href="#tim-bisnis" className="text-xs font-bold text-teal-800 hover:text-teal-900 flex items-center gap-1 mt-2">
-                Konsultasi RM CRR <ChevronRight className="w-3.5 h-3.5" />
-              </a>
+              <div className="flex items-center justify-between pt-2">
+                <a href="#tim-bisnis" className="text-xs font-bold text-teal-800 hover:text-teal-900 flex items-center gap-1">
+                  Konsultasi RM CRR <ChevronRight className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={() => openFAQModal('crr')}
+                  className="text-[11px] font-semibold text-slate-500 hover:text-teal-800 underline cursor-pointer"
+                >
+                  Prosedur CRR
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. Team Directory Component */}
+      {/* 5. Tim RM (Direktori Relationship Manager) */}
       <TeamDirectory />
 
-      {/* 6. Branch Network & Supervising Units (8 Official Units) */}
+      {/* 6. Kalkulator Simulasi Pinjaman (Loan Calculator) */}
+      <LoanCalculator />
+
+      {/* 7. Jaringan Supervisi 8 Kantor Unit */}
       <section id="unit-supervisi" className="py-14 sm:py-16 bg-white border-t border-slate-200 w-full max-w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#00529C] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
-              <Building2 className="w-3.5 h-3.5 text-[#00529C]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
+              <Building2 className="w-3.5 h-3.5 text-[#0052CC]" />
               <span>Regional Office Jakarta 3 • Supervisi 8 Kantor Unit</span>
             </div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#00529C] mb-2">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[#0052CC] mb-2">
               JARINGAN KANTOR & SUPERVISI
             </h2>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
@@ -439,14 +560,14 @@ export default function App() {
             {branchUnits.map((unit) => (
               <div
                 key={unit.id}
-                className="group bg-slate-50 hover:bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-[#00529C]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between w-full"
+                className="group bg-slate-50 hover:bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-[#0052CC]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between w-full"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#00529C] flex items-center justify-center font-bold text-xs group-hover:bg-[#00529C] group-hover:text-white transition-colors flex-shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#0052CC] flex items-center justify-center font-bold text-xs group-hover:bg-[#0052CC] group-hover:text-white transition-colors flex-shrink-0">
                       <Building2 className="w-4 h-4" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 truncate">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#0052CC] border border-blue-200 truncate">
                       {unit.shortName}
                     </span>
                   </div>
@@ -458,12 +579,12 @@ export default function App() {
                     className="block group/link"
                     title={`Buka peta lokasi Google Maps ${unit.name}`}
                   >
-                    <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover/link:text-[#00529C] transition-colors flex items-center gap-1">
+                    <h4 className="font-bold text-slate-900 text-sm mb-1.5 group-hover/link:text-[#0052CC] transition-colors flex items-center gap-1">
                       <span className="break-words">{unit.name}</span>
-                      <ExternalLink className="w-3 h-3 opacity-60 text-[#00529C] flex-shrink-0" />
+                      <ExternalLink className="w-3 h-3 opacity-60 text-[#0052CC] flex-shrink-0" />
                     </h4>
-                    <div className="flex items-start gap-1.5 text-[11px] text-slate-500 mb-3 group-hover/link:text-[#00529C] transition-colors">
-                      <MapPin className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-1.5 text-[11px] text-slate-500 mb-3 group-hover/link:text-[#0052CC] transition-colors">
+                      <MapPin className="w-3.5 h-3.5 text-[#0052CC] flex-shrink-0 mt-0.5" />
                       <span className="line-clamp-2 leading-relaxed break-words group-hover/link:underline">{unit.address}</span>
                     </div>
                   </a>
@@ -471,7 +592,7 @@ export default function App() {
                   <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200/70">
                     {unit.specializations.map((spec, idx) => (
                       <div key={idx} className="flex items-center gap-1.5">
-                        <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${spec.dotColor || 'bg-[#00529C]'}`} />
+                        <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${spec.dotColor || 'bg-[#0052CC]'}`} />
                         <span className="truncate">{spec.label}</span>
                       </div>
                     ))}
@@ -484,7 +605,7 @@ export default function App() {
                     href={unit.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#00529C] font-bold hover:underline flex items-center gap-1 flex-shrink-0"
+                    className="text-[#0052CC] font-bold hover:underline flex items-center gap-1 flex-shrink-0"
                   >
                     <span>Buka Maps</span>
                     <ExternalLink className="w-3 h-3" />
@@ -496,12 +617,15 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6.1 Interactive Location & Google Maps Card */}
+      {/* 8. Panduan Dokumen & FAQ Layanan (Posisi Baru Tepat Sebelum Lokasi Utama) */}
+      <PanduanFAQSection onOpenModal={openFAQModal} />
+
+      {/* 9. Lokasi & Alamat Kantor Cabang Utama (dengan nomor (021) 56981105) */}
       <section id="lokasi" className="py-12 sm:py-14 bg-[#F8FAFC] border-t border-slate-200 w-full max-w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 w-full">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#00529C] text-xs font-bold uppercase tracking-wider border border-blue-200">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider border border-blue-200">
                 <MapPin className="w-3.5 h-3.5" />
                 <span>Alamat & Lokasi Kantor Cabang</span>
               </div>
@@ -513,16 +637,16 @@ export default function App() {
               </p>
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-slate-600 pt-1">
                 <div className="flex items-center gap-1.5 font-medium">
-                  <Clock className="w-4 h-4 text-[#00529C] flex-shrink-0" />
+                  <Clock className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
                   <span>Senin - Jumat: 08.00 - 15.00 WIB</span>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
-                  <Phone className="w-4 h-4 text-[#00529C] flex-shrink-0" />
-                  <a href="tel:02156981105" className="text-[#00529C] hover:underline font-semibold">(021) 56981105</a>
+                  <Phone className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
+                  <a href="tel:02156981105" className="text-[#0052CC] hover:underline font-semibold">(021) 56981105</a>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
-                  <Mail className="w-4 h-4 text-[#00529C] flex-shrink-0" />
-                  <a href="mailto:kcjelambarbri@gmail.com" className="text-[#00529C] hover:underline font-semibold break-all">kcjelambarbri@gmail.com</a>
+                  <Mail className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
+                  <a href="mailto:kcjelambarbri@gmail.com" className="text-[#0052CC] hover:underline font-semibold break-all">kcjelambarbri@gmail.com</a>
                 </div>
               </div>
             </div>
@@ -532,7 +656,7 @@ export default function App() {
                 href="https://www.google.com/maps/search/?api=1&query=Jalan+Makaliwe+Raya+No+35C+Wijaya+Kusuma+Grogol+Jakarta+Barat"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-[#00529C] hover:bg-[#003d75] text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-blue-900/20 transition-all hover:scale-[1.02] active:scale-95 text-center whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-95 text-center whitespace-nowrap"
               >
                 <MapPin className="w-4 h-4 text-white" />
                 <span>Petunjuk Arah Google Maps</span>
@@ -540,9 +664,9 @@ export default function App() {
               </a>
               <a
                 href="mailto:kcjelambarbri@gmail.com"
-                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white border border-slate-300 hover:border-[#00529C] hover:bg-blue-50/50 text-slate-700 hover:text-[#00529C] text-xs sm:text-sm font-bold transition-all text-center whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white border border-slate-300 hover:border-[#0052CC] hover:bg-blue-50/50 text-slate-700 hover:text-[#0052CC] text-xs sm:text-sm font-bold transition-all text-center whitespace-nowrap"
               >
-                <Mail className="w-4 h-4 text-[#00529C]" />
+                <Mail className="w-4 h-4 text-[#0052CC]" />
                 <span>Kirim Email Resmi</span>
               </a>
             </div>
@@ -550,8 +674,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* 7. Modern Corporate Light Footer (Official Bank BRI Style) */}
-      <footer className="bg-slate-50 text-slate-600 text-xs pt-14 sm:pt-16 pb-12 border-t border-slate-200/80 w-full max-w-full">
+      {/* 10. Modern Corporate Blue Footer (Official Bank BRI Guidelines: #003B99) */}
+      <footer className="bg-[#003B99] text-white text-xs pt-14 sm:pt-16 pb-12 border-t border-blue-900/40 w-full max-w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 sm:mb-12 w-full">
             {/* Col 1: Logo & Branch Profile */}
@@ -560,84 +684,99 @@ export default function App() {
                 <img
                   src="/logo/bri.png"
                   alt="Logo Resmi Bank BRI"
-                  className="h-9 w-auto object-contain flex-shrink-0"
+                  className="h-9 w-auto object-contain brightness-0 invert flex-shrink-0"
                 />
-                <div className="h-6 w-px bg-slate-300 flex-shrink-0" />
+                <div className="h-6 w-px bg-white/30 flex-shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-sm font-extrabold text-[#00529C] leading-tight truncate">
+                  <div className="text-sm font-extrabold text-white leading-tight truncate">
                     KC Jakarta Jelambar
                   </div>
-                  <div className="text-[10px] text-slate-500 font-semibold truncate">
+                  <div className="text-[10px] text-blue-200 font-semibold truncate">
                     Regional Office Jakarta 3
                   </div>
                 </div>
               </div>
 
-              <p className="text-slate-600 text-xs leading-relaxed break-words">
+              <p className="text-blue-100 text-xs leading-relaxed break-words">
                 Kantor Cabang pengelola supervisi 8 Kantor Unit di Jakarta Barat, menghadirkan layanan perbankan terpadu bagi nasabah personal, UMKM, dan korporasi.
               </p>
 
-              <div className="space-y-2.5 text-xs text-slate-600 pt-2">
+              <div className="space-y-2.5 text-xs text-blue-100 pt-2">
                 <div className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-[#00529C] flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-blue-300 flex-shrink-0 mt-0.5" />
                   <span className="break-words">Jalan Makaliwe Raya No. 35 C Wijaya Kusuma, Grogol, Jakarta Barat 11450</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-[#00529C] flex-shrink-0" />
-                  <a href="tel:02156981105" className="text-slate-600 hover:text-[#00529C] font-semibold transition-colors">
+                  <Phone className="w-4 h-4 text-blue-300 flex-shrink-0" />
+                  <a href="tel:02156981105" className="text-blue-100 hover:text-white font-semibold transition-colors">
                     (021) 56981105
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-[#00529C] flex-shrink-0" />
-                  <a href="mailto:kcjelambarbri@gmail.com" className="text-slate-600 hover:text-[#00529C] font-semibold transition-colors break-all">
+                  <Mail className="w-4 h-4 text-blue-300 flex-shrink-0" />
+                  <a href="mailto:kcjelambarbri@gmail.com" className="text-blue-100 hover:text-white font-semibold transition-colors break-all">
                     kcjelambarbri@gmail.com
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Col 2: Pilar Layanan Bisnis */}
+            {/* Col 2: Pilar Layanan Bisnis & Panduan */}
             <div>
-              <h5 className="text-[#00529C] font-bold text-base tracking-wide mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#00529C]" />
-                Pilar Layanan Bisnis
+              <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
+                Pilar Layanan & Dokumen
               </h5>
               <ul className="space-y-2.5 text-sm">
                 <li>
-                  <a href="#tim-bisnis" className="text-slate-600 hover:text-[#00529C] transition-colors flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span>Kredit Modal Kerja & Investasi</span>
-                  </a>
+                  <button
+                    onClick={() => openFAQModal('sme')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>Syarat Kredit Modal Kerja & SME</span>
+                  </button>
                 </li>
                 <li>
-                  <a href="#tim-bisnis" className="text-slate-600 hover:text-[#00529C] transition-colors flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span>Kredit Usaha Rakyat (KUR) Mikro</span>
-                  </a>
+                  <button
+                    onClick={() => openFAQModal('konsumer')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>Syarat Pengajuan KPR & BRIguna</span>
+                  </button>
                 </li>
                 <li>
-                  <a href="#tim-bisnis" className="text-slate-600 hover:text-[#00529C] transition-colors flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span>Restrukturisasi Kredit & Recovery</span>
-                  </a>
+                  <button
+                    onClick={() => openFAQModal('giro')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>Dokumen Giro Badan Usaha (PT/CV)</span>
+                  </button>
                 </li>
                 <li>
-                  <a href="#tim-bisnis" className="text-slate-600 hover:text-[#00529C] transition-colors flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span>Giro Valas/Rupiah & Payroll</span>
-                  </a>
+                  <button
+                    onClick={() => openFAQModal('merchant')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>Syarat Mesin EDC & QRIS Merchant</span>
+                  </button>
                 </li>
                 <li>
-                  <a href="#tim-bisnis" className="text-slate-600 hover:text-[#00529C] transition-colors flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span>Mesin EDC Android & QRIS</span>
-                  </a>
+                  <button
+                    onClick={() => openFAQModal('crr')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>Prosedur Restrukturisasi Kredit</span>
+                  </button>
                 </li>
                 <li>
-                  <a href="#tim-bisnis" className="text-slate-600 hover:text-[#00529C] transition-colors flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span>Digital Banking Super App BRImo</span>
+                  <a href="#simulasi" className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>Simulasi Angsuran Pinjaman</span>
                   </a>
                 </li>
               </ul>
@@ -645,29 +784,29 @@ export default function App() {
 
             {/* Col 3: Layanan Digital Terhubung */}
             <div>
-              <h5 className="text-[#00529C] font-bold text-base tracking-wide mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#00529C]" />
+              <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
                 Layanan Digital Terhubung
               </h5>
               <ul className="space-y-2.5 text-sm">
-                <li className="flex items-center gap-2 text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00529C] flex-shrink-0" />
+                <li className="flex items-center gap-2 text-blue-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
                   <span>BRImo Super App Bisnis</span>
                 </li>
-                <li className="flex items-center gap-2 text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00529C] flex-shrink-0" />
+                <li className="flex items-center gap-2 text-blue-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
                   <span>Aplikasi BRI Merchant</span>
                 </li>
-                <li className="flex items-center gap-2 text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00529C] flex-shrink-0" />
+                <li className="flex items-center gap-2 text-blue-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
                   <span>Cash Management System (CMS)</span>
                 </li>
-                <li className="flex items-center gap-2 text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00529C] flex-shrink-0" />
+                <li className="flex items-center gap-2 text-blue-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
                   <span>Jaringan Kemitraan AgenBRILink</span>
                 </li>
-                <li className="flex items-center gap-2 text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00529C] flex-shrink-0" />
+                <li className="flex items-center gap-2 text-blue-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
                   <span>Sabrina Chatbot Resmi BRI</span>
                 </li>
               </ul>
@@ -675,40 +814,40 @@ export default function App() {
 
             {/* Col 4: Card Kontak Hotline 24 Jam */}
             <div>
-              <h5 className="text-[#00529C] font-bold text-base tracking-wide mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#00529C]" />
+              <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
                 Layanan Kontak 24 Jam
               </h5>
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4 w-full">
+              <div className="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/20 shadow-sm space-y-4 w-full">
                 <div>
-                  <div className="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">
+                  <div className="text-[11px] text-blue-200 font-bold uppercase tracking-wider mb-1">
                     Contact BRI Hotline 24 Jam
                   </div>
                   <a
                     href="tel:1500017"
-                    className="text-xl sm:text-2xl font-black text-[#00529C] hover:text-[#003d75] transition-colors flex items-center gap-2 tracking-tight"
+                    className="text-xl sm:text-2xl font-black text-white hover:text-blue-200 transition-colors flex items-center gap-2 tracking-tight"
                   >
-                    <Phone className="w-5 h-5 text-[#00529C] flex-shrink-0" />
+                    <Phone className="w-5 h-5 text-blue-300 flex-shrink-0" />
                     <span>1500017</span>
                   </a>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100">
-                  <div className="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">
+                <div className="pt-3 border-t border-white/15">
+                  <div className="text-[11px] text-blue-200 font-bold uppercase tracking-wider mb-1">
                     Sabrina WhatsApp Resmi
                   </div>
                   <a
                     href="https://wa.me/628121214017"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-bold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1.5"
+                    className="text-sm font-bold text-emerald-300 hover:text-emerald-200 transition-colors flex items-center gap-1.5"
                   >
-                    <MessageCircle className="w-4 h-4 fill-emerald-600 text-white flex-shrink-0" />
+                    <MessageCircle className="w-4 h-4 fill-emerald-300 text-[#003B99] flex-shrink-0" />
                     <span>0812-12-14017</span>
                   </a>
                 </div>
 
-                <div className="pt-2 text-[11px] text-slate-400">
+                <div className="pt-2 text-[11px] text-blue-200/80">
                   Respon cepat & informasi resmi nasabah Bank BRI.
                 </div>
               </div>
@@ -716,17 +855,27 @@ export default function App() {
           </div>
 
           {/* Bottom Bar / Hak Cipta & Legalitas */}
-          <div className="pt-6 sm:pt-8 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center md:text-left w-full">
+          <div className="pt-6 sm:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200 text-center md:text-left w-full">
             <p>
               © {new Date().getFullYear()} PT Bank Rakyat Indonesia (Persero) Tbk — Kantor Cabang Jakarta Jelambar. Seluruh hak cipta dilindungi undang-undang.
             </p>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 font-medium text-[11px] shadow-xs flex-shrink-0">
-              <ShieldCheck className="w-4 h-4 text-[#00529C] flex-shrink-0" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white font-medium text-[11px] shadow-xs flex-shrink-0 backdrop-blur-xs">
+              <ShieldCheck className="w-4 h-4 text-blue-300 flex-shrink-0" />
               <span>Berizin & Diawasi OJK serta Peserta Penjaminan LPS</span>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Panduan Persyaratan Berkas & FAQ Modal */}
+      <PanduanFAQModal
+        isOpen={faqModalOpen}
+        onClose={() => setFaqModalOpen(false)}
+        initialCategory={faqModalCategory}
+      />
+
+      {/* Floating Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   );
 }

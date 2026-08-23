@@ -170,57 +170,57 @@ export default function TeamDirectory() {
   };
 
   return (
-    <section id="tim-bisnis" className="relative py-16 md:py-20 bg-slate-50 overflow-hidden">
+    <section id="tim-bisnis" className="relative py-14 sm:py-16 md:py-20 bg-slate-50 overflow-hidden w-full max-w-full">
       {/* Background Decorative Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#00529C_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 sm:w-96 h-80 sm:h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 sm:w-96 h-80 sm:h-96 bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#00529C] text-xs md:text-sm font-bold tracking-wide uppercase mb-4 border border-blue-200">
             <ShieldCheck className="w-4 h-4 text-[#00529C]" />
             <span>Koneksi Langsung Petugas Resmi BRI</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
             Struktur Tim Bisnis &{' '}
             <span className="text-[#00529C]">
               Relationship Manager
             </span>
           </h2>
 
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
             Terhubung langsung dengan <strong>{teamMembers.length} Relationship Manager resmi BRI KC Jakarta Jelambar</strong>. 
             Konsultasikan kebutuhan kredit usaha, simpanan giro/deposito, pembiayaan mikro KUR, restrukturisasi komersial, hingga penanganan portofolio via WhatsApp.
           </p>
 
           {/* Quick Statistics Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-8">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
-              <div className="text-2xl font-bold text-[#00529C]">{teamMembers.length} RM</div>
-              <div className="text-xs text-slate-500 font-medium mt-0.5">Petugas Resmi KC Jelambar</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-8 w-full text-left sm:text-center">
+            <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
+              <div className="text-xl sm:text-2xl font-black text-[#00529C]">{teamMembers.length} RM</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Petugas Resmi KC Jelambar</div>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
-              <div className="text-2xl font-bold text-[#00529C]">4 Segmen</div>
-              <div className="text-xs text-slate-500 font-medium mt-0.5">Kredit, Dana, CRR & Mikro</div>
+            <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
+              <div className="text-xl sm:text-2xl font-black text-[#00529C]">4 Segmen</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Kredit, Dana, CRR & Mikro</div>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
-              <div className="text-2xl font-bold text-emerald-600">Respon Cepat</div>
-              <div className="text-xs text-slate-500 font-medium mt-0.5">Konsultasi WhatsApp</div>
+            <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
+              <div className="text-xl sm:text-2xl font-black text-emerald-600">Respon Cepat</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Konsultasi WhatsApp</div>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm text-center">
-              <div className="text-2xl font-bold text-[#003d75]">8 Unit</div>
-              <div className="text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi Cabang</div>
+            <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
+              <div className="text-xl sm:text-2xl font-black text-[#003d75]">8 Unit</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi Cabang</div>
             </div>
           </div>
         </div>
 
         {/* Interactive Controls: Tabs & Search Bar */}
-        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/90 shadow-sm mb-10">
-          {/* Main Segment Tabs */}
-          <div className="flex flex-wrap items-center justify-start gap-2 border-b border-slate-100 pb-5 mb-5">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/90 shadow-sm mb-8 sm:mb-10 w-full">
+          {/* Main Segment Tabs with smooth scroll on mobile */}
+          <div className="flex overflow-x-auto scrollbar-none sm:flex-wrap items-center gap-2 border-b border-slate-100 pb-4 mb-4 sm:mb-5 -mx-4 px-4 sm:mx-0 sm:px-0">
             {filterTabs.map((tab) => {
               const isActive = activeTab === tab.id;
               const count = tabCounts[tab.id as keyof typeof tabCounts] ?? 0;
@@ -231,7 +231,7 @@ export default function TeamDirectory() {
                     setActiveTab(tab.id);
                     setSelectedTopic('Semua Topik');
                   }}
-                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                  className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
                     isActive
                       ? 'bg-[#00529C] text-white shadow-md shadow-blue-900/20 scale-[1.02]'
                       : 'bg-slate-100/80 text-slate-700 hover:bg-slate-200/70 hover:text-slate-900'
@@ -243,7 +243,7 @@ export default function TeamDirectory() {
                   </span>
                   <span>{tab.shortLabel}</span>
                   <span
-                    className={`ml-1 text-xs px-2 py-0.5 rounded-full font-bold ${
+                    className={`text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full font-bold ${
                       isActive
                         ? 'bg-white/20 text-white'
                         : 'bg-slate-200 text-slate-600'
@@ -257,9 +257,9 @@ export default function TeamDirectory() {
           </div>
 
           {/* Search & Topic Chip Filters */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4 w-full">
             {/* Search Input */}
-            <div className="relative flex-1">
+            <div className="relative flex-1 min-w-0">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <Search className="w-4 h-4" />
               </div>
@@ -268,7 +268,7 @@ export default function TeamDirectory() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari nama RM, layanan (KUR, KMK, Giro, Deposito, Restrukturisasi)..."
-                className="w-full pl-10 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00529C]/30 focus:border-[#00529C] transition-all"
+                className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00529C]/30 focus:border-[#00529C] transition-all"
               />
               {searchQuery && (
                 <button
@@ -281,11 +281,11 @@ export default function TeamDirectory() {
               )}
             </div>
 
-            {/* Quick Topic Filter Dropdown / Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-              <span className="text-xs font-semibold text-slate-500 whitespace-nowrap flex items-center gap-1">
+            {/* Quick Topic Filter Dropdown / Pills with smooth horizontal scrolling */}
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 md:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <span className="text-xs font-semibold text-slate-500 whitespace-nowrap flex items-center gap-1 flex-shrink-0">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-                Topik Cepat:
+                Topik:
               </span>
               <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
                 {quickConsultationTopics.map((topic) => {
@@ -294,7 +294,7 @@ export default function TeamDirectory() {
                     <button
                       key={topic}
                       onClick={() => setSelectedTopic(topic)}
-                      className={`text-xs px-3 py-1.5 rounded-lg whitespace-nowrap font-medium transition-colors ${
+                      className={`text-[11px] sm:text-xs px-2.5 sm:px-3 py-1.5 rounded-lg whitespace-nowrap font-medium transition-colors flex-shrink-0 ${
                         isSelected
                           ? 'bg-[#00529C] text-white font-bold shadow-xs'
                           : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800'
@@ -309,16 +309,16 @@ export default function TeamDirectory() {
           </div>
 
           {/* Active Filter Indicators & Results Count */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500">
+          <div className="flex flex-wrap items-center justify-between gap-2 mt-3.5 pt-3 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500">
             <div>
-              Menampilkan <span className="font-bold text-slate-800">{filteredMembers.length}</span> dari {teamMembers.length} Relationship Manager
+              Menampilkan <span className="font-bold text-slate-800">{filteredMembers.length}</span> dari {teamMembers.length} RM
               {searchQuery && (
-                <span className="ml-2 font-medium text-[#00529C]">
-                  hasil pencarian &ldquo;{searchQuery}&rdquo;
+                <span className="ml-1.5 font-medium text-[#00529C]">
+                  &ldquo;{searchQuery}&rdquo;
                 </span>
               )}
               {selectedTopic !== 'Semua Topik' && (
-                <span className="ml-2 inline-flex items-center gap-1 text-[#00529C] font-semibold">
+                <span className="ml-1.5 inline-flex items-center gap-1 text-[#00529C] font-semibold">
                   • Topik: {selectedTopic}
                 </span>
               )}
@@ -331,18 +331,18 @@ export default function TeamDirectory() {
                   setSearchQuery('');
                   setSelectedTopic('Semua Topik');
                 }}
-                className="text-[#00529C] hover:text-[#003d75] font-semibold hover:underline flex items-center gap-1"
+                className="text-[#00529C] hover:text-[#003d75] font-semibold hover:underline flex items-center gap-1 whitespace-nowrap"
               >
                 <X className="w-3.5 h-3.5" />
-                Reset Semua Filter
+                Reset Filter
               </button>
             )}
           </div>
         </div>
 
-        {/* Team Cards Grid */}
+        {/* Team Cards Grid (1 col on mobile, 2 cols on tablet, 3 cols on desktop) */}
         {filteredMembers.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full">
             {filteredMembers.map((member) => {
               const badge = getSegmentBadge(member.segment);
               const isCopied = copiedId === member.id;
@@ -357,7 +357,7 @@ export default function TeamDirectory() {
               return (
                 <div
                   key={member.id}
-                  className="group bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-[#00529C]/40 transition-all duration-300 flex flex-col justify-between overflow-hidden relative"
+                  className="group bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-[#00529C]/40 transition-all duration-300 flex flex-col justify-between overflow-hidden relative w-full"
                 >
                   {/* Top Color Accent Line */}
                   <div
@@ -374,19 +374,19 @@ export default function TeamDirectory() {
                     }`}
                   />
 
-                  <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                  <div className="p-4 sm:p-5 lg:p-6 flex-1 flex flex-col">
                     {/* Header: Initial Avatar (AVA UI), Name, Role & Status */}
-                    <div className="flex items-start gap-4 mb-4">
+                    <div className="flex items-start gap-3 sm:gap-4 mb-3.5">
                       {/* Round Initial Avatar (AVA UI) */}
                       <div className="relative flex-shrink-0">
                         <div
-                          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-100 text-[#00529C] font-extrabold text-lg sm:text-xl flex items-center justify-center border-2 border-blue-200 shadow-sm group-hover:scale-105 transition-transform duration-300 select-none"
+                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-blue-100 text-[#00529C] font-extrabold text-base sm:text-lg md:text-xl flex items-center justify-center border-2 border-blue-200 shadow-xs group-hover:scale-105 transition-transform duration-300 select-none"
                           title={member.name}
                         >
                           {getInitials(member.name, member.initials)}
                         </div>
                         <span
-                          className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"
+                          className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"
                           title="Status: Online & Siap Melayani"
                         />
                       </div>
@@ -395,14 +395,14 @@ export default function TeamDirectory() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5 mb-1">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${badge.bg}`}
+                            className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold border ${badge.bg}`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
                             {badge.label}
                           </span>
                         </div>
 
-                        <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug group-hover:text-[#00529C] transition-colors truncate" title={member.name}>
+                        <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 leading-snug group-hover:text-[#00529C] transition-colors truncate" title={member.name}>
                           {member.name}
                         </h3>
 
@@ -413,7 +413,7 @@ export default function TeamDirectory() {
                     </div>
 
                     {/* Office / Supervised Area */}
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-3 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-100">
+                    <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 mb-3 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-100">
                       <Building2 className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
                       <span className="truncate">{member.unitOffice}</span>
                     </div>
@@ -427,9 +427,9 @@ export default function TeamDirectory() {
 
                     {/* Key Services & Specializations */}
                     <div className="mt-auto pt-2">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1">
                         <Layers className="w-3 h-3 text-[#00529C]" />
-                        Layanan & Portofolio Kunci
+                        Layanan Kunci
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         {member.specializations.map((spec, index) => {
@@ -441,12 +441,12 @@ export default function TeamDirectory() {
                             <span
                               key={index}
                               onClick={() => setSelectedTopic(spec)}
-                              className={`text-[11px] px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors ${
+                              className={`text-[10px] sm:text-[11px] px-2 sm:px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors ${
                                 isTopicMatch
                                   ? 'bg-[#00529C] text-white font-bold shadow-xs'
                                   : 'bg-slate-100 text-slate-700 hover:bg-[#00529C]/10 hover:text-[#00529C]'
                               }`}
-                              title={`Klik untuk filter spesialisasi: ${spec}`}
+                              title={`Klik untuk filter: ${spec}`}
                             >
                               {spec}
                             </span>
@@ -457,13 +457,13 @@ export default function TeamDirectory() {
                   </div>
 
                   {/* Actions Bar (WhatsApp CTA & Copy Phone) */}
-                  <div className="p-4 sm:p-5 bg-slate-50/80 border-t border-slate-100 flex flex-col gap-2">
+                  <div className="p-3.5 sm:p-4 md:p-5 bg-slate-50/90 border-t border-slate-100 flex flex-col gap-2 w-full">
                     {/* Primary Button: Chat via WhatsApp */}
                     <a
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold text-sm shadow-sm hover:shadow-md hover:shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98]"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md hover:shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] text-center"
                     >
                       <MessageCircle className="w-4 h-4 fill-white" />
                       <span>Chat via WhatsApp</span>
@@ -471,10 +471,10 @@ export default function TeamDirectory() {
                     </a>
 
                     {/* Secondary Actions: Salin Nomor & Custom Inquire */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
                       <button
                         onClick={() => handleCopyPhone(member)}
-                        className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 ${
+                        className={`flex-1 min-w-0 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 ${
                           isCopied
                             ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
                             : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900'
@@ -483,20 +483,20 @@ export default function TeamDirectory() {
                       >
                         {isCopied ? (
                           <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Nomor Tersalin!</span>
+                            <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                            <span className="truncate">Nomor Tersalin!</span>
                           </>
                         ) : (
                           <>
-                            <Copy className="w-3.5 h-3.5 text-slate-400" />
-                            <span>Salin Kontak ({member.displayPhone})</span>
+                            <Copy className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                            <span className="truncate">Salin ({member.displayPhone})</span>
                           </>
                         )}
                       </button>
 
                       <button
                         onClick={() => setSelectedRMForModal(member)}
-                        className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-[#00529C] hover:bg-[#00529C]/5 hover:border-[#00529C]/30 transition-colors"
+                        className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-[#00529C] hover:bg-[#00529C]/5 hover:border-[#00529C]/30 transition-colors flex-shrink-0 text-center"
                         title="Pilih topik spesifik sebelum membuka WhatsApp"
                       >
                         Kustomisasi
@@ -509,16 +509,15 @@ export default function TeamDirectory() {
           </div>
         ) : (
           /* Empty State */
-          <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center max-w-lg mx-auto shadow-sm">
-            <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center">
-              <Search className="w-8 h-8" />
+          <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-10 text-center max-w-lg mx-auto shadow-sm w-full">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center">
+              <Search className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2">
               Tidak Ada Relationship Manager yang Cocok
             </h3>
-            <p className="text-sm text-slate-500 mb-6">
-              Coba gunakan kata kunci pencarian lain, pilih tab &ldquo;Semua Layanan&rdquo;, 
-              atau hubungi Call Center KC Jelambar secara langsung.
+            <p className="text-xs sm:text-sm text-slate-500 mb-6">
+              Coba gunakan kata kunci pencarian lain atau pilih tab &ldquo;Semua Layanan&rdquo;.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -527,7 +526,7 @@ export default function TeamDirectory() {
                   setSearchQuery('');
                   setSelectedTopic('Semua Topik');
                 }}
-                className="w-full sm:w-auto px-5 py-2.5 bg-[#00529C] text-white rounded-xl text-sm font-semibold hover:bg-[#003d75] transition-colors shadow-sm"
+                className="w-full sm:w-auto px-5 py-2.5 bg-[#00529C] text-white rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#003d75] transition-colors shadow-sm"
               >
                 Reset Semua Filter
               </button>
@@ -535,9 +534,9 @@ export default function TeamDirectory() {
                 href="https://wa.me/6281340902924?text=Halo%20Customer%20Service%20BRI%20KC%20Jakarta%20Jelambar,%20saya%20memerlukan%20informasi%20layanan."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-sm font-semibold hover:bg-slate-200 transition-colors"
+                className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold hover:bg-slate-200 transition-colors"
               >
-                Hubungi CS Utama KC Jelambar
+                Hubungi CS Cabang
               </a>
             </div>
           </div>
@@ -546,7 +545,7 @@ export default function TeamDirectory() {
 
       {/* Floating Toast Notification when copying */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 animate-in fade-in slide-in-from-bottom-5 duration-200">
+        <div className="fixed bottom-6 right-6 left-6 sm:left-auto z-50 flex items-center gap-3 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 animate-in fade-in slide-in-from-bottom-5 duration-200 max-w-sm">
           <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
             <Check className="w-3.5 h-3.5 text-white" />
           </div>
@@ -557,21 +556,22 @@ export default function TeamDirectory() {
       {/* Custom Inquiry Modal for selecting tailored topic before sending WA */}
       {selectedRMForModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 relative">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100 relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setSelectedRMForModal(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="Tutup Modal"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-4 pr-6">
               <div className="w-12 h-12 rounded-full bg-blue-100 text-[#00529C] font-black text-base flex items-center justify-center border border-blue-200 flex-shrink-0 select-none">
                 {getInitials(selectedRMForModal.name, selectedRMForModal.initials)}
               </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-base">{selectedRMForModal.name}</h4>
-                <p className="text-xs text-slate-500">{selectedRMForModal.role}</p>
+              <div className="min-w-0 flex-1">
+                <h4 className="font-bold text-slate-900 text-base truncate">{selectedRMForModal.name}</h4>
+                <p className="text-xs text-slate-500 truncate">{selectedRMForModal.role}</p>
               </div>
             </div>
 
@@ -579,7 +579,7 @@ export default function TeamDirectory() {
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
                 Pilih Topik Konsultasi Spesifik:
               </label>
-              <div className="grid grid-cols-1 gap-1.5 max-h-48 overflow-y-auto pr-1">
+              <div className="grid grid-cols-1 gap-1.5 max-h-44 overflow-y-auto pr-1">
                 {selectedRMForModal.specializations.map((spec, i) => (
                   <button
                     key={i}
@@ -590,8 +590,8 @@ export default function TeamDirectory() {
                         : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
-                    <span>{spec}</span>
-                    {customInquiryService === spec && <Check className="w-3.5 h-3.5 text-[#00529C]" />}
+                    <span className="truncate">{spec}</span>
+                    {customInquiryService === spec && <Check className="w-3.5 h-3.5 text-[#00529C] flex-shrink-0 ml-1" />}
                   </button>
                 ))}
               </div>
@@ -601,17 +601,17 @@ export default function TeamDirectory() {
               <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                 Pratinjau Pesan WhatsApp:
               </div>
-              <p className="text-xs text-slate-700 italic">
+              <p className="text-xs text-slate-700 italic leading-relaxed">
                 {customInquiryService
                   ? `“Halo Bapak/Ibu ${selectedRMForModal.name}, saya ingin berkonsultasi mengenai layanan ${customInquiryService}...”`
                   : `“${selectedRMForModal.customWhatsAppText || `Halo Bapak/Ibu ${selectedRMForModal.name}, saya tertarik untuk konsultasi...`}”`}
               </p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <button
                 onClick={() => setSelectedRMForModal(null)}
-                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors"
               >
                 Batal
               </button>
@@ -626,7 +626,7 @@ export default function TeamDirectory() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setSelectedRMForModal(null)}
-                className="flex-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-sm"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-sm text-center"
               >
                 <MessageCircle className="w-4 h-4 fill-white" />
                 <span>Buka WhatsApp Sekarang</span>

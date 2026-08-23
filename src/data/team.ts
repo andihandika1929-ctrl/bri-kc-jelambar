@@ -32,14 +32,14 @@ export const filterTabs: FilterTabOption[] = [
     id: 'all',
     label: 'Semua Layanan & Tim',
     shortLabel: 'Semua',
-    description: 'Seluruh 9 Relationship Manager Resmi BRI KC Jakarta Jelambar',
+    description: 'Seluruh 10 Relationship Manager Resmi BRI KC Jakarta Jelambar',
     iconName: 'LayoutGrid',
   },
   {
     id: 'lending',
     label: 'Kredit & Pinjaman',
     shortLabel: 'Kredit & Pinjaman',
-    description: 'Kredit Komersial SME, Kredit Mikro, dan KUR Usaha Rakyat',
+    description: 'Kredit Komersial & SME, Kredit Mikro, dan KUR Usaha Rakyat',
     iconName: 'BadgePercent',
   },
   {
@@ -144,6 +144,28 @@ export const teamMembers: TeamMember[] = [
     ]
   },
   {
+    id: 'rm-sme-01',
+    name: 'Fahmi Sidik',
+    role: 'RM SME',
+    segment: 'Lending',
+    initials: 'FS',
+    phone: '628776271545',
+    displayPhone: '0877-6271-545',
+    email: 'fahmi.sidik_sme@bri.co.id',
+    unitOffice: 'KC Jakarta Jelambar',
+    experienceYears: 7,
+    status: 'Siap Konsultasi',
+    bio: 'Fasilitator pembiayaan skala menengah (SME), ekspansi modal kerja badan usaha (PT/CV), kredit investasi usaha, dan Bank Garansi konstruksi/pengadaan.',
+    customWhatsAppText: 'Halo Pak Fahmi Sidik, saya ingin berkonsultasi terkait fasilitas kredit SME BRI KC Jakarta Jelambar.',
+    specializations: [
+      'Kredit Usaha Menengah (SME)',
+      'Kredit Modal Kerja Badan Usaha',
+      'Kredit Investasi Komersial',
+      'Fasilitas Bank Garansi',
+      'Supply Chain Financing'
+    ]
+  },
+  {
     id: 'rm-mikro-01',
     name: 'Adam Werna Kusuma',
     role: 'RM Kredit Mikro & KUR',
@@ -208,7 +230,7 @@ export const teamMembers: TeamMember[] = [
   },
   {
     id: 'rm-collection-01',
-    name: 'Sutan',
+    name: 'Sutan Pardamean Hasibuan',
     role: 'RM Collection',
     segment: 'Collection',
     initials: 'ST',
@@ -298,6 +320,7 @@ export const quickConsultationTopics = [
   'Semua Topik',
   'Kredit Usaha Rakyat (KUR)',
   'Kredit Modal Kerja (KMK)',
+  'Kredit Usaha Menengah (SME)',
   'Restrukturisasi Kredit Komersial',
   'Giro & Payroll Perusahaan',
   'Deposito & Tabungan Bisnis',

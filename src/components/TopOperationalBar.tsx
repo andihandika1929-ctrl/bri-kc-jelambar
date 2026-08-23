@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Clock, Phone, MapPin, Sparkles, MessageCircle, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 // National Holidays List (Format MM-DD for recurring or YYYY-MM-DD for dynamic)
 const INDONESIAN_HOLIDAYS: string[] = [
@@ -25,6 +27,7 @@ const INDONESIAN_HOLIDAYS: string[] = [
 ];
 
 export default function TopOperationalBar() {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isHoliday, setIsHoliday] = useState(false);
   const [timeString, setTimeString] = useState('');
@@ -74,7 +77,7 @@ export default function TopOperationalBar() {
 
   return (
     <div className="w-full bg-[#0052CC] text-white text-[11px] sm:text-xs py-1.5 px-3 sm:px-6 border-none shadow-none m-0 relative z-50">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-4">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-4">
         {/* Real-time Status Indicator */}
         <div className="flex items-center gap-2 truncate">
           {isOpen ? (
@@ -84,32 +87,32 @@ export default function TopOperationalBar() {
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
               </span>
               <span className="font-bold text-emerald-200">
-                Layanan Kantor Cabang Buka
+                {t.topbar.openTitle}
               </span>
               <span className="hidden md:inline text-blue-100">
-                (Operasional Tatap Muka Aktif 08.00 - 15.00 WIB)
+                {t.topbar.openSub}
               </span>
             </div>
           ) : (
             <div className="flex items-center gap-1.5 text-blue-100">
               <span className="inline-block w-2 h-2 rounded-full bg-amber-300"></span>
               <span className="font-bold text-amber-200">
-                Layanan Kantor Cabang Tutup
+                {t.topbar.closedTitle}
               </span>
               <span className="hidden md:inline text-blue-100">
                 {isHoliday
-                  ? '— Hari Libur Nasional • Buka kembali hari kerja 08.00 WIB'
-                  : '— Buka kembali hari kerja pukul 08.00 WIB'}
+                  ? t.topbar.closedHoliday
+                  : t.topbar.closedRegular}
               </span>
               <span className="hidden lg:inline text-blue-200">
-                • Layanan Digital BRImo & ATM 24 Jam Aktif
+                {t.topbar.digital247}
               </span>
             </div>
           )}
         </div>
 
-        {/* Live Clock & Quick Hotline */}
-        <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-[11px] text-blue-100">
+        {/* Live Clock, Quick Hotline & Multi-Language Selector */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5 text-[10px] sm:text-[11px] text-blue-100">
           <div className="flex items-center gap-1 hidden xs:flex">
             <Clock className="w-3.5 h-3.5 text-blue-200" />
             <span className="font-medium text-white">{timeString || 'WIB'}</span>
@@ -121,7 +124,7 @@ export default function TopOperationalBar() {
             title="Call Center BRI 24 Jam"
           >
             <Phone className="w-3 h-3 text-blue-200" />
-            <span>Call BRI: 1500017</span>
+            <span>{t.topbar.callCenter}</span>
           </a>
           <span className="text-blue-300/40">|</span>
           <a
@@ -132,8 +135,11 @@ export default function TopOperationalBar() {
             title="Chat WhatsApp Sabrina BRI"
           >
             <MessageCircle className="w-3 h-3 fill-emerald-300 text-[#0052CC]" />
-            <span>Sabrina WA</span>
+            <span>{t.topbar.sabrinaWA}</span>
           </a>
+          <span className="text-blue-300/40">|</span>
+          {/* Integrated Multi-Language Switcher */}
+          <LanguageSelector variant="topbar" />
         </div>
       </div>
     </div>

@@ -1,7 +1,20 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { faqList, faqCategories, FAQItem } from '../data/faq';
+import {
+  faqList,
+  faqCategories,
+  FAQItem,
+  getFaqQuestion,
+  getFaqSummary,
+  getFaqCategoryLabel,
+  getFaqCategoryOptionLabel,
+  getFaqDocumentTitle,
+  getFaqDocumentItems,
+  getFaqProcessSteps,
+  getFaqNotes
+} from '../data/faq';
+import { useLanguage } from '../context/LanguageContext';
 import {
   FileText,
   Search,
@@ -32,6 +45,7 @@ export default function PanduanFAQModal({
   onClose,
   initialCategory = 'all',
 }: PanduanFAQModalProps) {
+  const { t, language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [expandedId, setExpandedId] = useState<string>(faqList[0].id);
@@ -44,26 +58,47 @@ export default function PanduanFAQModal({
         selectedCategory === 'all' || item.category === selectedCategory;
 
       const query = searchQuery.toLowerCase().trim();
+      const questionText = getFaqQuestion(item, language).toLowerCase();
+      const summaryText = getFaqSummary(item, language).toLowerCase();
+      const categoryText = getFaqCategoryLabel(item, language).toLowerCase();
+
       const matchesSearch =
         !query ||
         item.question.toLowerCase().includes(query) ||
+        questionText.includes(query) ||
         item.summary.toLowerCase().includes(query) ||
-        item.categoryLabel.toLowerCase().includes(query) ||
-        item.documents.some((doc) =>
-          doc.title.toLowerCase().includes(query) ||
-          doc.items.some((it) => it.toLowerCase().includes(query))
-        );
+        summaryText.includes(query) ||
+        categoryText.includes(query) ||
+        item.documents.some((doc) => {
+          const docTitle = getFaqDocumentTitle(doc, language).toLowerCase();
+          const docItems = getFaqDocumentItems(doc, language);
+          return (
+            doc.title.toLowerCase().includes(query) ||
+            docTitle.includes(query) ||
+            doc.items.some((it) => it.toLowerCase().includes(query)) ||
+            docItems.some((it) => it.toLowerCase().includes(query))
+          );
+        });
 
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, language]);
 
   // Copy checklist handler
   const handleCopyChecklist = (item: FAQItem) => {
+    const categoryName = getFaqCategoryLabel(item, language);
+    const questionText = getFaqQuestion(item, language);
+
+    const docsText = item.documents.map((doc) => {
+      const docTitle = getFaqDocumentTitle(doc, language);
+      const docItems = getFaqDocumentItems(doc, language);
+      return `${docTitle}:\n` + docItems.map((it) => `• ${it}`).join('\n');
+    }).join('\n\n');
+
     const text = `*PANDUAN PERSYARATAN BERKAS BRI KC JAKARTA JELAMBAR*\n\n` +
-      `*Layanan:* ${item.categoryLabel}\n` +
-      `*Pertanyaan:* ${item.question}\n\n` +
-      item.documents.map((doc) => `${doc.title}:\n` + doc.items.map((it) => `• ${it}`).join('\n')).join('\n\n') +
+      `*Layanan:* ${categoryName}\n` +
+      `*Pertanyaan:* ${questionText}\n\n` +
+      docsText +
       `\n\n*Konsultasi Petugas:* ${item.rmContact.name} (${item.rmContact.role})\nWhatsApp: https://wa.me/${item.rmContact.phone}`;
 
     navigator.clipboard.writeText(text);
@@ -87,14 +122,14 @@ export default function PanduanFAQModal({
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="text-base sm:text-lg md:text-xl font-extrabold tracking-tight truncate">
-                  Panduan Persyaratan Berkas & FAQ
+                  {t.faq.modalTitle}
                 </h3>
                 <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold">
                   Resmi KC Jelambar
                 </span>
               </div>
               <p className="text-xs text-blue-100 mt-0.5 truncate">
-                Rincian checklist dokumen persyaratan perbankan & kredit sebelum ke kantor cabang
+                {t.faq.modalSub}
               </p>
             </div>
           </div>
@@ -119,13 +154,13 @@ export default function PanduanFAQModal({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari persyaratan (KTP, NPWP, NIB, Giro, KPR, Rekening Koran, EDC, Restrukturisasi)..."
+              placeholder={t.faq.searchPlaceholder}
               className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0052CC] focus:border-[#0052CC] transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -136,6 +171,7 @@ export default function PanduanFAQModal({
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1">
             {faqCategories.map((cat) => {
               const isSelected = selectedCategory === cat.id;
+              const catLabel = getFaqCategoryOptionLabel(cat, language);
               return (
                 <button
                   key={cat.id}
@@ -146,7 +182,7 @@ export default function PanduanFAQModal({
                       : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
-                  {cat.label}
+                  {catLabel}
                 </button>
               );
             })}
@@ -159,6 +195,11 @@ export default function PanduanFAQModal({
             filteredFAQs.map((item) => {
               const isExpanded = expandedId === item.id;
               const isCopied = copiedGroup === item.id;
+              const questionDisplay = getFaqQuestion(item, language);
+              const summaryDisplay = getFaqSummary(item, language);
+              const categoryDisplay = getFaqCategoryLabel(item, language);
+              const processSteps = getFaqProcessSteps(item, language);
+              const notesDisplay = getFaqNotes(item, language);
 
               return (
                 <div
@@ -177,14 +218,14 @@ export default function PanduanFAQModal({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-1.5">
                         <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-[#0052CC] text-[10px] sm:text-[11px] font-bold border border-blue-200">
-                          {item.categoryLabel}
+                          {categoryDisplay}
                         </span>
                       </div>
                       <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                        {item.question}
+                        {questionDisplay}
                       </h4>
                       <p className="text-xs text-slate-500 mt-1 line-clamp-1">
-                        {item.summary}
+                        {summaryDisplay}
                       </p>
                     </div>
 
@@ -204,39 +245,44 @@ export default function PanduanFAQModal({
                       <div className="space-y-4">
                         <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                           <Layers className="w-3.5 h-3.5 text-[#0052CC]" />
-                          Daftar Checklist Berkas Wajib:
+                          <span>Daftar Checklist Berkas Wajib:</span>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                          {item.documents.map((docGroup, idx) => (
-                            <div
-                              key={idx}
-                              className="bg-slate-50/80 p-4 rounded-xl border border-slate-200/80 space-y-2.5"
-                            >
-                              <h5 className="text-xs font-bold text-[#0052CC]">
-                                {docGroup.title}
-                              </h5>
-                              <ul className="space-y-1.5 text-xs text-slate-700">
-                                {docGroup.items.map((docItem, dIdx) => (
-                                  <li key={dIdx} className="flex items-start gap-2">
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                                    <span className="leading-relaxed">{docItem}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          ))}
+                          {item.documents.map((docGroup, idx) => {
+                            const docTitle = getFaqDocumentTitle(docGroup, language);
+                            const docItems = getFaqDocumentItems(docGroup, language);
+
+                            return (
+                              <div
+                                key={idx}
+                                className="bg-slate-50/80 p-4 rounded-xl border border-slate-200/80 space-y-2.5"
+                              >
+                                <h5 className="text-xs font-bold text-[#0052CC]">
+                                  {docTitle}
+                                </h5>
+                                <ul className="space-y-1.5 text-xs text-slate-700">
+                                  {docItems.map((docItem, dIdx) => (
+                                    <li key={dIdx} className="flex items-start gap-2">
+                                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                      <span className="leading-relaxed">{docItem}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
 
                       {/* Process Steps (If present) */}
-                      {item.processSteps && (
+                      {processSteps.length > 0 && (
                         <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
                           <div className="text-xs font-bold text-[#0052CC] uppercase tracking-wider">
                             Tahapan Proses Pengajuan:
                           </div>
                           <ol className="space-y-1.5 text-xs text-slate-700 list-decimal list-inside leading-relaxed">
-                            {item.processSteps.map((step, sIdx) => (
+                            {processSteps.map((step, sIdx) => (
                               <li key={sIdx}>{step}</li>
                             ))}
                           </ol>
@@ -244,46 +290,40 @@ export default function PanduanFAQModal({
                       )}
 
                       {/* Notes / Tips */}
-                      {item.notes && (
+                      {notesDisplay && (
                         <div className="text-xs text-slate-500 bg-amber-50/60 p-3 rounded-lg border border-amber-200/70 italic leading-relaxed">
-                          💡 <strong>Catatan:</strong> {item.notes}
+                          💡 <strong>Catatan:</strong> {notesDisplay}
                         </div>
                       )}
 
-                      {/* Action Bar (Copy Checklist & Direct WhatsApp RM) */}
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
-                        {/* Copy checklist button */}
+                      {/* Action Bar Inside Modal */}
+                      <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                         <button
                           onClick={() => handleCopyChecklist(item)}
-                          className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                            isCopied
-                              ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
-                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900'
-                          }`}
+                          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer bg-white border-slate-300 hover:bg-slate-50 text-slate-700"
                         >
                           {isCopied ? (
                             <>
-                              <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              <span>Checklist Disalin ke Clipboard!</span>
+                              <Check className="w-4 h-4 text-emerald-600" />
+                              <span className="text-emerald-700">Checklist Berhasil Disalin!</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="w-3.5 h-3.5 text-slate-400" />
-                              <span>Salin Checklist Berkas</span>
+                              <Copy className="w-4 h-4 text-slate-400" />
+                              <span>{t.faq.btnCopyChecklist}</span>
                             </>
                           )}
                         </button>
 
-                        {/* WhatsApp CTA directly to the specialized RM */}
                         <a
                           href={`https://wa.me/${item.rmContact.phone}?text=${encodeURIComponent(item.rmContact.whatsappText)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors"
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
                         >
-                          <MessageCircle className="w-3.5 h-3.5 fill-white" />
-                          <span>Konsultasi Syarat ke {item.rmContact.name} ({item.rmContact.role})</span>
-                          <ExternalLink className="w-3 h-3 opacity-70" />
+                          <MessageCircle className="w-4 h-4 fill-white" />
+                          <span>{t.faq.btnContactOfficer} ({item.rmContact.name})</span>
+                          <ExternalLink className="w-3 h-3 opacity-80" />
                         </a>
                       </div>
                     </div>
@@ -292,39 +332,37 @@ export default function PanduanFAQModal({
               );
             })
           ) : (
-            <div className="bg-slate-50 rounded-2xl p-8 text-center border border-slate-200">
-              <HelpCircle className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-              <h4 className="text-sm font-bold text-slate-800">Tidak ada panduan yang cocok</h4>
-              <p className="text-xs text-slate-500 mt-1 mb-4">
-                Coba gunakan kata kunci pencarian lain atau pilih kategori &ldquo;Semua Panduan&rdquo;.
+            /* Empty Search */
+            <div className="text-center py-12">
+              <p className="text-sm font-semibold text-slate-600">
+                Tidak ada dokumen persyaratan yang cocok dengan pencarian Anda.
               </p>
               <button
                 onClick={() => {
-                  setSelectedCategory('all');
                   setSearchQuery('');
+                  setSelectedCategory('all');
                 }}
-                className="px-4 py-2 bg-[#0052CC] text-white rounded-xl text-xs font-semibold cursor-pointer"
+                className="mt-3 text-xs text-[#0052CC] font-bold hover:underline cursor-pointer"
               >
-                Reset Filter
+                Reset Pencarian
               </button>
             </div>
           )}
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
-            <span>Dokumen asli dibawa saat verifikasi tatap muka di Kantor Cabang.</span>
+        <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500 flex-shrink-0">
+          <div className="flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-[#0052CC]" />
+            <span>Dokumen diverifikasi resmi oleh Tim Bisnis BRI KC Jakarta Jelambar</span>
           </div>
           <button
             onClick={onClose}
-            className="w-full sm:w-auto px-5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition-colors cursor-pointer"
+            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition-colors cursor-pointer"
           >
-            Tutup Panduan
+            Tutup
           </button>
         </div>
-
       </div>
     </div>
   );

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import TopOperationalBar from './components/TopOperationalBar';
 import HeroCarousel from './components/HeroCarousel';
 import TeamDirectory from './components/TeamDirectory';
 import LoanCalculator from './components/LoanCalculator';
 import PanduanFAQSection from './components/PanduanFAQSection';
 import PanduanFAQModal from './components/PanduanFAQModal';
+import LanguageSelector from './components/LanguageSelector';
 import ScrollToTop from './components/ScrollToTop';
-import { branchUnits } from './data/units';
+import ActivitiesPage from './pages/ActivitiesPage';
+import OrganizationPage from './pages/OrganizationPage';
+import { branchUnits, getUnitAreaTag, getUnitSpecializationLabel } from './data/units';
 import { teamMembers } from './data/team';
 import {
   Building2,
@@ -33,14 +37,60 @@ import {
   FileText,
   Smartphone,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Globe,
+  Newspaper,
+  Network
 } from 'lucide-react';
 
-export default function App() {
+export type PageRoute = 'home' | 'activities' | 'org';
+
+function MainApp() {
+  const { t, language } = useLanguage();
+  const [currentRoute, setCurrentRoute] = useState<PageRoute>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [faqModalOpen, setFaqModalOpen] = useState(false);
   const [faqModalCategory, setFaqModalCategory] = useState('all');
+
+  // URL / Hash routing sync
+  useEffect(() => {
+    const parseRouteFromLocation = () => {
+      const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
+
+      if (hash.includes('aktivitas') || hash.includes('berita') || path.includes('aktivitas') || path.includes('berita')) {
+        setCurrentRoute('activities');
+      } else if (hash.includes('struktur') || path.includes('struktur')) {
+        setCurrentRoute('org');
+      } else {
+        setCurrentRoute('home');
+      }
+    };
+
+    parseRouteFromLocation();
+    window.addEventListener('hashchange', parseRouteFromLocation);
+    window.addEventListener('popstate', parseRouteFromLocation);
+
+    return () => {
+      window.removeEventListener('hashchange', parseRouteFromLocation);
+      window.removeEventListener('popstate', parseRouteFromLocation);
+    };
+  }, []);
+
+  const navigateTo = (route: PageRoute) => {
+    setCurrentRoute(route);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (route === 'activities') {
+      window.history.pushState(null, '', '#aktivitas');
+    } else if (route === 'org') {
+      window.history.pushState(null, '', '#struktur');
+    } else {
+      window.history.pushState(null, '', '#beranda');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,17 +112,38 @@ export default function App() {
     setFaqModalOpen(true);
   };
 
+  // If in Activities page route
+  if (currentRoute === 'activities') {
+    return (
+      <ActivitiesPage
+        onNavigateHome={() => navigateTo('home')}
+        onNavigateOrg={() => navigateTo('org')}
+      />
+    );
+  }
+
+  // If in Organization page route
+  if (currentRoute === 'org') {
+    return (
+      <OrganizationPage
+        onNavigateHome={() => navigateTo('home')}
+        onNavigateActivities={() => navigateTo('activities')}
+      />
+    );
+  }
+
+  // Main Home Page
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] overflow-x-hidden w-full max-w-full relative p-0 m-0">
       {/* 1. Real-time Branch Operational Status Bar & 2. Navbar Header */}
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 pointer-events-auto border-none shadow-none m-0 p-0 ${
+        className={`fixed top-0 left-0 right-0 w-full z-[999] transition-all duration-300 pointer-events-auto border-none shadow-none m-0 p-0 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-xs'
+            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200'
             : 'bg-transparent border-transparent shadow-none'
         }`}
       >
-        {/* Real-time Top Operational Bar (Border-none, Zero Gap) */}
+        {/* Real-time Top Operational Bar (Border-none, Zero Gap, with Language Selector) */}
         <TopOperationalBar />
 
         {/* Main Dynamic Navbar Container */}
@@ -108,7 +179,7 @@ export default function App() {
                         : 'bg-white/20 text-white border border-white/30 backdrop-blur-xs'
                     }`}
                   >
-                    KANTOR CABANG
+                    {t.nav.branchBadge}
                   </span>
                 </div>
                 <span
@@ -116,15 +187,15 @@ export default function App() {
                     isScrolled ? 'text-slate-500' : 'text-slate-100/90 drop-shadow-xs'
                   }`}
                 >
-                  Regional Office Jakarta 3
+                  {t.nav.brandSub}
                 </span>
               </div>
             </div>
 
             {/* Desktop Navigation Links & Action Buttons Group */}
-            <div className="hidden lg:flex items-center gap-5 xl:gap-7 flex-shrink-0">
+            <div className="hidden lg:flex items-center gap-4 xl:gap-6 flex-shrink-0">
               {/* Desktop Navigation Links */}
-              <nav className="flex items-center gap-3.5 xl:gap-5 text-sm font-medium whitespace-nowrap flex-shrink-0 border-none shadow-none m-0">
+              <nav className="flex items-center gap-3 xl:gap-4 text-xs xl:text-sm font-semibold whitespace-nowrap flex-shrink-0 border-none shadow-none m-0">
                 <a
                   href="#beranda"
                   className={`transition-colors duration-300 whitespace-nowrap ${
@@ -133,8 +204,33 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Beranda
+                  {t.nav.home}
                 </a>
+
+                {/* Direct Link to Activities Page */}
+                <button
+                  onClick={() => navigateTo('activities')}
+                  className={`transition-colors duration-300 whitespace-nowrap cursor-pointer ${
+                    isScrolled
+                      ? 'text-slate-700 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                  }`}
+                >
+                  {t.nav.activities}
+                </button>
+
+                {/* Direct Link to Organization Structure Page */}
+                <button
+                  onClick={() => navigateTo('org')}
+                  className={`transition-colors duration-300 whitespace-nowrap cursor-pointer ${
+                    isScrolled
+                      ? 'text-slate-700 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                  }`}
+                >
+                  {t.nav.org}
+                </button>
+
                 <a
                   href="#layanan"
                   className={`transition-colors duration-300 whitespace-nowrap ${
@@ -143,7 +239,7 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Layanan
+                  {t.nav.services}
                 </a>
                 <a
                   href="#tim-bisnis"
@@ -153,7 +249,7 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Tim Petugas & RM
+                  {t.nav.team}
                 </a>
                 <a
                   href="#simulasi"
@@ -163,7 +259,7 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Simulasi
+                  {t.nav.calculator}
                 </a>
                 <a
                   href="#unit-supervisi"
@@ -173,7 +269,7 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Unit Kerja
+                  {t.nav.units}
                 </a>
                 <a
                   href="#panduan"
@@ -183,7 +279,7 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Panduan & FAQ
+                  {t.nav.faq}
                 </a>
                 <a
                   href="#lokasi"
@@ -193,37 +289,37 @@ export default function App() {
                       : 'text-white hover:text-blue-200 drop-shadow-md'
                   }`}
                 >
-                  Kontak
+                  {t.nav.contact}
                 </a>
               </nav>
 
               {/* Distinct Spacer & Header CTA Buttons */}
-              <div className="flex items-center gap-3 pl-4 border-l border-slate-200/50 flex-shrink-0">
+              <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200/50 flex-shrink-0">
                 <button
                   onClick={() => openFAQModal('digital')}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold border transition-all cursor-pointer whitespace-nowrap ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer whitespace-nowrap ${
                     isScrolled
                       ? 'border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-[#0052CC] hover:text-[#0052CC]'
                       : 'border-white/30 text-white bg-white/10 hover:bg-white/20 backdrop-blur-xs'
                   }`}
                   title="Panduan Aktivasi BRImo & Platform Baru Qita"
                 >
-                  <Smartphone className="w-3.5 h-3.5" />
-                  <span>Qita & BRImo</span>
+                  <Smartphone className="w-3.5 h-3.5 text-[#0052CC]" />
+                  <span>{t.nav.qitaBtn}</span>
                 </button>
 
                 <a
                   href="#tim-bisnis"
-                  className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-extrabold shadow-md shadow-blue-600/20 transition-all active:scale-95 hover:scale-105 whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs font-extrabold shadow-md shadow-blue-600/20 transition-all active:scale-95 hover:scale-105 whitespace-nowrap"
                 >
                   <MessageCircle className="w-4 h-4 fill-white" />
-                  <span>Hubungi Petugas</span>
+                  <span>{t.nav.consultBtn}</span>
                 </a>
               </div>
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="lg:hidden flex items-center">
+            <div className="lg:hidden flex items-center gap-2">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className={`p-2 rounded-xl transition-colors duration-300 focus:outline-none ${
@@ -231,7 +327,7 @@ export default function App() {
                     ? 'text-slate-700 hover:bg-slate-100'
                     : 'text-white hover:bg-white/20 backdrop-blur-xs'
                 }`}
-                aria-label="Buka Navigasi Mobile"
+                aria-label={t.nav.menuAria}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -255,8 +351,37 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Beranda
+              {t.nav.home}
             </a>
+
+            {/* Mobile Link to Activities */}
+            <button
+              onClick={() => navigateTo('activities')}
+              className={`w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                isScrolled ? 'hover:bg-blue-50 text-[#0052CC]' : 'hover:bg-white/10 text-blue-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Newspaper className="w-4 h-4 text-[#0052CC]" />
+                <span>{t.nav.activities}</span>
+              </div>
+              <ChevronRight className="w-4 h-4 opacity-70" />
+            </button>
+
+            {/* Mobile Link to Organization */}
+            <button
+              onClick={() => navigateTo('org')}
+              className={`w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                isScrolled ? 'hover:bg-blue-50 text-[#0052CC]' : 'hover:bg-white/10 text-blue-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Network className="w-4 h-4 text-[#0052CC]" />
+                <span>{t.nav.org}</span>
+              </div>
+              <ChevronRight className="w-4 h-4 opacity-70" />
+            </button>
+
             <a
               href="#layanan"
               onClick={() => setMobileMenuOpen(false)}
@@ -264,7 +389,7 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Layanan Bisnis & Digital Banking Qita
+              {t.nav.services}
             </a>
             <a
               href="#tim-bisnis"
@@ -273,7 +398,7 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Direktori Tim Petugas ({teamMembers.length} RM & Universal Banker)
+              {t.nav.team} ({teamMembers.length} {t.team.officersText})
             </a>
             <a
               href="#simulasi"
@@ -282,7 +407,7 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Simulasi Angsuran Kredit (KPR, KKB, BRIguna)
+              {t.nav.calculator}
             </a>
             <a
               href="#unit-supervisi"
@@ -291,7 +416,7 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Jaringan 8 Kantor Unit Supervisi
+              {t.nav.units} (8 Unit)
             </a>
             <a
               href="#panduan"
@@ -300,7 +425,7 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Panduan Dokumen & FAQ Layanan
+              {t.nav.faq}
             </a>
             <a
               href="#lokasi"
@@ -309,8 +434,13 @@ export default function App() {
                 isScrolled ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-white/10 text-slate-100'
               }`}
             >
-              Lokasi Kantor & Kontak Resmi
+              {t.nav.contact}
             </a>
+
+            {/* Mobile Language Selector Integration */}
+            <div className="pt-2">
+              <LanguageSelector variant="mobile" />
+            </div>
 
             <div className="pt-3 border-t border-slate-200/40 space-y-2">
               <button
@@ -321,7 +451,7 @@ export default function App() {
                 className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border border-[#0052CC]/30 bg-blue-50 text-[#0052CC]"
               >
                 <Smartphone className="w-4 h-4" />
-                <span>Panduan Aktivasi BRImo & Platform Baru Qita</span>
+                <span>{t.welcome.btnFaq}</span>
               </button>
 
               <a
@@ -333,7 +463,7 @@ export default function App() {
                 }`}
               >
                 <Phone className="w-4 h-4 text-[#0052CC]" />
-                <span>Telepon Cabang: (021) 56981105</span>
+                <span>{t.location.hours} • (021) 56981105</span>
               </a>
 
               <a
@@ -342,7 +472,7 @@ export default function App() {
                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-sm font-bold shadow-md text-center"
               >
                 <MessageCircle className="w-4 h-4 fill-white" />
-                <span>Konsultasi Petugas Cabang</span>
+                <span>{t.nav.consultBtn}</span>
               </a>
             </div>
           </div>
@@ -360,20 +490,18 @@ export default function App() {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider mb-4 border border-blue-200">
               <Building2 className="w-4 h-4 text-[#0052CC]" />
-              <span>Portal Profil Resmi Kantor Cabang</span>
+              <span>{t.welcome.badge}</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-              Melayani Setulus Hati, Menggerakkan Ekonomi{' '}
+              {t.welcome.headingStart}{' '}
               <span className="text-[#0052CC]">
-                Jakarta Barat
+                {t.welcome.headingHighlight}
               </span>
             </h2>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 sm:mb-8">
-              Selamat datang di portal informasi <strong>BRI Kantor Cabang Jakarta Jelambar</strong>. 
-              Kami hadir memberikan solusi perbankan terintegrasi mulai dari platform digital generasi baru <strong>Qita & BRImo</strong>, 
-              Kredit Usaha (KUR & SME), pengelolaan kas & giro korporasi, hingga layanan perbankan harian langsung bersama tim <strong>Universal Banker (UB)</strong>.
+              {t.welcome.desc}
             </p>
 
             {/* Quick Action Buttons */}
@@ -383,41 +511,41 @@ export default function App() {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white font-bold text-sm shadow-md shadow-blue-600/20 transition-all hover:scale-[1.02] text-center"
               >
                 <Users className="w-4 h-4 text-white" />
-                <span>Lihat Struktur Tim & Chat Petugas</span>
-              </a>
-              <a
-                href="#simulasi"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all text-center"
-              >
-                <Calculator className="w-4 h-4 text-[#0052CC]" />
-                <span>Simulasi Angsuran Kredit</span>
+                <span>{t.welcome.btnTeam}</span>
               </a>
               <button
-                onClick={() => openFAQModal('digital')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0052CC] font-bold text-sm border border-blue-200 transition-all text-center cursor-pointer"
+                onClick={() => navigateTo('activities')}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 hover:border-[#0052CC] text-slate-800 font-bold text-sm shadow-xs transition-all text-center cursor-pointer"
               >
-                <Smartphone className="w-4 h-4" />
-                <span>Panduan Qita & FAQ</span>
+                <Newspaper className="w-4 h-4 text-[#0052CC]" />
+                <span>{t.nav.activities}</span>
+              </button>
+              <button
+                onClick={() => navigateTo('org')}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all text-center cursor-pointer"
+              >
+                <Network className="w-4 h-4 text-[#0052CC]" />
+                <span>{t.nav.org}</span>
               </button>
             </div>
 
             {/* Statistics Cards Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-left w-full">
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">13 Petugas</div>
-                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">10 RM & 3 Universal Banker</div>
+                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{teamMembers.length} {t.team.officersText}</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.welcome.statStaffSub}</div>
               </div>
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-xl sm:text-2xl font-black text-emerald-600">&lt; 15 Mnt</div>
-                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Respon Cepat WhatsApp</div>
+                <div className="text-xl sm:text-2xl font-black text-emerald-600">{t.welcome.statSpeed}</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.welcome.statSpeedSub}</div>
               </div>
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
                 <div className="text-xl sm:text-2xl font-black text-[#0052CC]">8 Unit</div>
-                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi KC Jelambar</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.welcome.statUnitsSub}</div>
               </div>
               <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">5 Segmen</div>
-                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">UB, Kredit, Dana, CRR & Mikro</div>
+                <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{t.welcome.statSegments}</div>
+                <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.welcome.statSegmentsSub}</div>
               </div>
             </div>
           </div>
@@ -429,10 +557,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
             <h2 className="text-xs font-bold uppercase tracking-widest text-[#0052CC] mb-2">
-              PORTOFOLIO LAYANAN UNGGULAN
+              {t.services.tagline}
             </h2>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              Solusi Finansial Komprehensif untuk Semua Segmen
+              {t.services.title}
             </h3>
           </div>
 
@@ -443,13 +571,13 @@ export default function App() {
               <div className="space-y-3 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0052CC] text-xs font-bold uppercase tracking-wider border border-blue-200">
                   <Smartphone className="w-3.5 h-3.5 text-[#0052CC]" />
-                  <span>Platform Generasi Baru Digital Banking</span>
+                  <span>{t.services.spotlightBadge}</span>
                 </div>
                 <h4 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                  Digital Banking Terpadu (BRImo & Platform Baru Qita)
+                  {t.services.spotlightTitle}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  Nikmati kemudahan transaksi perbankan harian melalui ekosistem digital <strong>BRImo</strong> serta transisi menuju platform generasi baru <strong>Qita</strong>. Untuk panduan aktivasi, registrasi akun, maupun pendampingan migrasi fitur digital, silakan konsultasikan langsung dengan tim <strong>Universal Banker (UB)</strong> kami di Banking Hall KC Jakarta Jelambar.
+                  {t.services.spotlightDesc}
                 </p>
               </div>
 
@@ -459,14 +587,14 @@ export default function App() {
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/20 transition-all cursor-pointer whitespace-nowrap"
                 >
                   <FileText className="w-4 h-4" />
-                  <span>Panduan & Syarat Qita</span>
+                  <span>{t.services.btnSpotlightGuide}</span>
                 </button>
                 <a
                   href="#tim-bisnis"
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white border border-blue-200 hover:bg-blue-50 text-[#0052CC] text-xs sm:text-sm font-bold transition-all text-center whitespace-nowrap"
                 >
                   <Users className="w-4 h-4" />
-                  <span>Chat Universal Banker</span>
+                  <span>{t.services.btnSpotlightChat}</span>
                 </a>
               </div>
             </div>
@@ -479,20 +607,20 @@ export default function App() {
                 <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#0052CC] flex items-center justify-center mb-4">
                   <PiggyBank className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-base mb-2">Simpanan & Cash Management</h4>
+                <h4 className="font-bold text-slate-900 text-base mb-2">{t.services.card1Title}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Giro Rupiah & Valas, Payroll BRI, Deposito Berjangka dengan bunga kompetitif, dan Cash Management System (CMS).
+                  {t.services.card1Desc}
                 </p>
               </div>
               <div className="flex items-center justify-between pt-2">
                 <a href="#tim-bisnis" className="text-xs font-bold text-[#0052CC] hover:text-[#1D4ED8] flex items-center gap-1">
-                  Konsultasi RM Dana <ChevronRight className="w-3.5 h-3.5" />
+                  {t.services.card1Cta} <ChevronRight className="w-3.5 h-3.5" />
                 </a>
                 <button
                   onClick={() => openFAQModal('giro')}
                   className="text-[11px] font-semibold text-slate-500 hover:text-[#0052CC] underline cursor-pointer"
                 >
-                  Syarat Giro
+                  {t.services.card1Req}
                 </button>
               </div>
             </div>
@@ -503,20 +631,20 @@ export default function App() {
                 <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#0052CC] flex items-center justify-center mb-4">
                   <CreditCard className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-base mb-2">Kredit Komersial & SME</h4>
+                <h4 className="font-bold text-slate-900 text-base mb-2">{t.services.card2Title}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Kredit Modal Kerja (KMK), Kredit Investasi pengembangan pabrik/ruko, serta fasilitas Bank Garansi tender.
+                  {t.services.card2Desc}
                 </p>
               </div>
               <div className="flex items-center justify-between pt-2">
                 <a href="#tim-bisnis" className="text-xs font-bold text-[#0052CC] hover:text-[#1D4ED8] flex items-center gap-1">
-                  Konsultasi RM Kredit <ChevronRight className="w-3.5 h-3.5" />
+                  {t.services.card2Cta} <ChevronRight className="w-3.5 h-3.5" />
                 </a>
                 <button
                   onClick={() => openFAQModal('sme')}
                   className="text-[11px] font-semibold text-slate-500 hover:text-[#0052CC] underline cursor-pointer"
                 >
-                  Syarat SME
+                  {t.services.card2Req}
                 </button>
               </div>
             </div>
@@ -527,20 +655,20 @@ export default function App() {
                 <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4">
                   <Store className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-base mb-2">Solusi Merchant & EDC</h4>
+                <h4 className="font-bold text-slate-900 text-base mb-2">{t.services.card3Title}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Pengadaan mesin EDC Android modern, QRIS Statis/Dinamis kasir, BRI Soundbox, dan settlement dana cepat.
+                  {t.services.card3Desc}
                 </p>
               </div>
               <div className="flex items-center justify-between pt-2">
                 <a href="#tim-bisnis" className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
-                  Konsultasi Merchant <ChevronRight className="w-3.5 h-3.5" />
+                  {t.services.card3Cta} <ChevronRight className="w-3.5 h-3.5" />
                 </a>
                 <button
                   onClick={() => openFAQModal('merchant')}
                   className="text-[11px] font-semibold text-slate-500 hover:text-emerald-700 underline cursor-pointer"
                 >
-                  Syarat EDC
+                  {t.services.card3Req}
                 </button>
               </div>
             </div>
@@ -551,20 +679,20 @@ export default function App() {
                 <div className="w-12 h-12 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center mb-4">
                   <RotateCcw className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-base mb-2">Restrukturisasi & Recovery</h4>
+                <h4 className="font-bold text-slate-900 text-base mb-2">{t.services.card4Title}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Penataan skema kewajiban kredit komersial, keringanan angsuran usaha, dan konsultasi recovery pembiayaan.
+                  {t.services.card4Desc}
                 </p>
               </div>
               <div className="flex items-center justify-between pt-2">
                 <a href="#tim-bisnis" className="text-xs font-bold text-teal-800 hover:text-teal-900 flex items-center gap-1">
-                  Konsultasi RM CRR <ChevronRight className="w-3.5 h-3.5" />
+                  {t.services.card4Cta} <ChevronRight className="w-3.5 h-3.5" />
                 </a>
                 <button
                   onClick={() => openFAQModal('crr')}
                   className="text-[11px] font-semibold text-slate-500 hover:text-teal-800 underline cursor-pointer"
                 >
-                  Prosedur CRR
+                  {t.services.card4Req}
                 </button>
               </div>
             </div>
@@ -584,16 +712,16 @@ export default function App() {
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
               <Building2 className="w-3.5 h-3.5 text-[#0052CC]" />
-              <span>Regional Office Jakarta 3 • Supervisi 8 Kantor Unit</span>
+              <span>{t.units.badge}</span>
             </div>
             <h2 className="text-xs font-bold uppercase tracking-widest text-[#0052CC] mb-2">
-              JARINGAN KANTOR & SUPERVISI
+              {t.units.tagline}
             </h2>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              8 Unit Kerja di Bawah Supervisi BRI KC Jakarta Jelambar
+              {t.units.title}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 mt-2">
-              Jangkauan pelayanan perbankan mikro, retail, simpanan, dan merchant yang tersebar strategis di seluruh wilayah Jelambar, Grogol, Angke, Pejagalan, Kapuk, dan sekitarnya.
+              {t.units.desc}
             </p>
           </div>
 
@@ -634,21 +762,21 @@ export default function App() {
                     {unit.specializations.map((spec, idx) => (
                       <div key={idx} className="flex items-center gap-1.5">
                         <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${spec.dotColor || 'bg-[#0052CC]'}`} />
-                        <span className="truncate">{spec.label}</span>
+                        <span className="truncate">{getUnitSpecializationLabel(spec, language)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="text-slate-400 font-medium truncate pr-2">{unit.areaTag}</span>
+                  <span className="text-slate-400 font-medium truncate pr-2">{getUnitAreaTag(unit, language)}</span>
                   <a
                     href={unit.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#0052CC] font-bold hover:underline flex items-center gap-1 flex-shrink-0"
                   >
-                    <span>Buka Maps</span>
+                    <span>{t.units.openMaps}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
@@ -668,26 +796,26 @@ export default function App() {
             <div className="space-y-3 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider border border-blue-200">
                 <MapPin className="w-3.5 h-3.5" />
-                <span>Alamat & Lokasi Kantor Cabang</span>
+                <span>{t.location.badge}</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                Kantor Cabang BRI Jakarta Jelambar
+                {t.location.branchName}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed break-words">
-                <strong>Alamat Lengkap:</strong> Jalan Makaliwe Raya No. 35 C Wijaya Kusuma, RT.2/RW.5, Grogol, Kec. Grogol Petamburan, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11450.
+                <strong>{t.location.addressLabel}</strong> {t.location.addressFull}
               </p>
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-slate-600 pt-1">
                 <div className="flex items-center gap-1.5 font-medium">
                   <Clock className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
-                  <span>Senin - Jumat: 08.00 - 15.00 WIB</span>
+                  <span>{t.location.hours}</span>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <Phone className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
-                  <a href="tel:02156981105" className="text-[#0052CC] hover:underline font-semibold">(021) 56981105</a>
+                  <a href="tel:02156981105" className="text-[#0052CC] hover:underline font-semibold">{t.location.phone}</a>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <Mail className="w-4 h-4 text-[#0052CC] flex-shrink-0" />
-                  <a href="mailto:kcjelambarbri@gmail.com" className="text-[#0052CC] hover:underline font-semibold break-all">kcjelambarbri@gmail.com</a>
+                  <a href="mailto:kcjelambarbri@gmail.com" className="text-[#0052CC] hover:underline font-semibold break-all">{t.location.email}</a>
                 </div>
               </div>
             </div>
@@ -700,7 +828,7 @@ export default function App() {
                 className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-95 text-center whitespace-nowrap"
               >
                 <MapPin className="w-4 h-4 text-white" />
-                <span>Petunjuk Arah Google Maps</span>
+                <span>{t.location.btnMaps}</span>
                 <ExternalLink className="w-3.5 h-3.5 opacity-80" />
               </a>
               <a
@@ -708,7 +836,7 @@ export default function App() {
                 className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white border border-slate-300 hover:border-[#0052CC] hover:bg-blue-50/50 text-slate-700 hover:text-[#0052CC] text-xs sm:text-sm font-bold transition-all text-center whitespace-nowrap"
               >
                 <Mail className="w-4 h-4 text-[#0052CC]" />
-                <span>Kirim Email Resmi</span>
+                <span>{t.location.btnEmail}</span>
               </a>
             </div>
           </div>
@@ -733,30 +861,30 @@ export default function App() {
                     KC Jakarta Jelambar
                   </div>
                   <div className="text-[10px] text-blue-200 font-semibold truncate">
-                    Regional Office Jakarta 3
+                    {t.nav.brandSub}
                   </div>
                 </div>
               </div>
 
               <p className="text-blue-100 text-xs leading-relaxed break-words">
-                Kantor Cabang pengelola supervisi 8 Kantor Unit di Jakarta Barat, menghadirkan layanan perbankan terpadu bagi nasabah personal, UMKM, dan korporasi.
+                {t.footer.desc}
               </p>
 
               <div className="space-y-2.5 text-xs text-blue-100 pt-2">
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 text-blue-300 flex-shrink-0 mt-0.5" />
-                  <span className="break-words">Jalan Makaliwe Raya No. 35 C Wijaya Kusuma, Grogol, Jakarta Barat 11450</span>
+                  <span className="break-words">{t.location.addressFull}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-blue-300 flex-shrink-0" />
                   <a href="tel:02156981105" className="text-blue-100 hover:text-white font-semibold transition-colors">
-                    (021) 56981105
+                    {t.location.phone}
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-blue-300 flex-shrink-0" />
                   <a href="mailto:kcjelambarbri@gmail.com" className="text-blue-100 hover:text-white font-semibold transition-colors break-all">
-                    kcjelambarbri@gmail.com
+                    {t.location.email}
                   </a>
                 </div>
               </div>
@@ -766,16 +894,34 @@ export default function App() {
             <div>
               <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
-                Pilar Layanan & Dokumen
+                {t.footer.col1Title}
               </h5>
               <ul className="space-y-2.5 text-sm">
+                <li>
+                  <button
+                    onClick={() => navigateTo('activities')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>{t.nav.activities}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => navigateTo('org')}
+                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <span>{t.nav.org}</span>
+                  </button>
+                </li>
                 <li>
                   <button
                     onClick={() => openFAQModal('digital')}
                     className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                   >
                     <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>Panduan Qita & BRImo Digital</span>
+                    <span>{t.welcome.btnFaq}</span>
                   </button>
                 </li>
                 <li>
@@ -784,7 +930,7 @@ export default function App() {
                     className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                   >
                     <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>Syarat Kredit Modal Kerja & SME</span>
+                    <span>{t.services.card2Title}</span>
                   </button>
                 </li>
                 <li>
@@ -793,7 +939,7 @@ export default function App() {
                     className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                   >
                     <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>Syarat Pengajuan KPR & BRIguna</span>
+                    <span>{t.calc.tabKpr} & {t.calc.tabBriguna}</span>
                   </button>
                 </li>
                 <li>
@@ -802,25 +948,7 @@ export default function App() {
                     className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                   >
                     <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>Dokumen Giro Badan Usaha (PT/CV)</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => openFAQModal('merchant')}
-                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>Syarat Mesin EDC & QRIS Merchant</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => openFAQModal('crr')}
-                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>Prosedur Restrukturisasi Kredit</span>
+                    <span>{t.services.card1Title}</span>
                   </button>
                 </li>
               </ul>
@@ -830,7 +958,7 @@ export default function App() {
             <div>
               <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
-                Layanan Digital Terhubung
+                {t.footer.col2Title}
               </h5>
               <ul className="space-y-2.5 text-sm">
                 <li className="flex items-center gap-2 text-blue-100">
@@ -864,12 +992,12 @@ export default function App() {
             <div>
               <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
-                Layanan Kontak 24 Jam
+                {t.footer.col3Title}
               </h5>
               <div className="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/20 shadow-sm space-y-4 w-full">
                 <div>
                   <div className="text-[11px] text-blue-200 font-bold uppercase tracking-wider mb-1">
-                    Contact BRI Hotline 24 Jam
+                    {t.footer.hotline24}
                   </div>
                   <a
                     href="tel:1500017"
@@ -882,7 +1010,7 @@ export default function App() {
 
                 <div className="pt-3 border-t border-white/15">
                   <div className="text-[11px] text-blue-200 font-bold uppercase tracking-wider mb-1">
-                    Sabrina WhatsApp Resmi
+                    {t.footer.sabrinaWA}
                   </div>
                   <a
                     href="https://wa.me/628121214017"
@@ -896,20 +1024,20 @@ export default function App() {
                 </div>
 
                 <div className="pt-2 text-[11px] text-blue-200/80">
-                  Respon cepat & informasi resmi nasabah Bank BRI.
+                  {t.footer.hotlineDesc}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Bottom Bar / Hak Cipta & Legalitas */}
+          {/* Bottom Bar / Hak Cipta, Developer Signature & Legalitas */}
           <div className="pt-6 sm:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200 text-center md:text-left w-full">
-            <p>
-              © {new Date().getFullYear()} PT Bank Rakyat Indonesia (Persero) Tbk — Kantor Cabang Jakarta Jelambar. Seluruh hak cipta dilindungi undang-undang.
+            <p className="leading-relaxed">
+              {t.footer.copyright}
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white font-medium text-[11px] shadow-xs flex-shrink-0 backdrop-blur-xs">
               <ShieldCheck className="w-4 h-4 text-blue-300 flex-shrink-0" />
-              <span>Berizin & Diawasi OJK serta Peserta Penjaminan LPS</span>
+              <span>{t.footer.legal}</span>
             </div>
           </div>
         </div>
@@ -925,5 +1053,13 @@ export default function App() {
       {/* Floating Scroll to Top Button */}
       <ScrollToTop />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <MainApp />
+    </LanguageProvider>
   );
 }

@@ -7,10 +7,15 @@ import {
   generateWhatsAppLink,
   quickConsultationTopics,
   getInitials,
+  getMemberBio,
+  getMemberRole,
+  getMemberOffice,
+  getMemberSpecializations,
   TeamMember,
   FilterCategory,
   TeamSegment
 } from '../data/team';
+import { useLanguage } from '../context/LanguageContext';
 import {
   Search,
   MessageCircle,
@@ -40,6 +45,7 @@ import {
 } from 'lucide-react';
 
 export default function TeamDirectory() {
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<FilterCategory>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTopic, setSelectedTopic] = useState<string>('Semua Topik');
@@ -64,6 +70,24 @@ export default function TeamDirectory() {
     }
   };
 
+  // Localized Tab Labels
+  const getTabLabel = (id: FilterCategory) => {
+    switch (id) {
+      case 'all':
+        return t.team.tabAll;
+      case 'ub':
+        return t.team.tabUb;
+      case 'lending':
+        return t.team.tabLending;
+      case 'funding':
+        return t.team.tabFunding;
+      case 'restrukturisasi':
+        return t.team.tabRestructuring;
+      default:
+        return id;
+    }
+  };
+
   // Filter logic
   const filteredMembers = useMemo(() => {
     return teamMembers.filter((member) => {
@@ -81,34 +105,41 @@ export default function TeamDirectory() {
 
       // 2. Search query filtering
       const query = searchQuery.toLowerCase().trim();
+      const localizedRole = getMemberRole(member, language).toLowerCase();
+      const localizedOffice = getMemberOffice(member, language).toLowerCase();
+      const localizedSpecs = getMemberSpecializations(member, language);
+      const localizedBio = getMemberBio(member, language).toLowerCase();
+
       const matchesSearch =
         !query ||
         member.name.toLowerCase().includes(query) ||
         member.role.toLowerCase().includes(query) ||
+        localizedRole.includes(query) ||
         member.unitOffice.toLowerCase().includes(query) ||
-        member.specializations.some((spec) => spec.toLowerCase().includes(query));
+        localizedOffice.includes(query) ||
+        localizedBio.includes(query) ||
+        member.specializations.some((spec) => spec.toLowerCase().includes(query)) ||
+        localizedSpecs.some((spec) => spec.toLowerCase().includes(query));
 
       // 3. Topic filter
       let matchesTopic = true;
       if (selectedTopic !== 'Semua Topik') {
         const topicNorm = selectedTopic.toLowerCase();
-        matchesTopic = member.specializations.some((spec) =>
-          spec.toLowerCase().includes(topicNorm) ||
-          (topicNorm.includes('qita') && (spec.toLowerCase().includes('qita') || spec.toLowerCase().includes('brimo'))) ||
-          (topicNorm.includes('rekening') && (spec.toLowerCase().includes('rekening') || spec.toLowerCase().includes('tabungan'))) ||
-          (topicNorm.includes('kur') && spec.toLowerCase().includes('kur')) ||
-          (topicNorm.includes('giro') && (spec.toLowerCase().includes('giro') || spec.toLowerCase().includes('payroll'))) ||
-          (topicNorm.includes('kmk') && spec.toLowerCase().includes('kmk')) ||
-          (topicNorm.includes('sme') && spec.toLowerCase().includes('sme')) ||
-          (topicNorm.includes('kupedes') && spec.toLowerCase().includes('kupedes')) ||
-          (topicNorm.includes('restrukturisasi') && (spec.toLowerCase().includes('restrukturisasi') || spec.toLowerCase().includes('recovery'))) ||
-          (topicNorm.includes('angsuran') && (spec.toLowerCase().includes('angsuran') || spec.toLowerCase().includes('portofolio')))
-        );
+        matchesTopic =
+          member.specializations.some((spec) => spec.toLowerCase().includes(topicNorm)) ||
+          localizedSpecs.some((spec) => spec.toLowerCase().includes(topicNorm)) ||
+          (topicNorm.includes('qita') && (member.segment === 'UB' || localizedBio.includes('qita'))) ||
+          (topicNorm.includes('rekening') && (member.segment === 'UB' || member.segment === 'Funding')) ||
+          (topicNorm.includes('kur') && member.segment === 'Mikro') ||
+          (topicNorm.includes('giro') && member.segment === 'Funding') ||
+          (topicNorm.includes('kmk') && member.segment === 'Lending') ||
+          (topicNorm.includes('sme') && member.segment === 'Lending') ||
+          (topicNorm.includes('restrukturisasi') && (member.segment === 'CRR' || member.segment === 'Collection'));
       }
 
       return matchesTab && matchesSearch && matchesTopic;
     });
-  }, [activeTab, searchQuery, selectedTopic]);
+  }, [activeTab, searchQuery, selectedTopic, language]);
 
   // Tab counts
   const tabCounts = useMemo(() => {
@@ -125,7 +156,7 @@ export default function TeamDirectory() {
   const handleCopyPhone = (member: TeamMember) => {
     navigator.clipboard.writeText(member.displayPhone || member.phone);
     setCopiedId(member.id);
-    setToastMessage(`Nomor kontak ${member.name} (${member.displayPhone}) berhasil disalin!`);
+    setToastMessage(`${t.team.btnCopied} (${member.name} - ${member.displayPhone})`);
 
     setTimeout(() => {
       setCopiedId(null);
@@ -149,13 +180,13 @@ export default function TeamDirectory() {
         return {
           bg: 'bg-blue-50 text-[#0052CC] border-blue-200',
           dot: 'bg-[#0052CC]',
-          label: 'Simpanan & Dana',
+          label: t.team.tabFunding,
         };
       case 'Lending':
         return {
           bg: 'bg-blue-50 text-[#0052CC] border-blue-200',
           dot: 'bg-[#0052CC]',
-          label: 'Kredit & Pinjaman',
+          label: t.team.tabLending,
         };
       case 'Mikro':
         return {
@@ -196,38 +227,37 @@ export default function TeamDirectory() {
         <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs md:text-sm font-bold tracking-wide uppercase mb-4 border border-blue-200">
             <ShieldCheck className="w-4 h-4 text-[#0052CC]" />
-            <span>Koneksi Langsung Petugas Resmi BRI</span>
+            <span>{t.team.badge}</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-            Struktur Tim Bisnis &{' '}
+            {t.team.titleStart}{' '}
             <span className="text-[#0052CC]">
-              Relationship Manager
+              {t.team.titleHighlight}
             </span>
           </h2>
 
           <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Terhubung langsung dengan <strong>{teamMembers.length} Petugas Resmi (10 Relationship Manager & 3 Universal Banker) BRI KC Jakarta Jelambar</strong>. 
-            Konsultasikan kebutuhan kredit usaha, simpanan giro/deposito, aktivasi platform digital baru QITA & BRImo, hingga restrukturisasi komersial via WhatsApp.
+            {t.team.desc}
           </p>
 
           {/* Quick Statistics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-8 w-full text-left sm:text-center">
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{teamMembers.length} Petugas</div>
-              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">10 RM & 3 Universal Banker</div>
+              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{teamMembers.length} {t.team.officersText}</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.team.statStaffSub}</div>
             </div>
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">5 Segmen</div>
-              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">UB, Kredit, Dana, CRR & Mikro</div>
+              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{t.team.statSegments}</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.team.statSegmentsSub}</div>
             </div>
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="text-xl sm:text-2xl font-black text-emerald-600">Respon Cepat</div>
-              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Konsultasi WhatsApp</div>
+              <div className="text-xl sm:text-2xl font-black text-emerald-600">{t.team.statFastResponse}</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.team.statFastResponseSub}</div>
             </div>
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">8 Unit</div>
-              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Jaringan Supervisi Cabang</div>
+              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{t.team.statBranchNetwork}</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">{t.team.statBranchNetworkSub}</div>
             </div>
           </div>
         </div>
@@ -256,7 +286,7 @@ export default function TeamDirectory() {
                   <span className={isActive ? 'text-white' : 'text-[#0052CC]'}>
                     {getTabIcon(tab.iconName)}
                   </span>
-                  <span>{tab.shortLabel}</span>
+                  <span>{getTabLabel(tab.id)}</span>
                   <span
                     className={`text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full font-bold ${
                       isActive
@@ -282,7 +312,7 @@ export default function TeamDirectory() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari nama (Sri Mulyani, Utama Farid, Fahmi...), layanan (QITA, BRImo, KUR, KMK, Giro)..."
+                placeholder={t.team.searchPlaceholder}
                 className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0052CC]/30 focus:border-[#0052CC] transition-all"
               />
               {searchQuery && (
@@ -300,7 +330,7 @@ export default function TeamDirectory() {
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 md:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
               <span className="text-xs font-semibold text-slate-500 whitespace-nowrap flex items-center gap-1 flex-shrink-0">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-                Topik:
+                {t.team.topicLabel}
               </span>
               <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
                 {quickConsultationTopics.map((topic) => {
@@ -326,7 +356,7 @@ export default function TeamDirectory() {
           {/* Active Filter Indicators & Results Count */}
           <div className="flex flex-wrap items-center justify-between gap-2 mt-3.5 pt-3 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500">
             <div>
-              Menampilkan <span className="font-bold text-slate-800">{filteredMembers.length}</span> dari {teamMembers.length} Petugas
+              {t.team.showingText} <span className="font-bold text-slate-800">{filteredMembers.length}</span> {t.team.ofText} {teamMembers.length} {t.team.officersText}
               {searchQuery && (
                 <span className="ml-1.5 font-medium text-[#0052CC]">
                   &ldquo;{searchQuery}&rdquo;
@@ -334,7 +364,7 @@ export default function TeamDirectory() {
               )}
               {selectedTopic !== 'Semua Topik' && (
                 <span className="ml-1.5 inline-flex items-center gap-1 text-[#0052CC] font-semibold">
-                  • Topik: {selectedTopic}
+                  • {t.team.topicLabel} {selectedTopic}
                 </span>
               )}
             </div>
@@ -349,7 +379,7 @@ export default function TeamDirectory() {
                 className="text-[#0052CC] hover:text-[#1D4ED8] font-semibold hover:underline flex items-center gap-1 whitespace-nowrap cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
-                Reset Filter
+                {t.team.resetFilter}
               </button>
             )}
           </div>
@@ -361,6 +391,11 @@ export default function TeamDirectory() {
             {filteredMembers.map((member) => {
               const badge = getSegmentBadge(member.segment);
               const isCopied = copiedId === member.id;
+              const roleDisplay = getMemberRole(member, language);
+              const officeDisplay = getMemberOffice(member, language);
+              const bioDisplay = getMemberBio(member, language);
+              const specsDisplay = getMemberSpecializations(member, language);
+
               const waUrl = generateWhatsAppLink(
                 member.phone,
                 member.name,
@@ -408,7 +443,7 @@ export default function TeamDirectory() {
                         </div>
                         <span
                           className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"
-                          title="Status: Aktif / Layanan On-Duty"
+                          title={t.team.dutyStatus}
                         />
                       </div>
 
@@ -428,7 +463,7 @@ export default function TeamDirectory() {
                         </h3>
 
                         <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-0.5 line-clamp-1">
-                          {member.role}
+                          {roleDisplay}
                         </p>
                       </div>
                     </div>
@@ -436,13 +471,13 @@ export default function TeamDirectory() {
                     {/* Office / Supervised Area */}
                     <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 mb-3 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-100">
                       <Building2 className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                      <span className="truncate">{member.unitOffice}</span>
+                      <span className="truncate">{officeDisplay}</span>
                     </div>
 
                     {/* Bio or Profile highlight */}
-                    {member.bio && (
+                    {bioDisplay && (
                       <p className="text-xs text-slate-600 leading-relaxed mb-4 line-clamp-2">
-                        {member.bio}
+                        {bioDisplay}
                       </p>
                     )}
 
@@ -450,10 +485,10 @@ export default function TeamDirectory() {
                     <div className="mt-auto pt-2">
                       <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1">
                         <Layers className="w-3 h-3 text-[#0052CC]" />
-                        Layanan Kunci
+                        {t.team.keyServices}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
-                        {member.specializations.map((spec, index) => {
+                        {specsDisplay.map((spec, index) => {
                           const isTopicMatch =
                             selectedTopic !== 'Semua Topik' &&
                             spec.toLowerCase().includes(selectedTopic.toLowerCase());
@@ -467,7 +502,7 @@ export default function TeamDirectory() {
                                   ? 'bg-[#0052CC] text-white font-bold shadow-xs'
                                   : 'bg-slate-100 text-slate-700 hover:bg-[#0052CC]/10 hover:text-[#0052CC]'
                               }`}
-                              title={`Klik untuk filter: ${spec}`}
+                              title={`Filter: ${spec}`}
                             >
                               {spec}
                             </span>
@@ -487,7 +522,7 @@ export default function TeamDirectory() {
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md hover:shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] text-center cursor-pointer"
                     >
                       <MessageCircle className="w-4 h-4 fill-white" />
-                      <span>Chat via WhatsApp</span>
+                      <span>{t.team.btnChatWA}</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-70 ml-0.5" />
                     </a>
 
@@ -505,12 +540,12 @@ export default function TeamDirectory() {
                         {isCopied ? (
                           <>
                             <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                            <span className="truncate">Nomor Tersalin!</span>
+                            <span className="truncate">{t.team.btnCopied}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                            <span className="truncate">Salin ({member.displayPhone})</span>
+                            <span className="truncate">{t.team.btnCopy} ({member.displayPhone})</span>
                           </>
                         )}
                       </button>
@@ -520,7 +555,7 @@ export default function TeamDirectory() {
                         className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-[#0052CC] hover:bg-[#0052CC]/5 hover:border-[#0052CC]/30 transition-colors flex-shrink-0 text-center cursor-pointer"
                         title="Pilih topik spesifik sebelum membuka WhatsApp"
                       >
-                        Kustomisasi
+                        {t.team.btnCustomize}
                       </button>
                     </div>
                   </div>
@@ -535,10 +570,10 @@ export default function TeamDirectory() {
               <Search className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
             <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2">
-              Tidak Ada Petugas yang Cocok
+              {t.team.emptyTitle}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 mb-6">
-              Coba gunakan kata kunci pencarian lain atau pilih tab &ldquo;Semua Petugas&rdquo;.
+              {t.team.emptyDesc}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -549,7 +584,7 @@ export default function TeamDirectory() {
                 }}
                 className="w-full sm:w-auto px-5 py-2.5 bg-[#0052CC] text-white rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#1D4ED8] transition-colors shadow-sm cursor-pointer"
               >
-                Reset Semua Filter
+                {t.team.emptyBtnReset}
               </button>
               <a
                 href="https://wa.me/6281234567890?text=Halo%20Universal%20Banker%20BRI%20KC%20Jakarta%20Jelambar,%20saya%20memerlukan%20informasi%20layanan%20transaksi%20dan%20digital%20banking."
@@ -557,7 +592,7 @@ export default function TeamDirectory() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold hover:bg-slate-200 transition-colors"
               >
-                Hubungi Universal Banker
+                {t.team.emptyBtnUb}
               </a>
             </div>
           </div>
@@ -592,7 +627,7 @@ export default function TeamDirectory() {
               </div>
               <div className="min-w-0 flex-1">
                 <h4 className="font-bold text-slate-900 text-base truncate">{selectedRMForModal.name}</h4>
-                <p className="text-xs text-slate-500 truncate">{selectedRMForModal.role}</p>
+                <p className="text-xs text-slate-500 truncate">{getMemberRole(selectedRMForModal, language)}</p>
               </div>
             </div>
 
@@ -601,7 +636,7 @@ export default function TeamDirectory() {
                 Pilih Topik Konsultasi Spesifik:
               </label>
               <div className="grid grid-cols-1 gap-1.5 max-h-44 overflow-y-auto pr-1">
-                {selectedRMForModal.specializations.map((spec, i) => (
+                {getMemberSpecializations(selectedRMForModal, language).map((spec, i) => (
                   <button
                     key={i}
                     onClick={() => setCustomInquiryService(spec)}

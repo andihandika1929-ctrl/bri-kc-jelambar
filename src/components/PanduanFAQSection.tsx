@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { faqList, FAQItem } from '../data/faq';
+import {
+  faqList,
+  FAQItem,
+  getFaqQuestion,
+  getFaqSummary,
+  getFaqCategoryLabel,
+  getFaqDocumentTitle,
+  getFaqDocumentItems
+} from '../data/faq';
+import { useLanguage } from '../context/LanguageContext';
 import {
   FileText,
   CheckCircle2,
@@ -21,14 +30,24 @@ interface PanduanFAQSectionProps {
 }
 
 export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProps) {
+  const { t, language } = useLanguage();
   const [expandedId, setExpandedId] = useState<string>(faqList[0].id);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopy = (item: FAQItem) => {
+    const categoryName = getFaqCategoryLabel(item, language);
+    const questionText = getFaqQuestion(item, language);
+    
+    const docsText = item.documents.map((doc) => {
+      const docTitle = getFaqDocumentTitle(doc, language);
+      const docItems = getFaqDocumentItems(doc, language);
+      return `${docTitle}:\n` + docItems.map((it) => `• ${it}`).join('\n');
+    }).join('\n\n');
+
     const text = `*PANDUAN PERSYARATAN BERKAS BRI KC JAKARTA JELAMBAR*\n\n` +
-      `*Layanan:* ${item.categoryLabel}\n` +
-      `*Pertanyaan:* ${item.question}\n\n` +
-      item.documents.map((doc) => `${doc.title}:\n` + doc.items.map((it) => `• ${it}`).join('\n')).join('\n\n') +
+      `*Layanan:* ${categoryName}\n` +
+      `*Pertanyaan:* ${questionText}\n\n` +
+      docsText +
       `\n\n*Konsultasi Petugas:* ${item.rmContact.name} (${item.rmContact.role})\nWhatsApp: https://wa.me/${item.rmContact.phone}`;
 
     navigator.clipboard.writeText(text);
@@ -43,15 +62,15 @@ export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProp
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
             <FileText className="w-3.5 h-3.5 text-[#0052CC]" />
-            <span>Pusat Informasi & Persyaratan Berkas</span>
+            <span>{t.faq.badge}</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
-            Panduan Dokumen & FAQ Layanan
+            {t.faq.title}
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            Ketahui kelengkapan dokumen resmi yang diperlukan untuk pengajuan kredit usaha, KPR, pembukaan giro badan usaha, mesin EDC merchant, hingga restrukturisasi kredit di <strong>BRI KC Jakarta Jelambar</strong>.
+            {t.faq.desc}
           </p>
         </div>
 
@@ -60,6 +79,9 @@ export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProp
           {faqList.map((item) => {
             const isExpanded = expandedId === item.id;
             const isCopied = copiedId === item.id;
+            const questionDisplay = getFaqQuestion(item, language);
+            const summaryDisplay = getFaqSummary(item, language);
+            const categoryDisplay = getFaqCategoryLabel(item, language);
 
             return (
               <div
@@ -78,14 +100,14 @@ export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProp
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-[#0052CC] text-[11px] font-bold border border-blue-200">
-                        {item.categoryLabel}
+                        {categoryDisplay}
                       </span>
                     </div>
                     <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                      {item.question}
+                      {questionDisplay}
                     </h3>
                     <p className="text-xs text-slate-500 mt-1 line-clamp-1">
-                      {item.summary}
+                      {summaryDisplay}
                     </p>
                   </div>
 
@@ -98,64 +120,48 @@ export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProp
                   </div>
                 </button>
 
-                {/* Expanded Content */}
+                {/* Expanded Content Body */}
                 {isExpanded && (
-                  <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-slate-200/80 space-y-5 animate-in fade-in duration-200">
-                    {/* Document Breakdown Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                      {item.documents.map((docGroup, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5"
-                        >
-                          <h4 className="text-xs font-bold text-[#0052CC]">
-                            {docGroup.title}
-                          </h4>
-                          <ul className="space-y-1.5 text-xs text-slate-700">
-                            {docGroup.items.map((docItem, dIdx) => (
-                              <li key={dIdx} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                                <span className="leading-relaxed">{docItem}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                  <div className="px-5 pb-5 pt-1 border-t border-slate-200/60 space-y-4">
+                    {/* Document Checklist Items */}
+                    <div className="space-y-3 pt-2">
+                      {item.documents.map((doc, idx) => {
+                        const docTitle = getFaqDocumentTitle(doc, language);
+                        const docItems = getFaqDocumentItems(doc, language);
+
+                        return (
+                          <div key={idx} className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
+                            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                              {docTitle}
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-slate-600">
+                              {docItems.map((line, lIdx) => (
+                                <li key={lIdx} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-[#0052CC] flex-shrink-0 mt-0.5" />
+                                  <span className="leading-relaxed">{line}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
                     </div>
 
-                    {/* Process Steps */}
-                    {item.processSteps && (
-                      <div className="bg-blue-50/60 p-4 rounded-xl border border-blue-100 space-y-2">
-                        <div className="text-xs font-bold text-[#0052CC] uppercase tracking-wider">
-                          Tahapan & Prosedur Pengajuan:
-                        </div>
-                        <ol className="space-y-1.5 text-xs text-slate-700 list-decimal list-inside leading-relaxed">
-                          {item.processSteps.map((step, sIdx) => (
-                            <li key={sIdx}>{step}</li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
-
-                    {/* Footer Actions */}
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    {/* Bottom Action Strip: Copy & WhatsApp Dedicated RM */}
+                    <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-slate-200/60">
                       <button
                         onClick={() => handleCopy(item)}
-                        className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                          isCopied
-                            ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
-                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900'
-                        }`}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer"
                       >
                         {isCopied ? (
                           <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Checklist Disalin!</span>
+                            <Check className="w-4 h-4 text-emerald-600" />
+                            <span className="text-emerald-700">Checklist Berhasil Disalin!</span>
                           </>
                         ) : (
                           <>
-                            <Copy className="w-3.5 h-3.5 text-slate-400" />
-                            <span>Salin Checklist Berkas</span>
+                            <Copy className="w-4 h-4 text-slate-400" />
+                            <span>{t.faq.btnCopyChecklist}</span>
                           </>
                         )}
                       </button>
@@ -164,11 +170,11 @@ export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProp
                         href={`https://wa.me/${item.rmContact.phone}?text=${encodeURIComponent(item.rmContact.whatsappText)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors text-center"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
                       >
-                        <MessageCircle className="w-3.5 h-3.5 fill-white" />
-                        <span>Konsultasi Syarat ke {item.rmContact.name} ({item.rmContact.role})</span>
-                        <ExternalLink className="w-3 h-3 opacity-70" />
+                        <MessageCircle className="w-4 h-4 fill-white" />
+                        <span>{t.faq.btnContactOfficer} ({item.rmContact.name})</span>
+                        <ExternalLink className="w-3 h-3 opacity-80" />
                       </a>
                     </div>
                   </div>
@@ -178,14 +184,15 @@ export default function PanduanFAQSection({ onOpenModal }: PanduanFAQSectionProp
           })}
         </div>
 
-        {/* Global CTA to Open Searchable Modal */}
+        {/* Big CTA to open full modal */}
         <div className="text-center">
           <button
             onClick={() => onOpenModal('all')}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-sm font-bold shadow-md shadow-blue-600/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] cursor-pointer"
           >
             <FileText className="w-4 h-4" />
-            <span>Buka Modal Pencarian & Panduan Lengkap</span>
+            <span>{t.faq.btnOpenFullModal}</span>
+            <ExternalLink className="w-4 h-4 opacity-80" />
           </button>
         </div>
       </div>

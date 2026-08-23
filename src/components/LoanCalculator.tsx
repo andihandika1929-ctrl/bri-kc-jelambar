@@ -24,10 +24,12 @@ import {
   CheckCircle2,
   Check
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 type CalculatorTab = 'kpr' | 'kendaraan' | 'briguna';
 
 export default function LoanCalculator() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<CalculatorTab>('kpr');
 
   // 1. KPR States
@@ -101,9 +103,9 @@ export default function LoanCalculator() {
         rate: vehicleRate,
       };
     } else {
-      // BRIguna
+      // BRIguna (Annuity)
       const p = brigunaPlafond;
-      const n = brigunaTenor * 12;
+      const n = brigunaTenor * 12; // months
       const r = brigunaRate / 100 / 12;
 
       if (r === 0 || n === 0) return { monthly: 0, totalInterest: 0, totalPayment: p, principal: p, tenorMonths: n };
@@ -135,218 +137,221 @@ export default function LoanCalculator() {
     brigunaRate,
   ]);
 
-  // Generate WhatsApp consultation link from calculation result
-  const generateWhatsAppConsultLink = () => {
-    let programName = 'KPR BRI';
-    let details = '';
+  // WhatsApp Inquiry URL Builder
+  const getWhatsAppInquiryUrl = () => {
+    const phoneNumber = '6281330785880'; // RM Kredit Utama Farid
+    let msg = '';
 
     if (activeTab === 'kpr') {
-      programName = 'KPR BRI (Kredit Pemilikan Rumah)';
-      details = `Plafond: ${formatRupiah(kprPlafond)}\nTenor: ${kprTenor} Tahun (${kprTenor * 12} Bulan)\nEstimasi Suku Bunga: ${kprRate}% eff. p.a\nEstimasi Angsuran: ${formatRupiah(calculationResult.monthly)} / bulan`;
+      msg = `Halo Pak Utama Farid (RM Kredit BRI KC Jakarta Jelambar),\n\nSaya ingin berkonsultasi mengenai pengajuan *KPR BRI* dengan rincian estimasi:\n- Plafond Pinjaman: ${formatRupiah(kprPlafond)}\n- Tenor: ${kprTenor} Tahun\n- Suku Bunga: ${kprRate}% p.a.\n- Estimasi Angsuran: ${formatRupiah(calculationResult.monthly)}/bulan.\n\nMohon informasi persyaratan dan proses pengajuannya. Terima kasih.`;
     } else if (activeTab === 'kendaraan') {
-      programName = `KKB BRI (${vehicleType === 'baru' ? 'Mobil Baru' : 'Mobil Bekas'})`;
-      details = `Harga OTR: ${formatRupiah(vehicleOtr)}\nUang Muka DP: ${vehicleDpPercent}% (${formatRupiah(calculationResult.dpAmount || 0)})\nPokok Pembiayaan: ${formatRupiah(calculationResult.principal)}\nTenor: ${vehicleTenor} Tahun\nEstimasi Angsuran: ${formatRupiah(calculationResult.monthly)} / bulan`;
+      msg = `Halo Pak Utama Farid (RM Kredit BRI KC Jakarta Jelambar),\n\nSaya tertarik dengan *Kredit Kendaraan Bermotor (KKB BRI)*:\n- Jenis Kendaraan: ${vehicleType === 'baru' ? 'Mobil Baru' : 'Mobil Bekas'}\n- Harga OTR: ${formatRupiah(vehicleOtr)}\n- Uang Muka (DP): ${vehicleDpPercent}%\n- Tenor: ${vehicleTenor} Tahun\n- Estimasi Angsuran: ${formatRupiah(calculationResult.monthly)}/bulan.\n\nMohon dibantu proses pengajuan dan rekomendasinya. Terima kasih.`;
     } else {
-      programName = 'Kredit Konsumtif BRIguna';
-      details = `Plafond: ${formatRupiah(brigunaPlafond)}\nTenor: ${brigunaTenor} Tahun (${brigunaTenor * 12} Bulan)\nEstimasi Suku Bunga: ${brigunaRate}% eff. p.a\nEstimasi Angsuran: ${formatRupiah(calculationResult.monthly)} / bulan`;
+      msg = `Halo Pak Utama Farid (RM Kredit BRI KC Jakarta Jelambar),\n\nSaya ingin menanyakan pinjaman *Kredit BRIguna (Payroll BRI)*:\n- Plafond: ${formatRupiah(brigunaPlafond)}\n- Tenor: ${brigunaTenor} Tahun\n- Estimasi Angsuran: ${formatRupiah(calculationResult.monthly)}/bulan.\n\nMohon informasi persyaratan SK dan dokumen yang dibutuhkan. Terima kasih.`;
     }
 
-    const message = `Halo Tim Relationship Manager Kredit BRI KC Jakarta Jelambar,\n\nSaya telah melakukan simulasi di website untuk produk *${programName}* dengan rincian sebagai berikut:\n\n${details}\n\nMohon informasi terkait syarat dokumen, program suku bunga promo yang berlaku, serta proses pengajuan resmi di KC Jelambar.\n\nTerima kasih.`;
-
-    // Direct to Fahmi Sidik / Utama Farid RM
-    return `https://wa.me/628776271545?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`;
   };
 
   return (
-    <section id="simulasi" className="py-16 sm:py-20 bg-slate-50 border-t border-b border-slate-200 relative overflow-hidden">
-      {/* Subtle Background Accent */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-slate-200/50 rounded-full blur-3xl pointer-events-none" />
+    <section id="simulasi" className="relative py-16 sm:py-20 bg-gradient-to-b from-slate-50 to-white overflow-hidden w-full max-w-full">
+      {/* Background Subtle Acent Glows */}
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider mb-3 border border-blue-200">
             <Calculator className="w-3.5 h-3.5 text-[#0052CC]" />
-            <span>Kalkulator Finansial Resmi BRI</span>
+            <span>{t.calc.badge}</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
-            Simulasi Angsuran Kredit & Pinjaman
+            {t.calc.titleStart}{' '}
+            <span className="text-[#0052CC]">
+              {t.calc.titleHighlight}
+            </span>
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            Hitung estimasi cicilan bulanan untuk <strong>KPR BRI, Kredit Kendaraan Bermotor (KKB),</strong> dan <strong>Kredit Tanpa Agunan BRIguna</strong> secara transparan dan akurat.
+          <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            {t.calc.desc}
           </p>
         </div>
 
-        {/* Calculator Main Container (Clean White Card) */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
-          {/* 3 Tab Navigation Header (Modern Brand Blue & Clean White) */}
-          <div className="grid grid-cols-3 border-b border-slate-200 bg-slate-50 text-xs sm:text-sm">
+        {/* Main Card Container */}
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden w-full">
+          {/* Navigation Tabs (3 Tabs) */}
+          <div className="grid grid-cols-3 border-b border-slate-200/90 bg-slate-50/70 p-1.5 sm:p-2.5 gap-1 sm:gap-2">
+            {/* TAB 1: KPR */}
             <button
               onClick={() => setActiveTab('kpr')}
-              className={`py-4 px-2 sm:px-6 flex items-center justify-center gap-2 font-bold transition-all relative ${
+              className={`flex items-center justify-center gap-2 py-3 px-2 sm:px-4 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                 activeTab === 'kpr'
-                  ? 'bg-white text-[#0052CC] border-b-2 border-[#0052CC] shadow-xs'
-                  : 'text-slate-600 hover:text-[#0052CC] hover:bg-slate-100/80'
+                  ? 'bg-white text-[#0052CC] shadow-sm border border-slate-200/80 scale-[1.01]'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
-              <Home className="w-4 h-4 text-[#0052CC] flex-shrink-0 hidden xs:inline" />
-              <span className="truncate">CICILAN KPR</span>
+              <Home className={`w-4 h-4 ${activeTab === 'kpr' ? 'text-[#0052CC]' : 'text-slate-400'}`} />
+              <span className="truncate">{t.calc.tabKpr}</span>
             </button>
 
+            {/* TAB 2: KENDARAAN */}
             <button
               onClick={() => setActiveTab('kendaraan')}
-              className={`py-4 px-2 sm:px-6 flex items-center justify-center gap-2 font-bold transition-all relative ${
+              className={`flex items-center justify-center gap-2 py-3 px-2 sm:px-4 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                 activeTab === 'kendaraan'
-                  ? 'bg-white text-[#0052CC] border-b-2 border-[#0052CC] shadow-xs'
-                  : 'text-slate-600 hover:text-[#0052CC] hover:bg-slate-100/80'
+                  ? 'bg-white text-[#0052CC] shadow-sm border border-slate-200/80 scale-[1.01]'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
-              <Car className="w-4 h-4 text-[#0052CC] flex-shrink-0 hidden xs:inline" />
-              <span className="truncate">CICILAN KENDARAAN</span>
+              <Car className={`w-4 h-4 ${activeTab === 'kendaraan' ? 'text-[#0052CC]' : 'text-slate-400'}`} />
+              <span className="truncate">{t.calc.tabKkb}</span>
             </button>
 
+            {/* TAB 3: BRIGUNA */}
             <button
               onClick={() => setActiveTab('briguna')}
-              className={`py-4 px-2 sm:px-6 flex items-center justify-center gap-2 font-bold transition-all relative ${
+              className={`flex items-center justify-center gap-2 py-3 px-2 sm:px-4 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                 activeTab === 'briguna'
-                  ? 'bg-white text-[#0052CC] border-b-2 border-[#0052CC] shadow-xs'
-                  : 'text-slate-600 hover:text-[#0052CC] hover:bg-slate-100/80'
+                  ? 'bg-white text-[#0052CC] shadow-sm border border-slate-200/80 scale-[1.01]'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
-              <Briefcase className="w-4 h-4 text-[#0052CC] flex-shrink-0 hidden xs:inline" />
-              <span className="truncate">CICILAN BRIGUNA</span>
+              <Briefcase className={`w-4 h-4 ${activeTab === 'briguna' ? 'text-[#0052CC]' : 'text-slate-400'}`} />
+              <span className="truncate">{t.calc.tabBriguna}</span>
             </button>
           </div>
 
-          {/* 2-Column Responsive Content Grid */}
-          <div className="p-6 sm:p-8 lg:p-10">
+          {/* Calculator Body (Clean 2-Column Layout) */}
+          <div className="p-5 sm:p-8 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-              
-              {/* Left Column: Clean Visual Product Illustration (White/Transparent Background) */}
-              <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-6">
-                {/* Visual Representation Card (Clean Light Aesthetic) */}
-                <div className="bg-slate-50/70 rounded-2xl border border-slate-200/80 p-6 sm:p-7 space-y-5">
-                  {/* Dynamic Product Visuals */}
+              {/* Left Column: Clean Visual Illustration & S&K Disclaimer */}
+              <div className="lg:col-span-5 space-y-6">
+                <div className="bg-gradient-to-br from-blue-50/80 via-white to-slate-50 p-6 sm:p-7 rounded-2xl border border-blue-100 flex flex-col justify-between">
+                  {/* TAB 1 VISUAL: KPR */}
                   {activeTab === 'kpr' && (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <div className="w-14 h-14 rounded-2xl bg-blue-100/80 text-[#0052CC] flex items-center justify-center border border-blue-200 shadow-xs">
-                          <Building2 className="w-7 h-7" />
+                        <div className="w-12 h-12 rounded-2xl bg-blue-100 text-[#0052CC] flex items-center justify-center shadow-xs">
+                          <Building2 className="w-6 h-6" />
                         </div>
-                        <span className="px-3 py-1 rounded-full bg-orange-50 text-[#F37021] border border-orange-200 text-xs font-bold flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-[#F37021]" />
-                          Bunga Mulai 4.75%
+                        <span className="px-3 py-1 rounded-full bg-amber-50 text-[#F37021] text-xs font-bold border border-amber-200">
+                          Bunga Spesial 6.75%
                         </span>
                       </div>
 
                       <div>
-                        <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">KPR BRI Prioritas & Reguler</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Pembiayaan hunian idaman, ruko komersial, apartemen baru/bekas, atau renovasi dengan tenor s.d 20 tahun.
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {t.calc.tabKpr}
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mt-1.5">
+                          Miliki hunian idaman keluarga dengan skema suku bunga bersaing, uang muka ringan, dan jangka waktu fleksibel hingga 25 tahun.
                         </p>
                       </div>
 
-                      <div className="space-y-2.5 pt-3 border-t border-slate-200/80 text-xs text-slate-700">
-                        <div className="flex items-center gap-2.5">
+                      <div className="pt-2 space-y-2 text-xs text-slate-700 font-medium">
+                        <div className="flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-blue-100 text-[#0052CC] flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3" />
+                            <CheckCircle2 className="w-3 h-3" />
                           </div>
-                          <span>Kerjasama dengan ratusan developer rekanan nasional</span>
+                          <span>Plafond pembiayaan hingga Rp 5 Miliar</span>
                         </div>
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-5 h-5 rounded-full bg-orange-100 text-[#F37021] flex items-center justify-center flex-shrink-0">
-                            <Percent className="w-3 h-3" />
-                          </div>
-                          <span>Fasilitas Uang Muka (DP) mulai dari 0%</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-blue-100 text-[#0052CC] flex items-center justify-center flex-shrink-0">
-                            <Search className="w-3 h-3" />
+                            <CheckCircle2 className="w-3 h-3" />
                           </div>
-                          <span>Fasilitas Take Over & Top Up KPR suku bunga kompetitif</span>
+                          <span>Bebas penalti pelunasan sebagian</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-blue-100 text-[#0052CC] flex items-center justify-center flex-shrink-0">
+                            <CheckCircle2 className="w-3 h-3" />
+                          </div>
+                          <span>Kerjasama dengan ratusan developer terpercaya</span>
                         </div>
                       </div>
                     </div>
                   )}
 
+                  {/* TAB 2 VISUAL: KENDARAAN (KKB) */}
                   {activeTab === 'kendaraan' && (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <div className="w-14 h-14 rounded-2xl bg-emerald-100/80 text-emerald-700 flex items-center justify-center border border-emerald-200 shadow-xs">
-                          <Car className="w-7 h-7" />
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shadow-xs">
+                          <Car className="w-6 h-6" />
                         </div>
-                        <span className="px-3 py-1 rounded-full bg-orange-50 text-[#F37021] border border-orange-200 text-xs font-bold flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-[#F37021]" />
-                          Bunga Flat Mulai 5.25%
+                        <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                          DP Mulai 10%
                         </span>
                       </div>
 
                       <div>
-                        <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">KKB BRI (Kredit Kendaraan)</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Kemudahan memiliki mobil baru, mobil bekas berkualitas, dan motor premium dengan proses kilat.
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {t.calc.tabKkb}
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mt-1.5">
+                          Wujudkan kepemilikan mobil baru atau bekas berkualitas untuk mobilitas keluarga dan armada operasional usaha Anda.
                         </p>
                       </div>
 
-                      <div className="space-y-2.5 pt-3 border-t border-slate-200/80 text-xs text-slate-700">
-                        <div className="flex items-center gap-2.5">
+                      <div className="pt-2 space-y-2 text-xs text-slate-700 font-medium">
+                        <div className="flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3" />
+                            <CheckCircle2 className="w-3 h-3" />
                           </div>
-                          <span>Bunga flat bersaing dengan tenor fleksibel s.d 6 tahun</span>
+                          <span>Suku bunga flat kompetitif mulai 5.25% p.a.</span>
                         </div>
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-5 h-5 rounded-full bg-orange-100 text-[#F37021] flex items-center justify-center flex-shrink-0">
-                            <Navigation className="w-3 h-3" />
-                          </div>
-                          <span>Bebas biaya provisi untuk tipe kendaraan pilihan</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                            <ShieldCheck className="w-3 h-3" />
+                            <CheckCircle2 className="w-3 h-3" />
                           </div>
-                          <span>Termasuk perlindungan Asuransi All-Risk & TLO</span>
+                          <span>Proses persetujuan cepat & rekanan dealer resmi</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle2 className="w-3 h-3" />
+                          </div>
+                          <span>Termasuk asuransi kendaraan komprehensif</span>
                         </div>
                       </div>
                     </div>
                   )}
 
+                  {/* TAB 3 VISUAL: BRIGUNA */}
                   {activeTab === 'briguna' && (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <div className="w-14 h-14 rounded-2xl bg-indigo-100/80 text-indigo-700 flex items-center justify-center border border-indigo-200 shadow-xs">
-                          <Briefcase className="w-7 h-7" />
+                        <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-xs">
+                          <Briefcase className="w-6 h-6" />
                         </div>
-                        <span className="px-3 py-1 rounded-full bg-orange-50 text-[#F37021] border border-orange-200 text-xs font-bold flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-[#F37021]" />
-                          Tanpa Agunan Fisik
+                        <span className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200">
+                          Khusus Payroll BRI
                         </span>
                       </div>
 
                       <div>
-                        <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">Kredit BRIguna Karya & Umum</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Pinjaman payroll khusus pegawai aktif, ASN/TNI/Polri, BUMN, dan karyawan swasta rekanan BRI.
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {t.calc.tabBriguna}
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mt-1.5">
+                          Solusi pinjaman tanpa agunan kebendaan bagi ASN, TNI/Polri, BUMN, dan karyawan swasta dengan sistem payroll di Bank BRI.
                         </p>
                       </div>
 
-                      <div className="space-y-2.5 pt-3 border-t border-slate-200/80 text-xs text-slate-700">
-                        <div className="flex items-center gap-2.5">
+                      <div className="pt-2 space-y-2 text-xs text-slate-700 font-medium">
+                        <div className="flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3" />
+                            <CheckCircle2 className="w-3 h-3" />
                           </div>
-                          <span>Plafond pinjaman tinggi hingga Rp 500 Juta</span>
+                          <span>Tanpa agunan fisik sertifikat/BPKB</span>
                         </div>
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-5 h-5 rounded-full bg-orange-100 text-[#F37021] flex items-center justify-center flex-shrink-0">
-                            <LineChart className="w-3 h-3" />
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle2 className="w-3 h-3" />
                           </div>
-                          <span>Tenor panjang hingga 15 tahun (atau masa pensiun)</span>
+                          <span>Tenor panjang hingga 15 tahun (BRIguna Karya)</span>
                         </div>
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center flex-shrink-0">
                             <CheckCircle2 className="w-3 h-3" />
                           </div>
@@ -360,9 +365,7 @@ export default function LoanCalculator() {
                 {/* S&K Muted Disclaimer Box */}
                 <div className="pt-2 text-xs text-slate-400 leading-relaxed flex items-start gap-2">
                   <Info className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
-                  <p>
-                    <strong className="text-slate-500">Syarat & Ketentuan:</strong> Perincian kredit di atas hanya merupakan simulasi/estimasi biaya dan belum termasuk biaya administrasi, provisi, asuransi, serta dapat berubah sewaktu-waktu sesuai ketentuan Bank BRI.
-                  </p>
+                  <p>{t.calc.snk}</p>
                 </div>
               </div>
 
@@ -376,7 +379,7 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Jumlah Pinjaman / Plafond:
+                            {t.calc.loanAmount}:
                           </label>
                           <span className="text-sm font-extrabold text-[#0052CC]">
                             {formatRupiah(kprPlafond)}
@@ -402,10 +405,10 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Jangka Waktu (Tenor):
+                            {t.calc.tenure}:
                           </label>
                           <span className="text-sm font-extrabold text-[#0052CC]">
-                            {kprTenor} Tahun ({kprTenor * 12} Bulan)
+                            {kprTenor} {t.calc.years} ({kprTenor * 12} Bulan)
                           </span>
                         </div>
                         <input
@@ -418,9 +421,9 @@ export default function LoanCalculator() {
                           className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0052CC]"
                         />
                         <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                          <span>1 Tahun</span>
-                          <span>12 Tahun</span>
-                          <span>25 Tahun</span>
+                          <span>1 {t.calc.years}</span>
+                          <span>12 {t.calc.years}</span>
+                          <span>25 {t.calc.years}</span>
                         </div>
                       </div>
 
@@ -428,7 +431,7 @@ export default function LoanCalculator() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                            Suku Bunga Efektif (% p.a):
+                            {t.calc.interestRate}:
                           </label>
                           <div className="relative">
                             <input
@@ -442,11 +445,6 @@ export default function LoanCalculator() {
                             />
                             <span className="absolute right-3.5 top-2 text-xs font-bold text-slate-400">%</span>
                           </div>
-                        </div>
-                        <div className="flex items-end pb-1">
-                          <span className="text-[11px] text-slate-500 italic">
-                            *Suku bunga promo berlaku fix 1-3 tahun pertama
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -472,7 +470,7 @@ export default function LoanCalculator() {
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                            Suku Bunga (% Flat p.a):
+                            {t.calc.interestRateFlat}:
                           </label>
                           <div className="relative">
                             <input
@@ -493,7 +491,7 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Harga Kendaraan (OTR):
+                            {t.calc.carPrice}:
                           </label>
                           <span className="text-sm font-extrabold text-[#0052CC]">
                             {formatRupiah(vehicleOtr)}
@@ -519,7 +517,7 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Uang Muka DP ({vehicleDpPercent}%):
+                            {t.calc.dpPercentage} ({vehicleDpPercent}%):
                           </label>
                           <span className="text-sm font-bold text-[#F37021]">
                             {formatRupiah(Math.round(vehicleOtr * (vehicleDpPercent / 100)))}
@@ -545,10 +543,10 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Jangka Waktu (Tenor):
+                            {t.calc.tenure}:
                           </label>
                           <span className="text-sm font-extrabold text-[#0052CC]">
-                            {vehicleTenor} Tahun ({vehicleTenor * 12} Bulan)
+                            {vehicleTenor} {t.calc.years} ({vehicleTenor * 12} Bulan)
                           </span>
                         </div>
                         <input
@@ -561,9 +559,9 @@ export default function LoanCalculator() {
                           className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0052CC]"
                         />
                         <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                          <span>1 Tahun</span>
-                          <span>3 Tahun</span>
-                          <span>6 Tahun (Max)</span>
+                          <span>1 {t.calc.years}</span>
+                          <span>3 {t.calc.years}</span>
+                          <span>6 {t.calc.years}</span>
                         </div>
                       </div>
                     </div>
@@ -576,7 +574,7 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Plafond Pinjaman BRIguna:
+                            {t.calc.loanAmount}:
                           </label>
                           <span className="text-sm font-extrabold text-[#0052CC]">
                             {formatRupiah(brigunaPlafond)}
@@ -602,10 +600,10 @@ export default function LoanCalculator() {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Jangka Waktu (Tenor):
+                            {t.calc.tenure}:
                           </label>
                           <span className="text-sm font-extrabold text-[#0052CC]">
-                            {brigunaTenor} Tahun ({brigunaTenor * 12} Bulan)
+                            {brigunaTenor} {t.calc.years} ({brigunaTenor * 12} Bulan)
                           </span>
                         </div>
                         <input
@@ -618,9 +616,9 @@ export default function LoanCalculator() {
                           className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0052CC]"
                         />
                         <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                          <span>1 Tahun</span>
-                          <span>5 Tahun</span>
-                          <span>15 Tahun (Max)</span>
+                          <span>1 {t.calc.years}</span>
+                          <span>5 {t.calc.years}</span>
+                          <span>15 {t.calc.years}</span>
                         </div>
                       </div>
 
@@ -628,7 +626,7 @@ export default function LoanCalculator() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                            Suku Bunga Efektif (% p.a):
+                            {t.calc.interestRate}:
                           </label>
                           <div className="relative">
                             <input
@@ -643,63 +641,68 @@ export default function LoanCalculator() {
                             <span className="absolute right-3.5 top-2 text-xs font-bold text-slate-400">%</span>
                           </div>
                         </div>
-                        <div className="flex items-end pb-1">
-                          <span className="text-[11px] text-slate-500 italic">
-                            *Dipotong langsung otomatis dari Payroll rekening BRI
-                          </span>
-                        </div>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* Calculation Output Box (Clean Soft Blue Card with Modern Brand Blue & Emerald CTA) */}
-                <div className="bg-blue-50/80 border border-blue-200/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="text-xs font-bold uppercase tracking-wider text-[#0052CC] flex items-center gap-1.5">
-                      <Calculator className="w-4 h-4 text-[#0052CC]" />
-                      Estimasi Angsuran Bulanan:
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-[#0052CC]">
-                      Simulasi Resmi
+                {/* Soft Blue Estimation Result Card */}
+                <div className="bg-blue-50/80 p-6 sm:p-7 rounded-2xl border border-blue-200/80 shadow-xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-blue-200/60 pb-3">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                      {t.calc.estTitle}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white text-[#0052CC] border border-blue-200">
+                      <Sparkles className="w-3 h-3 text-[#0052CC]" />
+                      Estimasi Akurat
                     </span>
                   </div>
 
-                  <div className="text-3xl sm:text-4xl font-black tracking-tight text-[#0052CC]">
-                    {formatRupiah(calculationResult.monthly)}{' '}
-                    <span className="text-sm sm:text-base font-semibold text-slate-500">/ bulan</span>
+                  {/* Monthly Amount Display */}
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0052CC] tracking-tight">
+                      {formatRupiah(calculationResult.monthly)}
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-slate-500">
+                      {t.calc.perMonth}
+                    </span>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-blue-200/70 text-xs">
+                  {/* Key Metrics Breakdown */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs text-slate-600 border-t border-blue-200/60">
                     <div>
-                      <div className="text-slate-500 text-[10px] font-medium">Pokok Pembiayaan</div>
-                      <div className="font-bold text-slate-800">{formatRupiah(calculationResult.principal)}</div>
+                      <span className="text-[11px] text-slate-400 block">{t.calc.principalLoan}</span>
+                      <span className="font-bold text-slate-800">{formatRupiah(calculationResult.principal)}</span>
                     </div>
                     <div>
-                      <div className="text-slate-500 text-[10px] font-medium">Estimasi Bunga Total</div>
-                      <div className="font-bold text-slate-800">{formatRupiah(calculationResult.totalInterest)}</div>
+                      <span className="text-[11px] text-slate-400 block">{t.calc.interestRateSummary}</span>
+                      <span className="font-bold text-slate-800">
+                        {activeTab === 'kendaraan' ? `${vehicleRate}% Flat p.a.` : `${activeTab === 'kpr' ? kprRate : brigunaRate}% p.a.`}
+                      </span>
                     </div>
-                    <div className="col-span-2 sm:col-span-1">
-                      <div className="text-slate-500 text-[10px] font-medium">Total Pembayaran</div>
-                      <div className="font-bold text-slate-800">{formatRupiah(calculationResult.totalPayment)}</div>
+                    <div>
+                      <span className="text-[11px] text-slate-400 block">{t.calc.tenureSummary}</span>
+                      <span className="font-bold text-slate-800">
+                        {activeTab === 'kpr' ? `${kprTenor} ${t.calc.years}` : activeTab === 'kendaraan' ? `${vehicleTenor} ${t.calc.years}` : `${brigunaTenor} ${t.calc.years}`}
+                      </span>
                     </div>
                   </div>
 
-                  {/* CTA Button: Elegant Emerald WhatsApp Button */}
+                  {/* Direct WhatsApp Consultation CTA Button */}
                   <div className="pt-2">
                     <a
-                      href={generateWhatsAppConsultLink()}
+                      href={getWhatsAppInquiryUrl()}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-sm hover:shadow-md hover:shadow-emerald-600/20 transition-all active:scale-95 text-center"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition-all hover:scale-[1.01] active:scale-95 text-center cursor-pointer"
                     >
                       <MessageCircle className="w-4 h-4 fill-white" />
-                      <span>Konsultasikan Hasil Simulasi via WhatsApp RM</span>
+                      <span>{t.calc.btnConsult}</span>
+                      <ChevronRight className="w-4 h-4" />
                     </a>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>

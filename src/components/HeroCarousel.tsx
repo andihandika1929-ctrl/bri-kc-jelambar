@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export interface BannerSlide {
   id: number;
@@ -37,67 +38,68 @@ export const bannerSlides: BannerSlide[] = [
   },
 ];
 
-const wantOptions = [
-  {
-    id: 'kur',
-    label: 'Pengajuan Kredit Usaha Rakyat (KUR Mikro & Super Mikro)',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'kmk',
-    label: 'Kredit Modal Kerja (KMK) & Investasi Usaha / Pabrik',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'sme',
-    label: 'Kredit Usaha Menengah (SME) & Fasilitas Bank Garansi',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'ub',
-    label: 'Layanan Transaksi, Pembukaan Rekening & Platform Baru Qita',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'crr',
-    label: 'Restrukturisasi Kredit Komersial & Pemulihan Kewajiban (CRR)',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'kpr',
-    label: 'Simulasi & Pengajuan KPR BRI / Pinjaman Konsumer',
-    target: '#simulasi',
-  },
-  {
-    id: 'edc',
-    label: 'Pemasangan Mesin EDC Android & Soundbox QRIS Merchant',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'giro',
-    label: 'Pembukaan Rekening Giro Bisnis, Deposito & Payroll',
-    target: '#tim-bisnis',
-  },
-  {
-    id: 'panduan',
-    label: 'Panduan Checklist Dokumen Persyaratan & FAQ',
-    target: '#panduan',
-  },
-  {
-    id: 'unit',
-    label: 'Informasi 8 Kantor Unit Supervisi KC Jelambar',
-    target: '#unit-supervisi',
-  },
-];
-
 export default function HeroCarousel() {
+  const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [selectedWant, setSelectedWant] = useState(wantOptions[0].id);
+  const [selectedWant, setSelectedWant] = useState('kur');
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const slideCount = bannerSlides.length;
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const wantOptions = useMemo(() => [
+    {
+      id: 'kur',
+      label: t.hero.wantKur,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'kmk',
+      label: t.hero.wantKmk,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'sme',
+      label: t.hero.wantSme,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'ub',
+      label: t.hero.wantUb,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'crr',
+      label: t.hero.wantCrr,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'kpr',
+      label: t.hero.wantKpr,
+      target: '#simulasi',
+    },
+    {
+      id: 'edc',
+      label: t.hero.wantEdc,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'giro',
+      label: t.hero.wantGiro,
+      target: '#tim-bisnis',
+    },
+    {
+      id: 'panduan',
+      label: t.hero.wantFaq,
+      target: '#panduan',
+    },
+    {
+      id: 'unit',
+      label: t.hero.wantUnits,
+      target: '#unit-supervisi',
+    },
+  ], [t]);
 
   // Auto slide helper
   const nextSlide = useCallback(() => {
@@ -218,10 +220,10 @@ export default function HeroCarousel() {
             {/* "I WANT" Brand Label */}
             <div className="flex items-center gap-2 pl-2 sm:pl-3 md:pl-4 flex-shrink-0">
               <span className="text-sm sm:text-base md:text-lg font-black text-[#0052CC] tracking-tight whitespace-nowrap">
-                I WANT
+                {t.hero.iWant}
               </span>
               <span className="text-slate-400 text-xs font-semibold hidden md:inline">
-                | SAYA INGIN
+                {t.hero.iWantSub}
               </span>
             </div>
 
@@ -249,7 +251,7 @@ export default function HeroCarousel() {
                 onClick={handleHelpAction}
                 className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 md:py-3.5 rounded-xl md:rounded-full bg-[#0052CC] hover:bg-[#1D4ED8] text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase shadow-md shadow-blue-600/25 transition-all hover:gap-3 active:scale-95 cursor-pointer text-center whitespace-nowrap"
               >
-                <span>LET US HELP YOU</span>
+                <span>{t.hero.letUsHelp}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

@@ -142,9 +142,9 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
                 {person.initials}
               </div>
 
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 min-h-[72px] flex flex-col justify-center">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <h4 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug truncate">
+                  <h4 className="font-bold text-slate-900 text-sm md:text-base leading-snug break-words">
                     {person.name}
                   </h4>
                 </div>
@@ -159,10 +159,10 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
                   </div>
                 )}
 
-                <p className="text-xs font-bold text-[#0052CC] line-clamp-1 mt-0.5">
+                <p className="text-xs md:text-sm font-semibold text-[#0052CC] leading-tight mt-0.5 break-words">
                   {roleDisplay}
                 </p>
-                <div className="text-[11px] text-slate-400 font-medium truncate mt-0.5">
+                <div className="text-[11px] md:text-xs text-slate-500 leading-normal mt-0.5 break-words">
                   {deptDisplay}
                 </div>
               </div>
@@ -500,7 +500,7 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
                   Kepala Departemen & Manajer Bidang
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  Empat pilar kepemimpinan manajerial operasional, kredit komersial kecil (MBK), bisnis mikro supervisi unit (MBM), dan dana transaksi (MDT).
+                  Empat pilar kepemimpinan manajerial operasional & layanan (MOL), bisnis komersial & SME (SBM), bisnis mikro supervisi unit (MBM), dan dana transaksi (RMFT).
                 </p>
               </div>
 

@@ -73,8 +73,8 @@ Wajib terurut alfabetis (A - Z):
 # 6. STANDAR HIERARKI STRUKTUR ORGANISASI (data/organizationData.ts)
 Wajib mematuhi nomenklatur baku kantor cabang Bank BRI (tanpa istilah direksi / LEVEL bertingkat):
 - Pimpinan Kantor Cabang: Adi Sujarwanto (Pemimpin Cabang / Branch Office Head, Solo Header Card)
-- Manajer Operasional & Bisnis: Jaka Farisa (MOL), Dwiyanto Ario Putro (MBK), Denis Sepriyanto (MBM), Eugenia Javanica Ratna Puri (MDT)
-- Supervisi Operasional & Administrasi Kredit: Aprita Dinasari (AMOL), Syamsul Hidayatullah (SPO), Rafika Widya Sari (SPV ADK)
+- Manajer Operasional & Bisnis: Jaka Farisa (MOL), Dwiyanto Ario Putro (SBM), Denis Sepriyanto (MBM), Eugenia Javanica Ratna Puri (RMFT)
+- Supervisi Operasional & Administrasi Kredit: Aprita Dinasari (AMOL), Syamsul Hidayatullah (SOL), Rafika Widya Sari (SPV ADK)
 - Tim Relationship Manager (RM):
   * SME & Commercial: Utama Farid (RM SME), Fahmi Sidik (RM SME Quality)
   * Funding & Transaction: Ahmad Firdaus (RMFT Business), Dani Faisal (RMFT Individu Branch), Syafira Febrianty (RMFT Individu Branch)
@@ -85,7 +85,7 @@ Wajib mematuhi nomenklatur baku kantor cabang Bank BRI (tanpa istilah direksi / 
   * Klaster B (Administrasi Kredit / ADK Murni): Bela Amelia Lestari, Marto Sujiro, Nindita Oviana
   * Klaster C (Penunjang Bisnis Mikro & Keagenan): Chairunnisah Riyanti (Admin Mikro), Cici Fatmimah (Admin Agen BRILink)
   * Klaster D (Penunjang Operasional, IT & Backoffice): Vera Amelia Yuniar (Sekretaris & Penunjang SDM / HR-Support), Ragil Supriyono (Petugas IT & E-Channel), Andi Handika (Petugas Laporan, Arsip & IT - Portal Lead & System Developer), Harlianto Ukajati (Petugas Penunjang Operasional & Pelaporan), Atin Prihatin (Team Support Operasional - Backoffice), Rakhmad Dwi Yunianto (Team Support Administrasi - Backoffice)
-- Format Kartu: Tanpa alamat email, tugas pokok & fungsi terbuka permanen, tinggi kartu seragam (`h-full flex flex-col justify-between`), serta badge spesial "Portal Lead & System Developer" untuk Andi Handika.
+- Format Kartu: Tanpa alamat email, seluruh nama & jabatan tampil utuh tanpa pemotongan (`break-words`, tanpa `truncate` / `line-clamp`), header profil memiliki `min-h-[72px]`, tugas pokok & fungsi terbuka permanen, tinggi kartu seragam (`h-full flex flex-col justify-between`), serta badge spesial "Portal Lead & System Developer" untuk Andi Handika.
 - Footer Signature: "© 2026 PT Bank Rakyat Indonesia (Persero) Tbk — KC Jakarta Jelambar. Inovasi Digital & Portal Resmi diarahkan & dikembangkan oleh Andi Handika (Unit IT & Pelaporan)."
 
 - Fixed Navigation: Seluruh header/navbar menggunakan `fixed top-0 left-0 right-0 w-full z-[999] transition-all` dengan transisi mulus: saat transparan di atas banner memiliki `drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] text-white font-medium` didukung top gradient overlay pada carousel (`bg-gradient-to-b from-black/60 via-black/20 to-transparent`), dan saat di-scroll berubah solid menjadi `bg-white text-slate-800 shadow-md border-b border-slate-200`.

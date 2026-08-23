@@ -262,45 +262,37 @@ export const organizationData: OrgPerson[] = [
   {
     id: 'l2-dwiyanto',
     name: 'Dwiyanto Ario Putro',
-    role: 'Manajer Bisnis Kecil (MBK)',
+    role: 'Small Business Manager (SBM)',
     roleI18n: {
-      id: 'Manajer Bisnis Kecil (MBK)',
-      en: 'Small Business & SME Manager (MBK)',
-      zh: '中小企业与商业信贷总监 (MBK)'
+      id: 'Small Business Manager (SBM)',
+      en: 'Small Business Manager (SBM)',
+      zh: '中小企业业务经理 (SBM)'
     },
     level: 2,
     departmentKey: 'managers',
-    departmentName: 'Departemen Bisnis Komersial & SME',
+    departmentName: 'Bisnis Komersial & SME',
     departmentNameI18n: {
-      id: 'Departemen Bisnis Komersial & SME',
-      en: 'Commercial & SME Business Dept',
-      zh: '商业与中小企业信贷部'
+      id: 'Bisnis Komersial & SME',
+      en: 'Commercial & SME Business Division',
+      zh: '商业贷款与中小企业业务部'
     },
     initials: 'DA',
     jobdesk: [
-      'Memimpin strategi penetrasi dan penyaluran Kredit Modal Kerja (KMK), Kredit Investasi, dan fasilitas Bank Garansi komersial.',
-      'Memimpin tim RM Kredit Komersial dan RM SME dalam mencapai target portofolio pembiayaan usaha menengah di Jakarta Barat.',
-      'Melakukan analisis kelayakan kredit (credit underwriting), review rasio keuangan, dan rekomendasi putusan kredit komersial.',
-      'Menjaga kualitas portofolio kredit komersial agar senantiasa sehat dengan tingkat NPL terkendali.'
+      'Memimpin strategi penetrasi dan penyaluran fasilitas pembiayaan Kredit Modal Kerja (KMK), Kredit Investasi, dan Bank Garansi komersial.',
+      'Mengkoordinir tim RM SME dalam pencapaian target portofolio pembiayaan serta menjaga kualitas debitur agar senantiasa sehat.'
     ],
     jobdeskI18n: {
       id: [
-        'Memimpin strategi penetrasi dan penyaluran Kredit Modal Kerja (KMK), Kredit Investasi, dan fasilitas Bank Garansi komersial.',
-        'Memimpin tim RM Kredit Komersial dan RM SME dalam mencapai target portofolio pembiayaan usaha menengah di Jakarta Barat.',
-        'Melakukan analisis kelayakan kredit (credit underwriting), review rasio keuangan, dan rekomendasi putusan kredit komersial.',
-        'Menjaga kualitas portofolio kredit komersial agar senantiasa sehat dengan tingkat NPL terkendali.'
+        'Memimpin strategi penetrasi dan penyaluran fasilitas pembiayaan Kredit Modal Kerja (KMK), Kredit Investasi, dan Bank Garansi komersial.',
+        'Mengkoordinir tim RM SME dalam pencapaian target portofolio pembiayaan serta menjaga kualitas debitur agar senantiasa sehat.'
       ],
       en: [
-        'Drive deployment of Working Capital Loans (KMK), Investment Loans, and Commercial Bank Guarantees.',
-        'Lead Commercial and SME Lending RM teams in achieving portfolio growth across West Jakarta.',
-        'Perform comprehensive credit underwriting, financial statement reviews, and credit committee recommendations.',
-        'Safeguard commercial loan portfolio health and ensure stringent NPL asset controls.'
+        'Leading penetration strategy and loan disbursement for Working Capital Loans (KMK), Investment Loans, and commercial Bank Guarantees.',
+        'Coordinating SME RM team in achieving loan portfolio targets and maintaining healthy borrower asset quality.'
       ],
       zh: [
-        '统领营运资金贷款（KMK）、商业投资信贷及工程银行保函的市场营销与投放。',
-        '带领商业信贷与 SME 客户经理团队开拓西雅加达中型企业与商业客户。',
-        '主持信贷尽职调查与财务报表审查，为支行审贷会提供专业决策建议。',
-        '严密监控商业信贷资产质量，防范信贷违约风险。'
+        '主导流动资金贷款 (KMK)、固定资产投资贷款及商业银行保函的授信审批与拓展策略。',
+        '统筹协调中小企业客户经理团队达成信贷规模目标，并严控资产质量保持优良。'
       ]
     }
   },
@@ -352,45 +344,37 @@ export const organizationData: OrgPerson[] = [
   {
     id: 'l2-eugenia',
     name: 'Eugenia Javanica Ratna Puri',
-    role: 'Manajer Dana & Transaksi (MDT)',
+    role: 'RM Funding & Transaction (RMFT)',
     roleI18n: {
-      id: 'Manajer Dana & Transaksi (MDT)',
-      en: 'Funding & Transaction Banking Manager (MDT)',
-      zh: '资金与交易银行部总监 (MDT)'
+      id: 'RM Funding & Transaction (RMFT)',
+      en: 'RM Funding & Transaction (RMFT)',
+      zh: '资金与交易客户经理 (RMFT)'
     },
     level: 2,
     departmentKey: 'managers',
-    departmentName: 'Departemen Dana, Giro & Cash Management',
+    departmentName: 'Dana, Giro & Cash Management Korporasi',
     departmentNameI18n: {
-      id: 'Departemen Dana, Giro & Cash Management',
-      en: 'Funding, Current Accounts & CMS Dept',
-      zh: '资金存款、活期支票与现金管理部'
+      id: 'Dana, Giro & Cash Management Korporasi',
+      en: 'Corporate Deposits, Current Accounts & Cash Management',
+      zh: '企业存款、往来账户与现金管理部'
     },
     initials: 'EJ',
     jobdesk: [
-      'Merumuskan strategi penghimpunan dana pihak ketiga (DPK), khususnya Giro Rupiah/Valas dan Deposito institusi korporat.',
-      'Memimpin tim RM Dana dalam penetrasi layanan Cash Management System (CMS), Payroll perusahaan, dan solusi transaksi digital.',
-      'Menjaga rasio likuiditas dana murah (CASA) cabang agar senantiasa optimal dan berbiaya efisien.',
-      'Mengembangkan program retensi nasabah prioritas dan kemitraan simpanan dengan komunitas bisnis Jakarta Barat.'
+      'Memimpin strategi penghimpunan Dana Pihak Ketiga (DPK), optimalisasi giro operasional bisnis, deposito valas/rupiah, dan kemitraan payroll.',
+      'Mengembangkan ekosistem transaksi perbankan digital institusi, cash management system (CMS), serta penetrasi mesin EDC dan merchant QRIS.'
     ],
     jobdeskI18n: {
       id: [
-        'Merumuskan strategi penghimpunan dana pihak ketiga (DPK), khususnya Giro Rupiah/Valas dan Deposito institusi korporat.',
-        'Memimpin tim RM Dana dalam penetrasi layanan Cash Management System (CMS), Payroll perusahaan, dan solusi transaksi digital.',
-        'Menjaga rasio likuiditas dana murah (CASA) cabang agar senantiasa optimal dan berbiaya efisien.',
-        'Mengembangkan program retensi nasabah prioritas dan kemitraan simpanan dengan komunitas bisnis Jakarta Barat.'
+        'Memimpin strategi penghimpunan Dana Pihak Ketiga (DPK), optimalisasi giro operasional bisnis, deposito valas/rupiah, dan kemitraan payroll.',
+        'Mengembangkan ekosistem transaksi perbankan digital institusi, cash management system (CMS), serta penetrasi mesin EDC dan merchant QRIS.'
       ],
       en: [
-        'Formulate Third-Party Fund (DPK) mobilization strategies, focusing on Corporate Checking Accounts and Time Deposits.',
-        'Lead Funding RM teams in expanding Cash Management System (CMS), corporate payroll, and institutional digital payments.',
-        'Optimize branch low-cost CASA deposit mix and manage efficient cost-of-funds metrics.',
-        'Develop priority banking customer retention programs and business community deposit partnerships.'
+        'Leading Third-Party Funds (DPK) accumulation strategy, optimizing business current accounts, FX/IDR deposits, and institutional payroll partnerships.',
+        'Developing institutional digital banking ecosystems, Cash Management Systems (CMS), and expanding EDC Android & merchant QRIS penetration.'
       ],
       zh: [
-        '制定全辖第三方存款组织策略，主抓企业印尼盾/多币种外汇活期及大额定期存单。',
-        '带领资金客户经理推广现金管理系统（CMS）、批量代发工资及机构数字交易方案。',
-        '优化支行低成本活期储蓄（CASA）资金结构，有效降低综合资金成本。',
-        '策划高净值 VIP 客户维护方案，深化与西雅加达商业社区的深度资金合作。'
+        '主导第三方存款（DPK）吸储策略，优化企业日常往来账户、外币/本币定期存款以及代发薪资业务合作。',
+        '拓展机构数字化银行生态圈、企业现金管理系统 (CMS) 以及智能 POS/EDC 和商户 QRIS 的商圈覆盖。'
       ]
     }
   },
@@ -446,45 +430,37 @@ export const organizationData: OrgPerson[] = [
   {
     id: 'l3-syamsul',
     name: 'Syamsul Hidayatullah',
-    role: 'Supervisor Operasional & Layanan (SPO)',
+    role: 'Supervisor Operasional & Layanan (SOL)',
     roleI18n: {
-      id: 'Supervisor Operasional & Layanan (SPO)',
-      en: 'Operations & Service Supervisor (SPO)',
-      zh: '营业大厅服务与柜面主管 (SPO)'
+      id: 'Supervisor Operasional & Layanan (SOL)',
+      en: 'Operations & Service Supervisor (SOL)',
+      zh: '运营与服务主管 (SOL)'
     },
     level: 3,
     departmentKey: 'supervisors',
-    departmentName: 'Layanan Banking Hall & Teller',
+    departmentName: 'Operasional & Layanan Banking Hall',
     departmentNameI18n: {
-      id: 'Layanan Banking Hall & Teller',
-      en: 'Banking Hall & Counter Services',
-      zh: '营业厅柜面与客户服务部'
+      id: 'Operasional & Layanan Banking Hall',
+      en: 'Banking Hall Operations & Services',
+      zh: '营业厅运营与服务部'
     },
     initials: 'SH',
     jobdesk: [
-      'Mensupervisi langsung operasional harian para Universal Banker (UB) dan Teller kasir di Banking Hall.',
-      'Melakukan otorisasi ganda transaksi nominal besar, mutasi khusus, dan penerbitan produk perbankan.',
-      'Menjaga ketertiban antrean dan kecepatan waktu tunggu nasabah di lantai layanan tatap muka.',
-      'Melakukan verifikasi keabsahan tanda tangan spesimen dan prosedur Anti Money Laundering (APUPPT).'
+      'Memimpin dan mengawasi jalannya standar pelayanan Service Excellence frontliner (Customer Service, Teller, Universal Banker) di Banking Hall KC Jakarta Jelambar.',
+      'Pelaksanaan otorisasi transaksi kas, validasi operasional harian, dan penanganan eskalasi kendala transaksi nasabah.'
     ],
     jobdeskI18n: {
       id: [
-        'Mensupervisi langsung operasional harian para Universal Banker (UB) dan Teller kasir di Banking Hall.',
-        'Melakukan otorisasi ganda transaksi nominal besar, mutasi khusus, dan penerbitan produk perbankan.',
-        'Menjaga ketertiban antrean dan kecepatan waktu tunggu nasabah di lantai layanan tatap muka.',
-        'Melakukan verifikasi keabsahan tanda tangan spesimen dan prosedur Anti Money Laundering (APUPPT).'
+        'Memimpin dan mengawasi jalannya standar pelayanan Service Excellence frontliner (Customer Service, Teller, Universal Banker) di Banking Hall KC Jakarta Jelambar.',
+        'Pelaksanaan otorisasi transaksi kas, validasi operasional harian, dan penanganan eskalasi kendala transaksi nasabah.'
       ],
       en: [
-        'Directly supervise daily transactional workflows executed by Universal Bankers (UB) and frontline Tellers.',
-        'Execute dual authorizations for large-value transactions, special adjustments, and banking instruments.',
-        'Manage queuing throughput and optimize customer wait times across the Banking Hall.',
-        'Verify specimen signatures and uphold Anti-Money Laundering (AML/CFT) compliance guidelines.'
+        'Leading and supervising Service Excellence frontline standards (Customer Service, Teller, Universal Banker) across Banking Hall KC Jakarta Jelambar.',
+        'Executing cash transaction authorizations, daily operational validation, and managing customer service transaction escalations.'
       ],
       zh: [
-        '现场管理全能银行家（UB）及柜员日常存取款、转账开户等业务操作。',
-        '对大额存取款、特殊账务调整及核心结算凭证执行双人复核授权。',
-        '统筹大堂排队叫号流转，持续压缩客户等待与办理时长。',
-        '严格执行印鉴核验及反洗钱（AML/APUPPT）风险审查。'
+        '领导并监督 KC Jakarta Jelambar 营业厅前台（客户服务、出纳柜员、全能银行家）的卓越服务标准落地执行。',
+        '执行现金业务授权、日常运营合规核验以及客户疑难业务纠纷的升级处理。'
       ]
     }
   },

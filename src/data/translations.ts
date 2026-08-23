@@ -63,6 +63,15 @@ export const translations = {
       wantUnits: 'Informasi 8 Kantor Unit Supervisi KC Jelambar',
     },
 
+    // Quick Action Sub-Banner Bar (Official BRI Web Line Art Icons)
+    quickAction: {
+      lelangTitle: 'INFO LELANG',
+      pinjamanTitle: 'PENGAJUAN PINJAMAN',
+      simpananTitle: 'SIMPANAN & GIRO',
+      digitalTitle: 'PENDAFTARAN BRIMO & QITA',
+      strukturTitle: 'STRUKTUR TIM & PIC',
+    },
+
     // Welcome & Profile Section
     welcome: {
       badge: 'Portal Profil Resmi Kantor Cabang',
@@ -324,6 +333,15 @@ export const translations = {
       wantUnits: 'Information on 8 Supervised Unit Offices of KC Jelambar',
     },
 
+    // Quick Action Sub-Banner Bar (Official BRI Web Line Art Icons)
+    quickAction: {
+      lelangTitle: 'AUCTION INFO',
+      pinjamanTitle: 'LOAN APPLICATION',
+      simpananTitle: 'SAVINGS & GIRO',
+      digitalTitle: 'BRIMO & QITA ACTIVATION',
+      strukturTitle: 'TEAM STRUCTURE & PIC',
+    },
+
     // Welcome & Profile Section
     welcome: {
       badge: 'Official Branch Office Profile Portal',
@@ -583,6 +601,15 @@ export const translations = {
       wantGiro: '企业支票活期账户（Giro）、大额定期存单与代发薪资',
       wantFaq: '申请材料清单指南与业务常见问题解答',
       wantUnits: '查询 Jelambar 支行下辖 8 家直属监管营业所',
+    },
+
+    // Quick Action Sub-Banner Bar (Official BRI Web Line Art Icons)
+    quickAction: {
+      lelangTitle: '资产拍卖信息',
+      pinjamanTitle: '信贷融资申请',
+      simpananTitle: '储蓄与往来支票',
+      digitalTitle: 'BRIMO 与 QITA 激活',
+      strukturTitle: '支行团队与对接人',
     },
 
     // Welcome & Profile Section

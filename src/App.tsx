@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import TopOperationalBar from './components/TopOperationalBar';
 import HeroCarousel from './components/HeroCarousel';
+import QuickActionBar from './components/QuickActionBar';
 import TeamDirectory from './components/TeamDirectory';
 import LoanCalculator from './components/LoanCalculator';
 import PanduanFAQSection from './components/PanduanFAQSection';
@@ -483,6 +484,12 @@ function MainApp() {
       <section id="beranda" className="relative w-full max-w-full overflow-hidden p-0 m-0 border-none shadow-none">
         <HeroCarousel />
       </section>
+
+      {/* 3.05 Official BRI Quick Action Sub-Banner Bar (Line Art Blue Iconography) */}
+      <QuickActionBar
+        onOpenDigitalModal={() => openFAQModal('digital')}
+        onNavigateOrg={() => navigateTo('org')}
+      />
 
       {/* 3.1 Welcome & Branch Profile Section (KC Jakarta Jelambar) */}
       <section className="pt-10 sm:pt-14 md:pt-16 pb-12 sm:pb-14 bg-gradient-to-b from-[#F8FAFC] to-white border-b border-slate-200 w-full max-w-full">

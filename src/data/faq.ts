@@ -1,6 +1,6 @@
 export interface FAQItem {
   id: string;
-  category: 'sme' | 'konsumer' | 'giro' | 'merchant' | 'crr';
+  category: 'sme' | 'konsumer' | 'giro' | 'merchant' | 'crr' | 'digital';
   categoryLabel: string;
   question: string;
   summary: string;
@@ -20,6 +20,7 @@ export interface FAQItem {
 
 export const faqCategories = [
   { id: 'all', label: 'Semua Panduan' },
+  { id: 'digital', label: 'Digital Banking (Qita & BRImo)' },
   { id: 'sme', label: 'Kredit Modal Kerja & SME' },
   { id: 'konsumer', label: 'KPR & BRIguna' },
   { id: 'giro', label: 'Giro Badan Usaha' },
@@ -28,6 +29,48 @@ export const faqCategories = [
 ] as const;
 
 export const faqList: FAQItem[] = [
+  {
+    id: 'faq-digital-01',
+    category: 'digital',
+    categoryLabel: 'Digital Banking (BRImo & Platform Baru Qita)',
+    question: 'Bagaimana panduan registrasi ekosistem digital BRImo serta alur migrasi platform generasi baru Qita?',
+    summary: 'Edukasi layanan digital banking terpadu BRImo dan platform generasi baru Qita untuk kemudahan transaksi harian, transfer, pembayaran, dan pembukaan rekening online.',
+    documents: [
+      {
+        title: '1. Persyaratan Registrasi & Aktivasi Akun Digital',
+        items: [
+          'KTP Elektronik (e-KTP) asli yang masih berlaku dan terverifikasi data kependudukan',
+          'Nomor handphone aktif yang memiliki pulsa reguler untuk verifikasi SMS OTP',
+          'Alamat email pribadi aktif untuk penerimaan bukti transaksi elektronik',
+          'Nomor rekening tabungan / kartu debit BRI yang masih aktif'
+        ]
+      },
+      {
+        title: '2. Fitur & Keunggulan Platform Generasi Baru Qita',
+        items: [
+          'Akses transaksi multi-channel terpadu perbankan personal & usaha',
+          'Autentikasi keamanan biometrik modern & perlindungan proteksi ganda',
+          'Monitoring mutasi rekening real-time dan kemudahan transaksi QRIS',
+          'Pendampingan migrasi fitur digital langsung bersama tim Universal Banker (UB)'
+        ]
+      }
+    ],
+    processSteps: [
+      'Download aplikasi BRImo resmi dari Google Play Store atau Apple App Store.',
+      'Pilih menu "Belum Punya Akun" untuk pembukaan baru, atau "Punya Akun" untuk login.',
+      'Lakukan perekaman biometrik wajah (Face Recognition) di tempat dengan pencahayaan cukup.',
+      'Masukkan 6 digit kode OTP yang dikirimkan via SMS ke nomor HP terdaftar.',
+      'Buat Username, Password kombinasi huruf & angka, serta 6 Digit PIN Transaksi.',
+      'Untuk panduan aktivasi, registrasi akun, maupun pendampingan migrasi fitur digital Qita, silakan konsultasikan langsung dengan tim Universal Banker (UB) kami di Banking Hall KC Jakarta Jelambar.'
+    ],
+    notes: 'Pastikan tidak pernah membagikan User ID, Password, PIN, atau Kode OTP kepada pihak manapun termasuk yang mengatasnamakan petugas Bank BRI.',
+    rmContact: {
+      name: 'Sri Mulyani',
+      role: 'Universal Banker (UB)',
+      phone: '6281234567890',
+      whatsappText: 'Halo Ibu Sri Mulyani, saya ingin meminta panduan aktivasi aplikasi BRImo dan registrasi platform digital baru Qita di BRI KC Jakarta Jelambar.'
+    }
+  },
   {
     id: 'faq-sme-01',
     category: 'sme',

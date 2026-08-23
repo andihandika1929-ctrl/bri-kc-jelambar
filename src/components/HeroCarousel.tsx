@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ArrowRight,
-  ChevronDown
-} from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 
 export interface BannerSlide {
   id: number;
@@ -59,6 +54,11 @@ const wantOptions = [
     target: '#tim-bisnis',
   },
   {
+    id: 'ub',
+    label: 'Layanan Transaksi, Pembukaan Rekening & Platform Baru Qita',
+    target: '#tim-bisnis',
+  },
+  {
     id: 'crr',
     label: 'Restrukturisasi Kredit Komersial & Pemulihan Kewajiban (CRR)',
     target: '#tim-bisnis',
@@ -108,21 +108,6 @@ export default function HeroCarousel() {
     setCurrentSlide((prev) => (prev - 1 + slideCount) % slideCount);
   }, [slideCount]);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-    resetTimer();
-  };
-
-  const handleNext = () => {
-    nextSlide();
-    resetTimer();
-  };
-
-  const handlePrev = () => {
-    prevSlide();
-    resetTimer();
-  };
-
   // Reset timer on user interaction
   const resetTimer = useCallback(() => {
     if (timerRef.current) {
@@ -135,7 +120,7 @@ export default function HeroCarousel() {
     }
   }, [isPaused, nextSlide]);
 
-  // Main auto-slide effect (5 seconds)
+  // Main auto-slide effect (Pure Autoplay 5 seconds + Pause on Hover)
   useEffect(() => {
     if (isPaused) {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -164,9 +149,11 @@ export default function HeroCarousel() {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
     if (distance > 50) {
-      handleNext();
+      nextSlide();
+      resetTimer();
     } else if (distance < -50) {
-      handlePrev();
+      prevSlide();
+      resetTimer();
     }
     setTouchStart(null);
     setTouchEnd(null);
@@ -183,7 +170,7 @@ export default function HeroCarousel() {
 
   return (
     <div className="relative w-full max-w-full overflow-hidden bg-transparent p-0 m-0 border-none shadow-none">
-      {/* 1. Full-Bleed Clean Hero Banner Carousel (Zero black borders / Zero gaps) */}
+      {/* 1. Full-Bleed Pure Clean Hero Banner Carousel (Zero Manual Controls / Edge-to-Edge Visual) */}
       <div
         className="relative w-full overflow-hidden bg-transparent p-0 m-0 border-none shadow-none"
         onMouseEnter={() => setIsPaused(true)}
@@ -194,10 +181,10 @@ export default function HeroCarousel() {
         aria-label="Hero Carousel Banner Resmi BRI"
       >
         {/* Soft Vignette Overlay: Top & Bottom */}
-        <div className="absolute top-0 inset-x-0 h-32 md:h-44 bg-gradient-to-b from-black/30 via-black/10 to-transparent pointer-events-none z-10" />
-        <div className="absolute bottom-0 inset-x-0 h-24 md:h-36 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none z-10" />
+        <div className="absolute top-0 inset-x-0 h-28 sm:h-40 md:h-44 bg-gradient-to-b from-black/30 via-black/10 to-transparent pointer-events-none z-10" />
+        <div className="absolute bottom-0 inset-x-0 h-24 sm:h-32 md:h-36 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none z-10" />
 
-        {/* Aspect Ratio Container */}
+        {/* Aspect Ratio Container (Edge-to-Edge Pure Banner Display) */}
         <div className="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] lg:aspect-[28/10] min-h-[300px] xs:min-h-[340px] sm:min-h-[440px] md:min-h-[520px] lg:min-h-[600px] max-h-[700px] bg-slate-900 p-0 m-0 border-none shadow-none">
           {bannerSlides.map((slide, index) => {
             const isActive = index === currentSlide;
@@ -221,42 +208,6 @@ export default function HeroCarousel() {
               </a>
             );
           })}
-
-          {/* Navigation Arrows (Prev / Next) */}
-          <button
-            onClick={handlePrev}
-            aria-label="Slide Banner Sebelumnya"
-            className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/35 hover:bg-[#0052CC] text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
-          >
-            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
-
-          <button
-            onClick={handleNext}
-            aria-label="Slide Banner Selanjutnya"
-            className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/35 hover:bg-[#0052CC] text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
-          >
-            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
-
-          {/* Slide Indicator Dots */}
-          <div className="absolute bottom-5 sm:bottom-10 lg:bottom-14 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20">
-            {bannerSlides.map((_, index) => {
-              const isActive = index === currentSlide;
-              return (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  aria-label={`Buka slide banner ${index + 1}`}
-                  className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                    isActive
-                      ? 'w-6 sm:w-8 bg-white shadow-md shadow-black/40'
-                      : 'w-1.5 sm:w-2 bg-white/40 hover:bg-white/80'
-                  }`}
-                />
-              );
-            })}
-          </div>
         </div>
       </div>
 

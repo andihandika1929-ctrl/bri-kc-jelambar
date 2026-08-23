@@ -35,7 +35,8 @@ import {
   BadgePercent,
   Store,
   RotateCcw,
-  LayoutGrid
+  LayoutGrid,
+  Smartphone
 } from 'lucide-react';
 
 export default function TeamDirectory() {
@@ -50,6 +51,8 @@ export default function TeamDirectory() {
   // Icon mapping for filter tabs
   const getTabIcon = (iconName: string) => {
     switch (iconName) {
+      case 'Smartphone':
+        return <Smartphone className="w-4 h-4" />;
       case 'BadgePercent':
         return <BadgePercent className="w-4 h-4" />;
       case 'PiggyBank':
@@ -66,7 +69,9 @@ export default function TeamDirectory() {
     return teamMembers.filter((member) => {
       // 1. Tab filtering
       let matchesTab = true;
-      if (activeTab === 'lending') {
+      if (activeTab === 'ub') {
+        matchesTab = member.segment === 'UB';
+      } else if (activeTab === 'lending') {
         matchesTab = member.segment === 'Lending' || member.segment === 'Mikro';
       } else if (activeTab === 'funding') {
         matchesTab = member.segment === 'Funding';
@@ -89,6 +94,8 @@ export default function TeamDirectory() {
         const topicNorm = selectedTopic.toLowerCase();
         matchesTopic = member.specializations.some((spec) =>
           spec.toLowerCase().includes(topicNorm) ||
+          (topicNorm.includes('qita') && (spec.toLowerCase().includes('qita') || spec.toLowerCase().includes('brimo'))) ||
+          (topicNorm.includes('rekening') && (spec.toLowerCase().includes('rekening') || spec.toLowerCase().includes('tabungan'))) ||
           (topicNorm.includes('kur') && spec.toLowerCase().includes('kur')) ||
           (topicNorm.includes('giro') && (spec.toLowerCase().includes('giro') || spec.toLowerCase().includes('payroll'))) ||
           (topicNorm.includes('kmk') && spec.toLowerCase().includes('kmk')) ||
@@ -107,6 +114,7 @@ export default function TeamDirectory() {
   const tabCounts = useMemo(() => {
     return {
       all: teamMembers.length,
+      ub: teamMembers.filter((m) => m.segment === 'UB').length,
       lending: teamMembers.filter((m) => m.segment === 'Lending' || m.segment === 'Mikro').length,
       funding: teamMembers.filter((m) => m.segment === 'Funding').length,
       restrukturisasi: teamMembers.filter((m) => m.segment === 'Collection' || m.segment === 'CRR').length,
@@ -131,6 +139,12 @@ export default function TeamDirectory() {
   // Segment styling helper
   const getSegmentBadge = (segment: TeamSegment) => {
     switch (segment) {
+      case 'UB':
+        return {
+          bg: 'bg-sky-50 text-sky-800 border-sky-200',
+          dot: 'bg-sky-500',
+          label: 'Universal Banker (UB)',
+        };
       case 'Funding':
         return {
           bg: 'bg-blue-50 text-[#0052CC] border-blue-200',
@@ -193,19 +207,19 @@ export default function TeamDirectory() {
           </h2>
 
           <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Terhubung langsung dengan <strong>{teamMembers.length} Relationship Manager resmi BRI KC Jakarta Jelambar</strong>. 
-            Konsultasikan kebutuhan kredit usaha, simpanan giro/deposito, pembiayaan mikro KUR, restrukturisasi komersial, hingga penanganan portofolio via WhatsApp.
+            Terhubung langsung dengan <strong>{teamMembers.length} Petugas Resmi (10 Relationship Manager & 3 Universal Banker) BRI KC Jakarta Jelambar</strong>. 
+            Konsultasikan kebutuhan kredit usaha, simpanan giro/deposito, aktivasi platform digital baru QITA & BRImo, hingga restrukturisasi komersial via WhatsApp.
           </p>
 
           {/* Quick Statistics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-8 w-full text-left sm:text-center">
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{teamMembers.length} RM</div>
-              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Petugas Resmi KC Jelambar</div>
+              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">{teamMembers.length} Petugas</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">10 RM & 3 Universal Banker</div>
             </div>
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">4 Segmen</div>
-              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">Kredit, Dana, CRR & Mikro</div>
+              <div className="text-xl sm:text-2xl font-black text-[#0052CC]">5 Segmen</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">UB, Kredit, Dana, CRR & Mikro</div>
             </div>
             <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
               <div className="text-xl sm:text-2xl font-black text-emerald-600">Respon Cepat</div>
@@ -268,13 +282,13 @@ export default function TeamDirectory() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari nama RM, layanan (KUR, KMK, SME, Giro, Deposito, Restrukturisasi)..."
+                placeholder="Cari nama (Sri Mulyani, Utama Farid, Fahmi...), layanan (QITA, BRImo, KUR, KMK, Giro)..."
                 className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0052CC]/30 focus:border-[#0052CC] transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                   aria-label="Bersihkan pencarian"
                 >
                   <X className="w-4 h-4" />
@@ -312,7 +326,7 @@ export default function TeamDirectory() {
           {/* Active Filter Indicators & Results Count */}
           <div className="flex flex-wrap items-center justify-between gap-2 mt-3.5 pt-3 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500">
             <div>
-              Menampilkan <span className="font-bold text-slate-800">{filteredMembers.length}</span> dari {teamMembers.length} RM
+              Menampilkan <span className="font-bold text-slate-800">{filteredMembers.length}</span> dari {teamMembers.length} Petugas
               {searchQuery && (
                 <span className="ml-1.5 font-medium text-[#0052CC]">
                   &ldquo;{searchQuery}&rdquo;
@@ -363,7 +377,9 @@ export default function TeamDirectory() {
                   {/* Top Color Accent Line */}
                   <div
                     className={`h-1.5 w-full ${
-                      member.segment === 'Funding'
+                      member.segment === 'UB'
+                        ? 'bg-sky-500'
+                        : member.segment === 'Funding'
                         ? 'bg-[#0052CC]'
                         : member.segment === 'Lending'
                         ? 'bg-[#2563EB]'
@@ -381,14 +397,18 @@ export default function TeamDirectory() {
                       {/* Round Initial Avatar (AVA UI) */}
                       <div className="relative flex-shrink-0">
                         <div
-                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-blue-100 text-[#0052CC] font-extrabold text-base sm:text-lg md:text-xl flex items-center justify-center border-2 border-blue-200 shadow-xs group-hover:scale-105 transition-transform duration-300 select-none"
+                          className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full font-extrabold text-base sm:text-lg md:text-xl flex items-center justify-center border-2 shadow-xs group-hover:scale-105 transition-transform duration-300 select-none ${
+                            member.segment === 'UB'
+                              ? 'bg-sky-100 text-sky-800 border-sky-200'
+                              : 'bg-blue-100 text-[#0052CC] border-blue-200'
+                          }`}
                           title={member.name}
                         >
                           {getInitials(member.name, member.initials)}
                         </div>
                         <span
                           className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"
-                          title="Status: Online & Siap Melayani"
+                          title="Status: Aktif / Layanan On-Duty"
                         />
                       </div>
 
@@ -464,7 +484,7 @@ export default function TeamDirectory() {
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md hover:shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] text-center"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md hover:shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] text-center cursor-pointer"
                     >
                       <MessageCircle className="w-4 h-4 fill-white" />
                       <span>Chat via WhatsApp</span>
@@ -515,10 +535,10 @@ export default function TeamDirectory() {
               <Search className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
             <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2">
-              Tidak Ada Relationship Manager yang Cocok
+              Tidak Ada Petugas yang Cocok
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 mb-6">
-              Coba gunakan kata kunci pencarian lain atau pilih tab &ldquo;Semua Layanan&rdquo;.
+              Coba gunakan kata kunci pencarian lain atau pilih tab &ldquo;Semua Petugas&rdquo;.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -532,12 +552,12 @@ export default function TeamDirectory() {
                 Reset Semua Filter
               </button>
               <a
-                href="https://wa.me/6281340902924?text=Halo%20Customer%20Service%20BRI%20KC%20Jakarta%20Jelambar,%20saya%20memerlukan%20informasi%20layanan."
+                href="https://wa.me/6281234567890?text=Halo%20Universal%20Banker%20BRI%20KC%20Jakarta%20Jelambar,%20saya%20memerlukan%20informasi%20layanan%20transaksi%20dan%20digital%20banking."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold hover:bg-slate-200 transition-colors"
               >
-                Hubungi CS Cabang
+                Hubungi Universal Banker
               </a>
             </div>
           </div>
@@ -605,7 +625,7 @@ export default function TeamDirectory() {
               <p className="text-xs text-slate-700 italic leading-relaxed">
                 {customInquiryService
                   ? `“Halo Bapak/Ibu ${selectedRMForModal.name}, saya ingin berkonsultasi mengenai layanan ${customInquiryService}...”`
-                  : `“${selectedRMForModal.customWhatsAppText || `Halo Bapak/Ibu ${selectedRMForModal.name}, saya tertarik untuk konsultasi...`}”`}
+                  : `“${selectedRMForModal.customWhatsAppText || `Halo Bapak/Ibu ${selectedRMForModal.name}, saya tertarik untuk berkonsultasi...`}”`}
               </p>
             </div>
 
@@ -627,7 +647,7 @@ export default function TeamDirectory() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setSelectedRMForModal(null)}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-sm text-center"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-sm text-center cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4 fill-white" />
                 <span>Buka WhatsApp Sekarang</span>

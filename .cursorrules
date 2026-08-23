@@ -36,22 +36,26 @@ Urutan 10 bagian wajib pada landing page:
 10. Lokasi & Alamat Cabang (#lokasi - Google Maps deep link & nomor (021) 56981105)
 11. Modern Corporate Footer (`bg-[#003B99]` - Legalitas OJK & LPS)
 
-# 4. STANDAR DIRECTORY TIM RELATIONSHIP MANAGER (data/team.ts)
+# 4. STANDAR DIRECTORY TIM PETUGAS (data/team.ts)
 - Format Foto: Wajib Avatar Inisial Bulat (AVA UI):
   `w-14 h-14 rounded-full bg-blue-100 text-[#0052CC] font-black flex items-center justify-center border-2 border-blue-200`
-- Total 10 RM Resmi Terverifikasi:
-  1. Ahmad Firdaus (RM Dana & Funding, AF, 0813-4090-2924)
-  2. Syafira Febrianty (RM Dana & Funding, SF, 0877-7745-0533)
-  3. Dani Faisal (RM Dana & Funding, DF, 0858-6718-3671)
-  4. Utama Farid (RM Kredit Komersial & SME, UF, 0813-3078-5880)
-  5. Fahmi Sidik (RM SME, FS, 0877-6271-545)
-  6. Adam Werna Kusuma (RM Kredit Mikro & KUR, AW, 0812-9452-0098)
-  7. Rezki Fitra Ridhoni (RM Kredit Mikro & KUR, RF, 0822-8338-2914)
-  8. Afriyadie Ramadhan (RM Kredit Mikro & KUR, AR, 0812-8454-6809)
-  9. Sutan Pardamean Hasibuan (RM Collection, ST, 0877-7393-3322)
-  10. Yasin Nugraha (RM CRR, YN, 0821-7777-3888)
+- Total 13 Petugas Resmi Terverifikasi (10 RM & 3 Universal Banker):
+  1. Sri Mulyani (Universal Banker, SM, 0812-3456-7890)
+  2. Erina Rebecca Sinaga (Universal Banker, ES, 0812-3456-7891)
+  3. Nabilah Putri Asry Adisti (Universal Banker, NA, 0812-3456-7892)
+  4. Ahmad Firdaus (RM Dana & Funding, AF, 0813-4090-2924)
+  5. Syafira Febrianty (RM Dana & Funding, SF, 0877-7745-0533)
+  6. Dani Faisal (RM Dana & Funding, DF, 0858-6718-3671)
+  7. Utama Farid (RM Kredit Komersial & SME, UF, 0813-3078-5880)
+  8. Fahmi Sidik (RM SME, FS, 0877-6271-545)
+  9. Adam Werna Kusuma (RM Kredit Mikro & KUR, AW, 0812-9452-0098)
+  10. Rezki Fitra Ridhoni (RM Kredit Mikro & KUR, RF, 0822-8338-2914)
+  11. Afriyadie Ramadhan (RM Kredit Mikro & KUR, AR, 0812-8454-6809)
+  12. Sutan Pardamean Hasibuan (RM Collection, ST, 0877-7393-3322)
+  13. Yasin Nugraha (RM CRR, YN, 0821-7777-3888)
 - Tombol WA: `https://wa.me/62...` dengan parameter `text` otomatis.
 - Fitur Salin Kontak: Tombol salin nomor telepon dengan floating toast feedback.
+- Digital Banking: Edukasi ekosistem BRImo & platform generasi baru QITA didampingi oleh tim Universal Banker (UB).
 
 # 5. STANDAR JARINGAN 8 KANTOR UNIT SUPERVISI (data/units.ts)
 Wajib terurut alfabetis (A - Z):

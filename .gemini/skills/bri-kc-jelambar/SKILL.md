@@ -60,24 +60,28 @@ Urutan 10 bagian wajib:
 
 ---
 
-## 4. Format Data Petugas RM (`src/data/team.ts`)
+## 4. Format Data Petugas Cabang & RM (`src/data/team.ts`)
 
-Total 10 Relationship Manager resmi:
-1. **Ahmad Firdaus** — RM Dana & Funding (`AF`, `0813-4090-2924`)
-2. **Syafira Febrianty** — RM Dana & Funding (`SF`, `0877-7745-0533`)
-3. **Dani Faisal** — RM Dana & Funding (`DF`, `0858-6718-3671`)
-4. **Utama Farid** — RM Kredit Komersial & SME (`UF`, `0813-3078-5880`)
-5. **Fahmi Sidik** — RM SME (`FS`, `0877-6271-545`)
-6. **Adam Werna Kusuma** — RM Kredit Mikro & KUR (`AW`, `0812-9452-0098`)
-7. **Rezki Fitra Ridhoni** — RM Kredit Mikro & KUR (`RF`, `0822-8338-2914`)
-8. **Afriyadie Ramadhan** — RM Kredit Mikro & KUR (`AR`, `0812-8454-6809`)
-9. **Sutan Pardamean Hasibuan** — RM Collection (`ST`, `0877-7393-3322`)
-10. **Yasin Nugraha** — RM CRR (`YN`, `0821-7777-3888`)
+Total 13 Petugas Resmi (10 Relationship Manager & 3 Universal Banker):
+1. **Sri Mulyani** — Universal Banker (`SM`, `0812-3456-7890`)
+2. **Erina Rebecca Sinaga** — Universal Banker (`ES`, `0812-3456-7891`)
+3. **Nabilah Putri Asry Adisti** — Universal Banker (`NA`, `0812-3456-7892`)
+4. **Ahmad Firdaus** — RM Dana & Funding (`AF`, `0813-4090-2924`)
+5. **Syafira Febrianty** — RM Dana & Funding (`SF`, `0877-7745-0533`)
+6. **Dani Faisal** — RM Dana & Funding (`DF`, `0858-6718-3671`)
+7. **Utama Farid** — RM Kredit Komersial & SME (`UF`, `0813-3078-5880`)
+8. **Fahmi Sidik** — RM SME (`FS`, `0877-6271-545`)
+9. **Adam Werna Kusuma** — RM Kredit Mikro & KUR (`AW`, `0812-9452-0098`)
+10. **Rezki Fitra Ridhoni** — RM Kredit Mikro & KUR (`RF`, `0822-8338-2914`)
+11. **Afriyadie Ramadhan** — RM Kredit Mikro & KUR (`AR`, `0812-8454-6809`)
+12. **Sutan Pardamean Hasibuan** — RM Collection (`ST`, `0877-7393-3322`)
+13. **Yasin Nugraha** — RM CRR (`YN`, `0821-7777-3888`)
 
-**Aturan UI Kartu RM**:
-- Foto: Avatar Inisial Bulat (`bg-blue-100 text-[#0052CC] font-bold text-lg border-2 border-blue-200`).
+**Aturan UI Kartu Petugas**:
+- Foto: Avatar Inisial Bulat (`bg-blue-100 text-[#0052CC]` atau `bg-sky-100 text-sky-800` untuk UB `border-2 border-sky-200`).
 - Direct WhatsApp Link: `https://wa.me/62...` dengan parameter `text` otomatis berisi pesan sopan dan terstruktur.
 - Tombol Salin Kontak: Salin nomor ke clipboard dengan floating toast notification feedback.
+- Digital Banking: Edukasi ekosistem BRImo & platform generasi baru QITA didampingi langsung oleh Universal Banker (UB).
 
 ---
 

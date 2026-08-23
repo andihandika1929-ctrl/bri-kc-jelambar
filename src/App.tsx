@@ -137,9 +137,9 @@ function MainApp() {
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] overflow-x-hidden w-full max-w-full relative p-0 m-0">
       {/* 1. Real-time Branch Operational Status Bar & 2. Navbar Header */}
       <header
-        className={`fixed top-0 left-0 right-0 w-full z-[999] transition-all duration-300 pointer-events-auto border-none shadow-none m-0 p-0 ${
+        className={`fixed top-0 left-0 right-0 w-full z-[999] transition-all duration-300 pointer-events-auto border-none m-0 p-0 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200'
+            ? 'bg-white text-slate-800 shadow-md border-b border-slate-200'
             : 'bg-transparent border-transparent shadow-none'
         }`}
       >
@@ -167,7 +167,7 @@ function MainApp() {
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <span
                     className={`text-sm sm:text-base md:text-lg font-black tracking-tight leading-none transition-colors duration-300 whitespace-nowrap ${
-                      isScrolled ? 'text-[#0052CC]' : 'text-white drop-shadow-md'
+                      isScrolled ? 'text-[#0052CC]' : 'text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]'
                     }`}
                   >
                     KC Jakarta Jelambar
@@ -184,7 +184,7 @@ function MainApp() {
                 </div>
                 <span
                   className={`text-[10px] sm:text-[11px] font-semibold mt-0.5 sm:mt-1 transition-colors duration-300 whitespace-nowrap ${
-                    isScrolled ? 'text-slate-500' : 'text-slate-100/90 drop-shadow-xs'
+                    isScrolled ? 'text-slate-500' : 'text-slate-100/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]'
                   }`}
                 >
                   {t.nav.brandSub}
@@ -200,8 +200,8 @@ function MainApp() {
                   href="#beranda"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.home}
@@ -212,8 +212,8 @@ function MainApp() {
                   onClick={() => navigateTo('activities')}
                   className={`transition-colors duration-300 whitespace-nowrap cursor-pointer ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.activities}
@@ -224,8 +224,8 @@ function MainApp() {
                   onClick={() => navigateTo('org')}
                   className={`transition-colors duration-300 whitespace-nowrap cursor-pointer ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.org}
@@ -235,8 +235,8 @@ function MainApp() {
                   href="#layanan"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.services}
@@ -245,8 +245,8 @@ function MainApp() {
                   href="#tim-bisnis"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.team}
@@ -255,8 +255,8 @@ function MainApp() {
                   href="#simulasi"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.calculator}
@@ -265,8 +265,8 @@ function MainApp() {
                   href="#unit-supervisi"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.units}
@@ -275,8 +275,8 @@ function MainApp() {
                   href="#panduan"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.faq}
@@ -285,8 +285,8 @@ function MainApp() {
                   href="#lokasi"
                   className={`transition-colors duration-300 whitespace-nowrap ${
                     isScrolled
-                      ? 'text-slate-700 hover:text-[#0052CC]'
-                      : 'text-white hover:text-blue-200 drop-shadow-md'
+                      ? 'text-slate-800 hover:text-[#0052CC]'
+                      : 'text-white hover:text-blue-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] font-medium'
                   }`}
                 >
                   {t.nav.contact}

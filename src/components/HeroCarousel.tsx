@@ -182,8 +182,8 @@ export default function HeroCarousel() {
         onTouchEnd={handleTouchEnd}
         aria-label="Hero Carousel Banner Resmi BRI"
       >
-        {/* Soft Vignette Overlay: Top & Bottom */}
-        <div className="absolute top-0 inset-x-0 h-28 sm:h-40 md:h-44 bg-gradient-to-b from-black/30 via-black/10 to-transparent pointer-events-none z-10" />
+        {/* Top-to-Bottom Gradient Overlay (Guarantees Crisp Navbar Text Contrast over any banner) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent pointer-events-none z-10" />
         <div className="absolute bottom-0 inset-x-0 h-24 sm:h-32 md:h-36 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none z-10" />
 
         {/* Aspect Ratio Container (Edge-to-Edge Pure Banner Display) */}

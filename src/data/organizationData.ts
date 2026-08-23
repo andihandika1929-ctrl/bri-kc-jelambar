@@ -379,11 +379,8 @@ export const organizationData: OrgPerson[] = [
     }
   },
 
-  // =========================================================================
-  // 3. SUPERVISI OPERASIONAL & ADMINISTRASI KREDIT (3 Pejabat)
-  // =========================================================================
   {
-    id: 'l3-aprita',
+    id: 'l2-aprita',
     name: 'Aprita Dinasari',
     role: 'Asisten Manajer Operasional & Layanan (AMOL)',
     roleI18n: {
@@ -391,8 +388,8 @@ export const organizationData: OrgPerson[] = [
       en: 'Assistant Manager Operations & Service (AMOL)',
       zh: '营运与服务助理经理 (AMOL)'
     },
-    level: 3,
-    departmentKey: 'supervisors',
+    level: 2,
+    departmentKey: 'managers',
     departmentName: 'Manajemen Operasional & Layanan',
     departmentNameI18n: {
       id: 'Manajemen Operasional & Layanan',
@@ -401,32 +398,31 @@ export const organizationData: OrgPerson[] = [
     },
     initials: 'AD',
     jobdesk: [
-      'Membantu Manager Operasional dalam mengoordinasikan mutu layanan frontline dan back-office harian.',
-      'Melakukan review SLA layanan perbankan, efisiensi loket transaksi, dan audit kepatuhan kas harian.',
-      'Memastikan ketersediaan logistik kartu debit, buku tabungan, bilyet giro, dan material promosi cabang.',
-      'Mendampingi implementasi inovasi digital perbankan dan migrasi platform baru Qita di Banking Hall.'
+      'Membantu Manajer Operasional & Layanan (MOL) dalam perencanaan, pengawasan, dan evaluasi operasional perbankan harian cabang.',
+      'Supervisi kepatuhan operasional kas, koordinasi tindak lanjut audit intern, dan mitigasi risiko operasional cabang.',
+      'Memastikan standar kualitas layanan (Service Quality) berjalan konsisten di seluruh unit kerja KC Jakarta Jelambar.'
     ],
     jobdeskI18n: {
       id: [
-        'Membantu Manager Operasional dalam mengoordinasikan mutu layanan frontline dan back-office harian.',
-        'Melakukan review SLA layanan perbankan, efisiensi loket transaksi, dan audit kepatuhan kas harian.',
-        'Memastikan ketersediaan logistik kartu debit, buku tabungan, bilyet giro, dan material promosi cabang.',
-        'Mendampingi implementasi inovasi digital perbankan dan migrasi platform baru Qita di Banking Hall.'
+        'Membantu Manajer Operasional & Layanan (MOL) dalam perencanaan, pengawasan, dan evaluasi operasional perbankan harian cabang.',
+        'Supervisi kepatuhan operasional kas, koordinasi tindak lanjut audit intern, dan mitigasi risiko operasional cabang.',
+        'Memastikan standar kualitas layanan (Service Quality) berjalan konsisten di seluruh unit kerja KC Jakarta Jelambar.'
       ],
       en: [
-        'Assist the Operations Manager in aligning frontline service excellence and daily back-office processing.',
-        'Review banking service SLAs, transaction counter throughput, and daily cash compliance.',
-        'Ensure administrative inventory for debit cards, passbooks, checkbooks, and promotional materials.',
-        'Facilitate digital banking platform innovations and the Qita migration in the Banking Hall.'
+        'Assisting the Operations & Service Quality Manager (MOL) in planning, supervising, and evaluating daily branch banking operations.',
+        'Supervising cash operational compliance, coordinating internal audit follow-ups, and mitigating branch operational risks.',
+        'Ensuring consistent execution of Service Quality standards across all operational units of KC Jakarta Jelambar.'
       ],
       zh: [
-        '协助营运总监把控前台服务质量与后台账务处理效率。',
-        '监督柜面业务办理时效（SLA），落实每日现金收付与账实核对。',
-        '保障借记卡、存折、支票票据及业务宣传物料的充足供应。',
-        '推动大堂数字化创新应用落地及新一代 Qita 平台的平稳迁移。'
+        '协助营运与服务质量总监（MOL）统筹规划、监督与评估支行日常银行业务运营。',
+        '监督现金运营合规、协调落实内部审计整改并做好支行日常运营风险防范。',
+        '确保卓越服务质量标准（Service Quality）在 KC Jakarta Jelambar 全辖网点稳健落实。'
       ]
     }
   },
+  // =========================================================================
+  // 3. SUPERVISI OPERASIONAL & ADMINISTRASI KREDIT (2 Supervisor)
+  // =========================================================================
   {
     id: 'l3-syamsul',
     name: 'Syamsul Hidayatullah',

@@ -73,8 +73,8 @@ Wajib terurut alfabetis (A - Z):
 # 6. STANDAR HIERARKI STRUKTUR ORGANISASI (data/organizationData.ts)
 Wajib mematuhi nomenklatur baku kantor cabang Bank BRI (tanpa istilah direksi / LEVEL bertingkat):
 - Pimpinan Kantor Cabang: Adi Sujarwanto (Pemimpin Cabang / Branch Office Head, Solo Header Card)
-- Manajer Operasional & Bisnis: Jaka Farisa (MOL), Dwiyanto Ario Putro (SBM), Denis Sepriyanto (MBM), Eugenia Javanica Ratna Puri (RMFT)
-- Supervisi Operasional & Administrasi Kredit: Aprita Dinasari (AMOL), Syamsul Hidayatullah (SOL), Rafika Widya Sari (SPV ADK)
+- Manajer Operasional & Bisnis: Jaka Farisa (MOL), Aprita Dinasari (AMOL), Dwiyanto Ario Putro (SBM), Denis Sepriyanto (MBM), Eugenia Javanica Ratna Puri (RMFT)
+- Supervisi Operasional & Administrasi Kredit: Syamsul Hidayatullah (SOL), Rafika Widya Sari (SPV ADK)
 - Tim Relationship Manager (RM):
   * SME & Commercial: Utama Farid (RM SME), Fahmi Sidik (RM SME Quality)
   * Funding & Transaction: Ahmad Firdaus (RMFT Business), Dani Faisal (RMFT Individu Branch), Syafira Febrianty (RMFT Individu Branch)

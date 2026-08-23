@@ -487,7 +487,7 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
           )}
 
           {/* ========================================================================= */}
-          {/* 2. MANAJER OPERASIONAL & BISNIS (4 Manajer) */}
+          {/* 2. MANAJER OPERASIONAL & BISNIS (5 Pejabat) */}
           {/* ========================================================================= */}
           {(selectedLevel === 'all' || selectedLevel === 2) && level2Managers.length > 0 && (
             <section className="space-y-6">
@@ -500,11 +500,11 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
                   Kepala Departemen & Manajer Bidang
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  Empat pilar kepemimpinan manajerial operasional & layanan (MOL), bisnis komersial & SME (SBM), bisnis mikro supervisi unit (MBM), dan dana transaksi (RMFT).
+                  Jajaran manajemen pilar operasional & layanan (MOL, AMOL), bisnis komersial & SME (SBM), bisnis mikro supervisi unit (MBM), dan dana transaksi (RMFT).
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 items-stretch">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
                 {level2Managers.map((manager) => renderPersonCard(manager))}
               </div>
 
@@ -516,7 +516,7 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
           )}
 
           {/* ========================================================================= */}
-          {/* 3. SUPERVISI OPERASIONAL & ADMINISTRASI KREDIT (3 Pejabat) */}
+          {/* 3. SUPERVISI OPERASIONAL & ADMINISTRASI KREDIT (2 Supervisor) */}
           {/* ========================================================================= */}
           {(selectedLevel === 'all' || selectedLevel === 3) && level3Supervisors.length > 0 && (
             <section className="space-y-6">
@@ -529,11 +529,11 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
                   Pengawas Operasional & Administrasi Kredit
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  Pengawas langsung mutu layanan prima di Banking Hall, dual otorisasi transaksi kas, serta review legalitas notariil kredit.
+                  Pengawas langsung mutu layanan prima di Banking Hall, dual otorisasi transaksi kas, serta administrasi operasional kredit cabang.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-5xl mx-auto items-stretch">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-3xl mx-auto items-stretch">
                 {level3Supervisors.map((spv) => renderPersonCard(spv))}
               </div>
 

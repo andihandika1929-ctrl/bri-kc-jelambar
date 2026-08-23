@@ -119,8 +119,8 @@ Wajib diurutkan secara alfabetis (A - Z):
 - **Rute Terpisah & Navigasi**: Halaman Beranda (`/` / `#beranda`), Aktivitas & Berita (`/aktivitas` / `#aktivitas` - Status Pembaruan Sistem Informasi / Under Construction Card), dan Struktur Organisasi & Jobdesk (`/struktur` / `#struktur`).
 - **Nomenklatur Baku Struktur Organisasi Cabang**:
   * Pimpinan Kantor Cabang: Adi Sujarwanto (Pemimpin Cabang / Branch Office Head - Solo Header)
-  * Manajer Operasional & Bisnis: Jaka Farisa (MOL), Dwiyanto Ario Putro (SBM), Denis Sepriyanto (MBM), Eugenia Javanica (RMFT)
-  * Supervisi Operasional & Administrasi Kredit: Aprita Dinasari (AMOL), Syamsul Hidayatullah (SOL), Rafika Widya Sari (SPV ADK)
+  * Manajer Operasional & Bisnis: Jaka Farisa (MOL), Aprita Dinasari (AMOL), Dwiyanto Ario Putro (SBM), Denis Sepriyanto (MBM), Eugenia Javanica (RMFT)
+  * Supervisi Operasional & Administrasi Kredit: Syamsul Hidayatullah (SOL), Rafika Widya Sari (SPV ADK)
   * Tim Relationship Manager (RM): SME & Commercial (Utama Farid, Fahmi Sidik), Funding & Transaction (Ahmad Firdaus, Dani Faisal, Syafira Febrianty), Mikro (Afriyadie, Adam Werna, Rezki Fitra), CRR & Lelang (Yasin Nugraha, Sutan Pardamean, Ayang Pradila)
   * Layanan Nasabah & Penunjang Operasional: Klaster A (Banking Hall: Sri Mulyani, Erina, Nabilah, Ryan CS, Indrastuti Teller, Choirul DJS), Klaster B (ADK Murni: Bela, Marto, Nindita), Klaster C (Admin Mikro & Agen: Chairunnisah, Cici Fatmimah), Klaster D (Penunjang Operasional & IT: Vera Amelia HR, Ragil, Andi Handika - Portal Lead & System Developer, Harlianto, Atin Prihatin - Support Operasional, Rakhmad Dwi Yunianto - Support Administrasi)
 - **Format Kartu Struktur Organisasi**: Tanpa alamat email, seluruh nama & jabatan tampil utuh tanpa pemotongan (`break-words`, tanpa `truncate` / `line-clamp`), header profil memiliki `min-h-[72px]`, tugas pokok & fungsi terbuka permanen, tinggi kartu seragam (`h-full flex flex-col justify-between`), serta badge spesial "Portal Lead & System Developer" untuk Andi Handika.

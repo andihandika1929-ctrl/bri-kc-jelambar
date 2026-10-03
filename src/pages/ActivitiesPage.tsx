@@ -1,10 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import TopOperationalBar from '../components/TopOperationalBar';
 import LanguageSelector from '../components/LanguageSelector';
 import ScrollToTop from '../components/ScrollToTop';
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+} from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { activitiesData, ActivityArticle } from '../data/activitiesData';
 import {
   Newspaper,
   ArrowLeft,
@@ -16,7 +24,14 @@ import {
   ChevronRight,
   Menu,
   X,
-  MessageCircle
+  MessageCircle,
+  Calendar,
+  Tag,
+  Clock,
+  Search,
+  BookOpen,
+  ArrowRight,
+  Loader2,
 } from 'lucide-react';
 
 interface ActivitiesPageProps {
@@ -24,15 +39,159 @@ interface ActivitiesPageProps {
   onNavigateOrg: () => void;
 }
 
+export interface UnifiedArticle {
+  id: string;
+  title: string;
+  category: string;
+  publishDate: any;
+  excerpt: string;
+  content: string;
+  imageUrl?: string;
+  author?: string;
+  tags?: string[];
+}
+
+const CATEGORY_STYLES: Record<string, string> = {
+  'Kegiatan Cabang': 'bg-blue-50 text-[#0052CC] border-blue-200',
+  'CSR':             'bg-emerald-50 text-emerald-700 border-emerald-200',
+  'Pengumuman':      'bg-amber-50 text-amber-700 border-amber-200',
+  'Edukasi Nasabah': 'bg-purple-50 text-purple-700 border-purple-200',
+  'csr':             'bg-emerald-50 text-emerald-700 border-emerald-200',
+  'operasional':     'bg-blue-50 text-[#0052CC] border-blue-200',
+  'literasi':        'bg-purple-50 text-purple-700 border-purple-200',
+  'event':           'bg-amber-50 text-amber-700 border-amber-200',
+  'default':         'bg-slate-100 text-slate-700 border-slate-200',
+};
+
+import { getLocalActivities, formatDisplayDate, getDeletedIds } from '../lib/dataSync';
+
+function formatArticleDate(val: any): string {
+  return formatDisplayDate(val, 'long');
+}
+
 export default function ActivitiesPage({ onNavigateHome, onNavigateOrg }: ActivitiesPageProps) {
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [articles, setArticles] = useState<UnifiedArticle[]>(() => {
+    const initial = getLocalActivities() as unknown as UnifiedArticle[];
+    return Array.isArray(initial) ? initial : [];
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [readingArticle, setReadingArticle] = useState<UnifiedArticle | null>(null);
+
+  // Auto Scroll-to-Top on Page Mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
+  const fallbackToStatic = () => {
+    const local = getLocalActivities() as unknown as UnifiedArticle[];
+    if (Array.isArray(local)) {
+      setArticles(local);
+      return;
+    }
+    const deletedIds = getDeletedIds('activities');
+    const staticMapped: UnifiedArticle[] = activitiesData
+      .filter((item) => !deletedIds.includes(item.id))
+      .map((item) => ({
+        id: item.id,
+        title: item.title,
+        category: item.categoryLabel || item.category,
+        publishDate: item.date,
+        excerpt: item.excerpt,
+        content: Array.isArray(item.content) ? item.content.join('\n\n') : String(item.content || ''),
+        imageUrl: item.image,
+        author: item.author,
+        tags: item.tags,
+      }));
+    setArticles(staticMapped);
+  };
+
+  // Listen to Firestore `activities` with graceful fallback and sync listener
+  useEffect(() => {
+    fallbackToStatic();
+
+    const handleSync = (e: any) => {
+      if (!e.detail || e.detail.collection === 'activities') {
+        fallbackToStatic();
+      }
+    };
+    window.addEventListener('kc_data_sync', handleSync);
+
+    try {
+      const q = query(collection(db, 'activities'), orderBy('publishDate', 'desc'));
+      const unsub = onSnapshot(
+        q,
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const fetched: UnifiedArticle[] = snapshot.docs.map((doc) => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                title: data.title || '',
+                category: data.category || 'Kegiatan Cabang',
+                publishDate: data.publishDate || data.createdAt,
+                excerpt: data.excerpt || '',
+                content: data.content || '',
+                imageUrl: data.imageUrl || '',
+                author: data.author || 'Tim Humas BRI KC Jelambar',
+                tags: data.tags || [],
+              };
+            });
+            setArticles(fetched);
+          } else {
+            fallbackToStatic();
+          }
+          setLoading(false);
+        },
+        (error) => {
+          console.warn('Firestore activities fetch error, using static fallback:', error);
+          fallbackToStatic();
+          setLoading(false);
+        }
+      );
+      return () => {
+        unsub();
+        window.removeEventListener('kc_data_sync', handleSync);
+      };
+    } catch (err) {
+      fallbackToStatic();
+      setLoading(false);
+      return () => window.removeEventListener('kc_data_sync', handleSync);
+    }
+  }, []);
+
+  // Categories list
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    articles.forEach((a) => {
+      if (a.category) set.add(a.category);
+    });
+    return ['Semua', ...Array.from(set)];
+  }, [articles]);
+
+  // Filtered articles
+  const filteredArticles = useMemo(() => {
+    return articles.filter((art) => {
+      const matchesCat =
+        selectedCategory === 'Semua' ||
+        art.category?.toLowerCase() === selectedCategory.toLowerCase();
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        art.title?.toLowerCase().includes(q) ||
+        art.excerpt?.toLowerCase().includes(q) ||
+        art.content?.toLowerCase().includes(q);
+      return matchesCat && matchesSearch;
+    });
+  }, [articles, selectedCategory, searchQuery]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] overflow-x-hidden w-full max-w-full relative">
       {/* 1. Global Fixed Header Navigation */}
       <header className="fixed top-0 left-0 right-0 w-full z-[999] bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
-        {/* Top Operational Bar */}
         <TopOperationalBar />
 
         {/* Main Navbar */}
@@ -91,19 +250,12 @@ export default function ActivitiesPage({ onNavigateHome, onNavigateOrg }: Activi
               >
                 {t.nav.services}
               </button>
-              <button
-                onClick={onNavigateHome}
-                className="px-3 py-2 rounded-xl text-slate-600 hover:text-[#0052CC] hover:bg-slate-50 transition-colors cursor-pointer"
-              >
-                {t.nav.team}
-              </button>
-              <button
-                onClick={onNavigateHome}
-                className="px-3 py-2 rounded-xl text-slate-600 hover:text-[#0052CC] hover:bg-slate-50 transition-colors cursor-pointer"
-              >
-                {t.nav.units}
-              </button>
             </nav>
+
+            {/* Language Selector Desktop */}
+            <div className="hidden lg:flex items-center gap-3">
+              <LanguageSelector variant="desktop" />
+            </div>
 
             {/* Mobile Menu Toggle */}
             <div className="lg:hidden flex items-center gap-2">
@@ -149,46 +301,261 @@ export default function ActivitiesPage({ onNavigateHome, onNavigateOrg }: Activi
         )}
       </header>
 
-      {/* 2. Main Centered Under Construction Card (Mobile-First UI) */}
-      <main className="flex-1 flex items-center justify-center pt-32 sm:pt-36 md:pt-40 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-lg md:max-w-xl mx-auto my-auto bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-10 text-center flex flex-col items-center">
-          {/* Status Icon */}
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 text-[#0052CC] flex items-center justify-center mb-5 border border-blue-200/60 shadow-2xs">
-            <Newspaper className="w-7 h-7 sm:w-8 sm:h-8" />
+      {/* 2. Main Content */}
+      <main className="flex-1 pt-32 sm:pt-36 md:pt-40 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        {/* Header Hero */}
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider border border-blue-200">
+            <BookOpen className="w-3.5 h-3.5 text-[#0052CC]" />
+            <span>Kanal Informasi Resmi</span>
           </div>
 
-          {/* Badge */}
-          <span className="px-3 py-1 text-[11px] sm:text-xs font-semibold rounded-full bg-blue-100/70 text-[#0052CC] border border-blue-200 mb-4 inline-flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#0052CC]" />
-            <span>{t.activities.maintenanceBadge}</span>
-          </span>
-
-          {/* Title */}
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 leading-snug mb-3">
-            {t.activities.maintenanceTitle}
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Aktivitas, Berita &amp; Program Cabang
           </h1>
 
-          {/* Description */}
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mx-auto mb-6">
-            {t.activities.maintenanceDesc}
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Dokumentasi inisiatif sosial (TJSL), edukasi literasi finansial, pengumuman operasional,
+            dan ragam kegiatan terkini di lingkungan kerja BRI Kantor Cabang Jakarta Jelambar.
           </p>
-
-          {/* Action Button */}
-          <button
-            onClick={onNavigateHome}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0052CC] hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>{t.activities.backToHome}</span>
-          </button>
         </div>
+
+        {/* Filter & Search Bar */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 sm:p-5 mb-10 space-y-4">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            {/* Search Input */}
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari judul berita, topik, atau kata kunci..."
+                className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0052CC] focus:border-[#0052CC] transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Live Count */}
+            <div className="text-xs font-semibold text-slate-500 whitespace-nowrap self-center">
+              Menampilkan <span className="text-[#0052CC] font-bold">{filteredArticles.length}</span> artikel
+            </div>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                  selectedCategory === cat
+                    ? 'bg-[#0052CC] text-white shadow-xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Articles Grid */}
+        {loading ? (
+          <div className="py-24 text-center space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-[#0052CC] mx-auto" />
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">Memuat warta &amp; berita terkini…</p>
+          </div>
+        ) : filteredArticles.length === 0 ? (
+          <div className="py-20 text-center space-y-3 bg-white rounded-3xl border border-slate-200/80 p-8">
+            <Newspaper className="w-12 h-12 text-slate-300 mx-auto" />
+            <p className="text-sm sm:text-base font-bold text-slate-800">
+              Tidak ada artikel yang cocok dengan pencarian Anda
+            </p>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              Silakan ganti kata kunci atau pilih kategori lain untuk melihat artikel lainnya.
+            </p>
+            <button
+              onClick={() => {
+                setSelectedCategory('Semua');
+                setSearchQuery('');
+              }}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#0052CC] hover:underline cursor-pointer"
+            >
+              Reset Filter
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredArticles.map((article) => {
+              const badgeStyle = CATEGORY_STYLES[article.category] || CATEGORY_STYLES['default'];
+              return (
+                <article
+                  key={article.id}
+                  onClick={() => setReadingArticle(article)}
+                  className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-md hover:border-blue-200 transition-all duration-300 overflow-hidden flex flex-col cursor-pointer group"
+                >
+                  {/* Thumbnail Image */}
+                  <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
+                    {article.imageUrl ? (
+                      <img
+                        src={article.imageUrl}
+                        alt={article.title}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-slate-100 text-blue-300">
+                        <Newspaper className="w-12 h-12" />
+                      </div>
+                    )}
+                    <div className="absolute top-3 left-3">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border shadow-xs backdrop-blur-xs ${badgeStyle}`}
+                      >
+                        <Tag className="w-2.5 h-2.5" />
+                        {article.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                        <Calendar className="w-3 h-3 text-[#F37021]" />
+                        <span>{formatArticleDate(article.publishDate)}</span>
+                        {article.author && (
+                          <>
+                            <span>•</span>
+                            <span className="truncate">{article.author}</span>
+                          </>
+                        )}
+                      </div>
+
+                      <h2 className="text-sm sm:text-base font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-[#0052CC] transition-colors">
+                        {article.title}
+                      </h2>
+
+                      {article.excerpt && (
+                        <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                          {article.excerpt}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0052CC] group-hover:gap-2 transition-all">
+                        <span>Baca Selengkapnya</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </main>
 
-      {/* 3. Modern Corporate Blue Footer (#003B99) */}
+      {/* 3. Detail Reading Modal */}
+      {readingArticle && (
+        <div
+          className="fixed inset-0 z-[1000] bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setReadingArticle(null);
+          }}
+        >
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col relative border border-slate-200">
+            {/* Header Sticky */}
+            <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+              <span
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
+                  CATEGORY_STYLES[readingArticle.category] || CATEGORY_STYLES['default']
+                }`}
+              >
+                <Tag className="w-3 h-3" />
+                {readingArticle.category}
+              </span>
+              <button
+                onClick={() => setReadingArticle(null)}
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Tutup"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 sm:p-8 space-y-6">
+              {/* Title & Metadata */}
+              <div className="space-y-3">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                  {readingArticle.title}
+                </h2>
+                <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#F37021]" />
+                    {formatArticleDate(readingArticle.publishDate)}
+                  </span>
+                  {readingArticle.author && (
+                    <span className="flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#0052CC]" />
+                      {readingArticle.author}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Main Image */}
+              {readingArticle.imageUrl && (
+                <div className="rounded-2xl overflow-hidden aspect-[16/9] bg-slate-100 shadow-xs border border-slate-100">
+                  <img
+                    src={readingArticle.imageUrl}
+                    alt={readingArticle.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Lead Excerpt */}
+              {readingArticle.excerpt && (
+                <p className="text-sm font-semibold text-slate-700 leading-relaxed border-l-4 border-[#F37021] pl-4 italic bg-orange-50/40 py-2 rounded-r-xl">
+                  {readingArticle.excerpt}
+                </p>
+              )}
+
+              {/* Full Content */}
+              <div className="prose prose-sm max-w-none text-slate-700 leading-relaxed whitespace-pre-line text-xs sm:text-sm space-y-4">
+                {readingArticle.content || readingArticle.excerpt || 'Konten belum tersedia.'}
+              </div>
+            </div>
+
+            {/* Footer Action */}
+            <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 sm:p-6 flex justify-end">
+              <button
+                onClick={() => setReadingArticle(null)}
+                className="px-6 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold transition-colors cursor-pointer"
+              >
+                Tutup Jendela
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. Modern Corporate Blue Footer (#003B99) */}
       <footer className="bg-[#003B99] text-white text-xs pt-14 sm:pt-16 pb-12 border-none shadow-none w-full max-w-full m-0 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 sm:mb-12 w-full">
-            {/* Col 1: Logo & Branch Profile */}
+            {/* Col 1 */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <img
@@ -206,32 +573,12 @@ export default function ActivitiesPage({ onNavigateHome, onNavigateOrg }: Activi
                   </div>
                 </div>
               </div>
-
               <p className="text-blue-100 text-xs leading-relaxed break-words">
                 {t.footer.desc}
               </p>
-
-              <div className="space-y-2.5 text-xs text-blue-100 pt-2">
-                <div className="flex items-start gap-2">
-                  <Building2 className="w-4 h-4 text-blue-300 flex-shrink-0 mt-0.5" />
-                  <span className="break-words">{t.location.addressFull}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                  <a href="tel:02156981105" className="text-blue-100 hover:text-white font-semibold transition-colors">
-                    {t.location.phone}
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                  <a href="mailto:kcjelambarbri@gmail.com" className="text-blue-100 hover:text-white font-semibold transition-colors break-all">
-                    {t.location.email}
-                  </a>
-                </div>
-              </div>
             </div>
 
-            {/* Col 2: Pilar Layanan Bisnis & Panduan */}
+            {/* Col 2 */}
             <div>
               <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
@@ -243,132 +590,67 @@ export default function ActivitiesPage({ onNavigateHome, onNavigateOrg }: Activi
                     onClick={onNavigateHome}
                     className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                   >
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>{t.nav.home}</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300" />
+                    <span>{t.nav.services}</span>
                   </button>
-                </li>
-                <li>
-                  <span className="text-white font-bold flex items-center gap-1.5 text-left">
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>{t.nav.activities}</span>
-                  </span>
                 </li>
                 <li>
                   <button
                     onClick={onNavigateOrg}
                     className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
                   >
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-300" />
                     <span>{t.nav.org}</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={onNavigateHome}
-                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>{t.services.card2Title}</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={onNavigateHome}
-                    className="text-blue-100 hover:text-white transition-colors flex items-center gap-1.5 text-left cursor-pointer"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-blue-300 flex-shrink-0" />
-                    <span>{t.calc.tabKpr}</span>
                   </button>
                 </li>
               </ul>
             </div>
 
-            {/* Col 3: Layanan Digital Terhubung */}
+            {/* Col 3 */}
             <div>
               <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
                 {t.footer.col2Title}
               </h5>
-              <ul className="space-y-2.5 text-sm">
-                <li className="flex items-center gap-2 text-blue-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
-                  <span className="font-semibold text-white">Platform Generasi Baru Qita</span>
-                </li>
-                <li className="flex items-center gap-2 text-blue-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
-                  <span>BRImo Super App Bisnis</span>
-                </li>
-                <li className="flex items-center gap-2 text-blue-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
-                  <span>Aplikasi BRI Merchant</span>
-                </li>
-                <li className="flex items-center gap-2 text-blue-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
-                  <span>Cash Management System (CMS)</span>
-                </li>
-                <li className="flex items-center gap-2 text-blue-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-300 flex-shrink-0" />
-                  <span>Jaringan Kemitraan AgenBRILink</span>
-                </li>
-              </ul>
+              <div className="space-y-2 text-xs text-blue-100">
+                <p>Senin – Jumat: 08.00 – 15.00 WIB</p>
+                <p>Layanan CRM &amp; ATM: 24 Jam Nonstop</p>
+              </div>
             </div>
 
-            {/* Col 4: Card Kontak Hotline 24 Jam */}
+            {/* Col 4 */}
             <div>
               <h5 className="text-white font-bold text-base tracking-wide mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
-                {t.footer.col3Title}
+                Hubungi Kami
               </h5>
-              <div className="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/20 shadow-sm space-y-4 w-full">
-                <div>
-                  <div className="text-[11px] text-blue-200 font-bold uppercase tracking-wider mb-1">
-                    {t.footer.hotline24}
-                  </div>
-                  <a
-                    href="tel:1500017"
-                    className="text-xl sm:text-2xl font-black text-white hover:text-blue-200 transition-colors flex items-center gap-2 tracking-tight"
-                  >
-                    <Phone className="w-5 h-5 text-blue-300 flex-shrink-0" />
-                    <span>1500017</span>
+              <div className="space-y-2.5 text-xs text-blue-100">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-blue-300 flex-shrink-0" />
+                  <a href="tel:02156981105" className="hover:text-white font-semibold">
+                    (021) 5698-1105
                   </a>
                 </div>
-
-                <div className="pt-3 border-t border-white/15">
-                  <div className="text-[11px] text-blue-200 font-bold uppercase tracking-wider mb-1">
-                    {t.footer.sabrinaWA}
-                  </div>
-                  <a
-                    href="https://wa.me/628121214017"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-bold text-emerald-300 hover:text-emerald-200 transition-colors flex items-center gap-1.5"
-                  >
-                    <MessageCircle className="w-4 h-4 fill-emerald-300 text-[#003B99] flex-shrink-0" />
-                    <span>0812-12-14017</span>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-blue-300 flex-shrink-0" />
+                  <a href="mailto:kcjelambarbri@gmail.com" className="hover:text-white font-semibold break-all">
+                    kcjelambarbri@gmail.com
                   </a>
-                </div>
-
-                <div className="pt-2 text-[11px] text-blue-200/80">
-                  {t.footer.hotlineDesc}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Bottom Bar / Hak Cipta, Developer Signature & Legalitas */}
-          <div className="pt-6 sm:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200 text-center md:text-left w-full">
-            <p className="leading-relaxed">
-              {t.footer.copyright}
-            </p>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white font-medium text-[11px] shadow-xs flex-shrink-0 backdrop-blur-xs">
-              <ShieldCheck className="w-4 h-4 text-blue-300 flex-shrink-0" />
+          <div className="pt-6 sm:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200">
+            <p>{t.footer.copyright}</p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white font-medium text-[11px]">
+              <ShieldCheck className="w-4 h-4 text-blue-300" />
               <span>{t.footer.legal}</span>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Floating Scroll to Top Button */}
       <ScrollToTop />
     </div>
   );

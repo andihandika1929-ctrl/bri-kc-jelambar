@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   organizationData,
   OrgPerson,
@@ -14,6 +14,8 @@ import { useLanguage } from '../context/LanguageContext';
 import TopOperationalBar from '../components/TopOperationalBar';
 import LanguageSelector from '../components/LanguageSelector';
 import ScrollToTop from '../components/ScrollToTop';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import {
   Network,
   Users,
@@ -36,6 +38,7 @@ import {
   Phone,
   Mail,
   ChevronRight,
+  ChevronDown,
   Target,
   Store,
   Sparkles,
@@ -47,15 +50,67 @@ interface OrganizationPageProps {
   onNavigateActivities: () => void;
 }
 
+import { getLocalOrg, mergeOrgWithLocal } from '../lib/dataSync';
+
 export default function OrganizationPage({ onNavigateHome, onNavigateActivities }: OrganizationPageProps) {
   const { t, language } = useLanguage();
+  const [orgList, setOrgList] = useState<OrgPerson[]>(() => {
+    const initial = getLocalOrg() as unknown as OrgPerson[];
+    return initial && initial.length > 0 ? initial : organizationData;
+  });
   const [selectedLevel, setSelectedLevel] = useState<number | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+
+  const toggleCard = (id: string) => {
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  // Auto Scroll-to-Top on Page Mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
+  // Listen to Firestore `org_structure` collection in real-time with local fallback and sync listener
+  useEffect(() => {
+    const loadOrg = (remote: any[] = []) => {
+      const merged = mergeOrgWithLocal(remote) as unknown as OrgPerson[];
+      setOrgList(merged.length > 0 ? merged : organizationData);
+    };
+
+    const handleSync = (e: any) => {
+      if (!e.detail || e.detail.collection === 'org_structure') {
+        loadOrg();
+      }
+    };
+    window.addEventListener('kc_data_sync', handleSync);
+
+    try {
+      const q = query(collection(db, 'org_structure'));
+      const unsub = onSnapshot(
+        q,
+        (snapshot) => {
+          const fetched = snapshot.docs.map((d) => ({
+            id: d.id,
+            ...(d.data() as any),
+          }));
+          loadOrg(fetched);
+        },
+        () => loadOrg()
+      );
+      return () => {
+        unsub();
+        window.removeEventListener('kc_data_sync', handleSync);
+      };
+    } catch {
+      return () => window.removeEventListener('kc_data_sync', handleSync);
+    }
+  }, []);
 
   // Filtered persons
   const filteredPersons = useMemo(() => {
-    return organizationData.filter((person) => {
+    return orgList.filter((person) => {
       const matchesLevel = selectedLevel === 'all' || person.level === selectedLevel;
 
       const query = searchQuery.toLowerCase().trim();
@@ -72,10 +127,13 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
 
       return matchesLevel && matchesSearch;
     });
-  }, [selectedLevel, searchQuery, language]);
+  }, [orgList, selectedLevel, searchQuery, language]);
 
   // Level 1: Pimpinan Kantor Cabang
-  const level1Pincab = useMemo(() => filteredPersons.find((p) => p.id === 'l1-pincab'), [filteredPersons]);
+  const level1Pincab = useMemo(
+    () => filteredPersons.find((p) => p.id === 'l1-pincab') || filteredPersons.find((p) => p.level === 1),
+    [filteredPersons]
+  );
 
   // Level 2: Manajer Operasional & Bisnis (4)
   const level2Managers = useMemo(() => filteredPersons.filter((p) => p.level === 2), [filteredPersons]);
@@ -183,40 +241,59 @@ export default function OrganizationPage({ onNavigateHome, onNavigateActivities 
               </div>
             )}
 
-            {/* Permanently Open Jobdesk Points */}
-            <div className="pt-2.5 border-t border-slate-100 space-y-1.5">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                Tugas Pokok & Fungsi:
-              </div>
-              <ul className="space-y-1.5 text-xs text-slate-700">
-                {jobdeskItems.map((desk, idx) => (
-                  <li key={idx} className="flex items-start gap-2 leading-relaxed">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                    <span className="text-[11px] sm:text-xs text-slate-600">{desk}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Optional KPIs / Core Competencies */}
-          {kpiItems.length > 0 && (
-            <div className="pt-2.5 border-t border-slate-100 mt-auto">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                Indikator Kinerja Utama (KPI):
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {kpiItems.map((kpi, kIdx) => (
-                  <span
-                    key={kIdx}
-                    className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0052CC] border border-blue-200 text-[10px] font-semibold"
-                  >
-                    {kpi}
+            {/* Progressive Disclosure: Collapsible Accordion for Jobdesk */}
+            {jobdeskItems.length > 0 && (
+              <div className="pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => toggleCard(person.id)}
+                  className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-xs font-bold text-[#0052CC] hover:bg-blue-50/60 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-1.5 text-[11px] sm:text-xs">
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-[#0052CC]" />
+                    <span>Tugas Pokok &amp; Fungsi ({jobdeskItems.length})</span>
                   </span>
-                ))}
+                  <ChevronDown
+                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                      expandedCards[person.id] ? 'rotate-180 text-[#0052CC]' : ''
+                    }`}
+                  />
+                </button>
+
+                {expandedCards[person.id] && (
+                  <div className="pt-2 pb-1 space-y-2 animate-fadeIn">
+                    <ul className="space-y-1.5 text-xs text-slate-700">
+                      {jobdeskItems.map((desk, idx) => (
+                        <li key={idx} className="flex items-start gap-2 leading-relaxed">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                          <span className="text-[11px] sm:text-xs text-slate-600">{desk}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Optional KPIs / Core Competencies */}
+                    {kpiItems.length > 0 && (
+                      <div className="pt-2 border-t border-slate-100 mt-2">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                          Indikator Kinerja Utama (KPI):
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {kpiItems.map((kpi, kIdx) => (
+                            <span
+                              key={kIdx}
+                              className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0052CC] border border-blue-200 text-[10px] font-semibold"
+                            >
+                              {kpi}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     );

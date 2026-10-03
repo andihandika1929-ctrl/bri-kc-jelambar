@@ -1,6 +1,6 @@
-'use client';
-
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import {
   teamMembers,
   filterTabs,
@@ -44,8 +44,14 @@ import {
   Smartphone
 } from 'lucide-react';
 
+import { getLocalStaff, mergeStaffWithLocal } from '../lib/dataSync';
+
 export default function TeamDirectory() {
   const { t, language } = useLanguage();
+  const [staffList, setStaffList] = useState<TeamMember[]>(() => {
+    const initial = getLocalStaff() as unknown as TeamMember[];
+    return initial && initial.length > 0 ? initial : teamMembers;
+  });
   const [activeTab, setActiveTab] = useState<FilterCategory>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTopic, setSelectedTopic] = useState<string>('Semua Topik');
@@ -53,6 +59,42 @@ export default function TeamDirectory() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedRMForModal, setSelectedRMForModal] = useState<TeamMember | null>(null);
   const [customInquiryService, setCustomInquiryService] = useState<string>('');
+
+  // Firestore real-time listener for staff with local fallback and sync listener
+  useEffect(() => {
+    const loadStaff = (remote: any[] = []) => {
+      const merged = mergeStaffWithLocal(remote) as unknown as TeamMember[];
+      setStaffList(merged.length > 0 ? merged : teamMembers);
+    };
+
+    const handleSync = (e: any) => {
+      if (!e.detail || e.detail.collection === 'staff') {
+        loadStaff();
+      }
+    };
+    window.addEventListener('kc_data_sync', handleSync);
+
+    try {
+      const q = query(collection(db, 'staff'));
+      const unsub = onSnapshot(
+        q,
+        (snapshot) => {
+          const fetched = snapshot.docs.map((d) => ({
+            id: d.id,
+            ...(d.data() as any),
+          }));
+          loadStaff(fetched);
+        },
+        () => loadStaff()
+      );
+      return () => {
+        unsub();
+        window.removeEventListener('kc_data_sync', handleSync);
+      };
+    } catch {
+      return () => window.removeEventListener('kc_data_sync', handleSync);
+    }
+  }, []);
 
   // Icon mapping for filter tabs
   const getTabIcon = (iconName: string) => {
@@ -90,7 +132,7 @@ export default function TeamDirectory() {
 
   // Filter logic
   const filteredMembers = useMemo(() => {
-    return teamMembers.filter((member) => {
+    return staffList.filter((member) => {
       // 1. Tab filtering
       let matchesTab = true;
       if (activeTab === 'ub') {
@@ -112,13 +154,13 @@ export default function TeamDirectory() {
 
       const matchesSearch =
         !query ||
-        member.name.toLowerCase().includes(query) ||
-        member.role.toLowerCase().includes(query) ||
+        member.name?.toLowerCase().includes(query) ||
+        member.role?.toLowerCase().includes(query) ||
         localizedRole.includes(query) ||
-        member.unitOffice.toLowerCase().includes(query) ||
+        member.unitOffice?.toLowerCase().includes(query) ||
         localizedOffice.includes(query) ||
         localizedBio.includes(query) ||
-        member.specializations.some((spec) => spec.toLowerCase().includes(query)) ||
+        member.specializations?.some((spec) => spec.toLowerCase().includes(query)) ||
         localizedSpecs.some((spec) => spec.toLowerCase().includes(query));
 
       // 3. Topic filter
@@ -126,7 +168,7 @@ export default function TeamDirectory() {
       if (selectedTopic !== 'Semua Topik') {
         const topicNorm = selectedTopic.toLowerCase();
         matchesTopic =
-          member.specializations.some((spec) => spec.toLowerCase().includes(topicNorm)) ||
+          member.specializations?.some((spec) => spec.toLowerCase().includes(topicNorm)) ||
           localizedSpecs.some((spec) => spec.toLowerCase().includes(topicNorm)) ||
           (topicNorm.includes('qita') && (member.segment === 'UB' || localizedBio.includes('qita'))) ||
           (topicNorm.includes('rekening') && (member.segment === 'UB' || member.segment === 'Funding')) ||
@@ -139,18 +181,18 @@ export default function TeamDirectory() {
 
       return matchesTab && matchesSearch && matchesTopic;
     });
-  }, [activeTab, searchQuery, selectedTopic, language]);
+  }, [staffList, activeTab, searchQuery, selectedTopic, language]);
 
   // Tab counts
   const tabCounts = useMemo(() => {
     return {
-      all: teamMembers.length,
-      ub: teamMembers.filter((m) => m.segment === 'UB').length,
-      lending: teamMembers.filter((m) => m.segment === 'Lending' || m.segment === 'Mikro').length,
-      funding: teamMembers.filter((m) => m.segment === 'Funding').length,
-      restrukturisasi: teamMembers.filter((m) => m.segment === 'Collection' || m.segment === 'CRR').length,
+      all: staffList.length,
+      ub: staffList.filter((m) => m.segment === 'UB').length,
+      lending: staffList.filter((m) => m.segment === 'Lending' || m.segment === 'Mikro').length,
+      funding: staffList.filter((m) => m.segment === 'Funding').length,
+      restrukturisasi: staffList.filter((m) => m.segment === 'Collection' || m.segment === 'CRR').length,
     };
-  }, []);
+  }, [staffList]);
 
   // Handle copy phone number with feedback
   const handleCopyPhone = (member: TeamMember) => {
@@ -439,7 +481,16 @@ export default function TeamDirectory() {
                           }`}
                           title={member.name}
                         >
-                          {getInitials(member.name, member.initials)}
+                          {member.photoUrl ? (
+                            <img
+                              src={member.photoUrl}
+                              alt={member.name}
+                              loading="lazy"
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            getInitials(member.name, member.initials)
+                          )}
                         </div>
                         <span
                           className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"
@@ -623,7 +674,15 @@ export default function TeamDirectory() {
 
             <div className="flex items-center gap-3 mb-4 pr-6">
               <div className="w-12 h-12 rounded-full bg-blue-100 text-[#0052CC] font-black text-base flex items-center justify-center border border-blue-200 flex-shrink-0 select-none">
-                {getInitials(selectedRMForModal.name, selectedRMForModal.initials)}
+                {selectedRMForModal.photoUrl ? (
+                  <img
+                    src={selectedRMForModal.photoUrl}
+                    alt={selectedRMForModal.name}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  getInitials(selectedRMForModal.name, selectedRMForModal.initials)
+                )}
               </div>
               <div className="min-w-0 flex-1">
                 <h4 className="font-bold text-slate-900 text-base truncate">{selectedRMForModal.name}</h4>

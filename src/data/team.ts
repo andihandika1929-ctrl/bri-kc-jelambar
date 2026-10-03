@@ -17,6 +17,7 @@ export interface TeamMember {
   roleI18n?: LocalizedText;
   segment: TeamSegment;
   initials?: string;
+  photoUrl?: string;
   phone: string; // WhatsApp formatted (e.g. 6281340902924)
   displayPhone: string; // Formatted for UI (e.g. 0813-4090-2924)
   email: string;

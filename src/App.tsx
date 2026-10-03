@@ -11,6 +11,7 @@ import LanguageSelector from './components/LanguageSelector';
 import ScrollToTop from './components/ScrollToTop';
 import ActivitiesPage from './pages/ActivitiesPage';
 import OrganizationPage from './pages/OrganizationPage';
+import AdminPage from './pages/AdminPage';
 import { branchUnits, getUnitAreaTag, getUnitSpecializationLabel } from './data/units';
 import { teamMembers } from './data/team';
 import {
@@ -44,7 +45,7 @@ import {
   Network
 } from 'lucide-react';
 
-export type PageRoute = 'home' | 'activities' | 'org';
+export type PageRoute = 'home' | 'activities' | 'org' | 'admin';
 
 function MainApp() {
   const { t, language } = useLanguage();
@@ -54,19 +55,30 @@ function MainApp() {
   const [faqModalOpen, setFaqModalOpen] = useState(false);
   const [faqModalCategory, setFaqModalCategory] = useState('all');
 
-  // URL / Hash routing sync
+  // URL / Hash routing sync with automatic Scroll Restoration
   useEffect(() => {
     const parseRouteFromLocation = () => {
-      const hash = window.location.hash.toLowerCase();
-      const path = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase().replace(/\/+$/, '');
+      const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
 
-      if (hash.includes('aktivitas') || hash.includes('berita') || path.includes('aktivitas') || path.includes('berita')) {
+      if (
+        hash === '#admin' ||
+        hash === '#/admin' ||
+        hash.startsWith('#admin') ||
+        hash.startsWith('#/admin') ||
+        path === '/admin' ||
+        path.startsWith('/admin') ||
+        path.endsWith('/admin')
+      ) {
+        setCurrentRoute('admin');
+      } else if (hash.includes('aktivitas') || hash.includes('berita') || path.includes('aktivitas') || path.includes('berita')) {
         setCurrentRoute('activities');
       } else if (hash.includes('struktur') || path.includes('struktur')) {
         setCurrentRoute('org');
       } else {
         setCurrentRoute('home');
       }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     };
 
     parseRouteFromLocation();
@@ -79,12 +91,20 @@ function MainApp() {
     };
   }, []);
 
+  // Global Auto Scroll to Top on Route State Change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [currentRoute]);
+
   const navigateTo = (route: PageRoute) => {
     setCurrentRoute(route);
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
-    if (route === 'activities') {
+    if (route === 'admin') {
+      window.history.pushState(null, '', '#admin');
+    } else if (route === 'activities') {
       window.history.pushState(null, '', '#aktivitas');
     } else if (route === 'org') {
       window.history.pushState(null, '', '#struktur');
@@ -112,6 +132,15 @@ function MainApp() {
     setFaqModalCategory(category);
     setFaqModalOpen(true);
   };
+
+  // If in Admin page route
+  if (currentRoute === 'admin') {
+    return (
+      <AdminPage
+        onNavigateHome={() => navigateTo('home')}
+      />
+    );
+  }
 
   // If in Activities page route
   if (currentRoute === 'activities') {

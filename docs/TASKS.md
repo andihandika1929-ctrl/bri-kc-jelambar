@@ -1,4 +1,4 @@
-# Implementation Tasks Checklist
+﻿# Implementation Tasks Checklist
 
 ## Phase 1: Core Foundation & Upload Helper
 - [x] Task 1.1: Buat helper `src/lib/uploadImage.ts` untuk upload gambar langsung ke Cloudinary via unsigned preset.
@@ -18,5 +18,5 @@
 - [x] Task 4.3: Perbaiki form tambah/edit pejabat di admin agar modal tertutup otomatis dan data tersimpan ke Firestore.
 
 ## Phase 5: Warta & Berita Cabang
-- [ ] Task 5.1: Sambungkan `src/pages/ActivitiesPage.tsx` ke koleksi `activities` (fix parsing tanggal 'Invalid Date').
-- [ ] Task 5.2: Perbaiki form artikel baru di admin (upload thumbnail, cegah duplicate submit, hapus data lama secara permanen dari database).
+- [x] Task 5.1: Sambungkan `src/pages/ActivitiesPage.tsx` ke koleksi `activities` (fix parsing tanggal 'Invalid Date').
+- [x] Task 5.2: Perbaiki form artikel baru di admin (upload thumbnail, cegah duplicate submit, hapus data lama secara permanen dari database).

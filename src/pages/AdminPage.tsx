@@ -25,7 +25,6 @@ import {
   mergeStaffWithLocal,
   mergeOrgWithLocal,
   saveLocalData,
-  uploadImageWithFallback,
   autoSeedFirestore,
   formatDisplayDate,
   formatInputDate,
@@ -65,7 +64,7 @@ interface AdminPageProps {
   onNavigateHome: () => void;
 }
 
-// ─── Toast Notification System ───────────────────────────────────────────────
+// â”€â”€â”€ Toast Notification System â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface ToastInfo {
   id: number;
   message: string;
@@ -115,7 +114,7 @@ function ToastContainer({
   );
 }
 
-// ─── PIN Guard ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ PIN Guard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PinGuard({
   onUnlock,
   onNavigateHome,
@@ -150,7 +149,7 @@ function PinGuard({
           </div>
           <h1 className="text-xl font-extrabold text-slate-900">Portal Admin &amp; CMS</h1>
           <p className="text-xs text-slate-500">
-            BRI KC Jakarta Jelambar — Area Terbatas
+            BRI KC Jakarta Jelambar â€” Area Terbatas
           </p>
         </div>
 
@@ -169,7 +168,7 @@ function PinGuard({
                     ? 'border-red-400 bg-red-50 ring-2 ring-red-200 animate-pulse'
                     : 'border-slate-200 focus:ring-[#0052CC] focus:border-[#0052CC]'
                 }`}
-                placeholder="••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢"
                 maxLength={10}
                 autoFocus
               />
@@ -212,9 +211,9 @@ function PinGuard({
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TAB 1: HERO BANNER MANAGER
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 interface BannerItem {
   id: string;
   altText: string;
@@ -448,7 +447,7 @@ function BannerManager({
       {loading ? (
         <div className="py-20 text-center text-slate-400 space-y-2">
           <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#0052CC]" />
-          <p className="text-xs">Memuat banner…</p>
+          <p className="text-xs">Memuat bannerâ€¦</p>
         </div>
       ) : banners.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center space-y-3">
@@ -609,7 +608,7 @@ function BannerManager({
                       />
                     </div>
                     <p className="text-[10px] text-slate-500 text-right">
-                      {uploadProgress}% sedang diunggah…
+                      {uploadProgress}% sedang diunggahâ€¦
                     </p>
                   </div>
                 )}
@@ -665,9 +664,9 @@ function BannerManager({
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TAB 2: DIREKTORI PETUGAS & RM (STAFF)
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 interface StaffItem {
   id: string;
   name: string;
@@ -925,7 +924,7 @@ function StaffManager({
       {loading ? (
         <div className="py-20 text-center text-slate-400 space-y-2">
           <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#0052CC]" />
-          <p className="text-xs">Memuat data petugas…</p>
+          <p className="text-xs">Memuat data petugasâ€¦</p>
         </div>
       ) : staff.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center space-y-3">
@@ -1139,7 +1138,7 @@ function StaffManager({
                     ) : (
                       <Upload className="w-3.5 h-3.5" />
                     )}
-                    {uploadingPhoto ? 'Mengunggah…' : 'Pilih Foto'}
+                    {uploadingPhoto ? 'Mengunggahâ€¦' : 'Pilih Foto'}
                     <input
                       type="file"
                       accept="image/*"
@@ -1204,9 +1203,9 @@ function StaffManager({
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TAB 3: STRUKTUR ORGANISASI
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 interface OrgItem {
   id: string;
   name: string;
@@ -1298,7 +1297,7 @@ function OrgManager({
 
     const jobdeskParsed = jobdeskText
       .split('\n')
-      .map((s) => s.trim().replace(/^[-*•]\s*/, ''))
+      .map((s) => s.trim().replace(/^[-*â€¢]\s*/, ''))
       .filter(Boolean);
 
     const kpisParsed = kpisText
@@ -1464,7 +1463,7 @@ function OrgManager({
       {loading ? (
         <div className="py-20 text-center text-slate-400 space-y-2">
           <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#0052CC]" />
-          <p className="text-xs">Memuat struktur organisasi…</p>
+          <p className="text-xs">Memuat struktur organisasiâ€¦</p>
         </div>
       ) : org.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center space-y-3">
@@ -1666,20 +1665,20 @@ function OrgManager({
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                  Tugas Pokok &amp; Fungsi (Jobdesk) — Pisahkan dengan Baris Baru
+                  Tugas Pokok &amp; Fungsi (Jobdesk) â€” Pisahkan dengan Baris Baru
                 </label>
                 <textarea
                   rows={4}
                   value={jobdeskText}
                   onChange={(e) => setJobdeskText(e.target.value)}
-                  placeholder="• Memimpin operasional kantor cabang&#10;• Menetapkan strategi pencapaian target bisnis"
+                  placeholder="â€¢ Memimpin operasional kantor cabang&#10;â€¢ Menetapkan strategi pencapaian target bisnis"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-[#0052CC] font-mono leading-relaxed"
                 />
               </div>
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                  Indikator Kinerja Utama (KPI) — Pisahkan dengan koma
+                  Indikator Kinerja Utama (KPI) â€” Pisahkan dengan koma
                 </label>
                 <input
                   type="text"
@@ -1713,9 +1712,9 @@ function OrgManager({
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TAB 4: KELOLA AKTIVITAS & BERITA (NEWS / CSR / EVENTS)
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 interface ArticleItem {
   id: string;
   title: string;
@@ -1754,6 +1753,7 @@ function ActivitiesManager({
   const [form, setForm] = useState<ArticleItem>(initialForm);
 
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -1806,37 +1806,27 @@ function ActivitiesManager({
     if (!file) return;
 
     setUploading(true);
-    setUploadProgress(10);
+    setUploadProgress(30);
 
     try {
-      const res = await uploadImageWithFallback('activities', file, (pct) =>
-        setUploadProgress(pct)
-      );
-      setForm((prev) => ({
-        ...prev,
-        imageUrl: res.url,
-        imageStoragePath: res.storagePath,
-      }));
-
-      if (res.fallbackUsed) {
-        onShowToast(
-          'Foto artikel dimuat sebagai data inline (Firebase Storage rules belum terbuka). Artikel tetap dapat diterbitkan.',
-          'warning'
-        );
-      } else {
-        onShowToast('Foto dokumentasi berhasil diunggah ke Firebase Storage.', 'success');
-      }
+      const url = await uploadImageToCloudinary(file);
+      setUploadProgress(100);
+      setForm((prev) => ({ ...prev, imageUrl: url, imageStoragePath: '' }));
+      onShowToast('Foto artikel berhasil diunggah ke Cloudinary.', 'success');
     } catch (err: any) {
-      onShowToast('Gagal memproses gambar: ' + (err.message || 'Error'), 'error');
+      setUploadProgress(0);
+      onShowToast('Gagal mengunggah gambar: ' + (err.message || 'Error'), 'error');
     } finally {
       setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (saving || uploading) return;
     if (!form.title.trim()) {
-      alert('Judul artikel wajib diisi.');
+      onShowToast('Judul artikel wajib diisi.', 'error');
       return;
     }
 
@@ -1852,82 +1842,60 @@ function ActivitiesManager({
       publishDate: formatInputDate(form.publishDate),
     };
 
-    // 1. Optimistic Local State Update immediately
-    let updatedList: ArticleItem[];
-    if (isEdit) {
-      updatedList = articles.map((a) => (a.id === targetId ? payload : a));
-    } else {
-      updatedList = [payload, ...articles];
+    setSaving(true);
+    try {
+      await withTimeout(
+        setDoc(
+          targetDocRef,
+          {
+            title: payload.title,
+            category: payload.category,
+            publishDate: parseSafeDate(payload.publishDate),
+            excerpt: payload.excerpt || '',
+            content: payload.content || '',
+            imageUrl: payload.imageUrl || '',
+            author: payload.author || '',
+            updatedAt: serverTimestamp(),
+            ...(isEdit ? {} : { createdAt: serverTimestamp() }),
+          },
+          { merge: true }
+        ),
+        10000
+      );
+
+      // Sinkronkan cache lokal hanya setelah Firestore sukses
+      const updatedList = isEdit
+        ? articles.map((a) => (a.id === targetId ? payload : a))
+        : [payload, ...articles.filter((a) => a.id !== targetId)];
+      setArticles(updatedList);
+      saveLocalData('activities', updatedList);
+      clearDeletedId('activities', targetId);
+
+      setView('list');
+      setForm(initialForm);
+      setEditing(null);
+      onShowToast(
+        isEdit
+          ? `Artikel "${payload.title}" berhasil diperbarui!`
+          : `Artikel "${payload.title}" berhasil diterbitkan!`,
+        'success'
+      );
+    } catch (err: any) {
+      console.error('Firestore write error:', err);
+      onShowToast('Gagal menyimpan artikel ke Firestore: ' + (err.message || 'error'), 'error');
+    } finally {
+      setSaving(false);
     }
-    setArticles(updatedList);
-    saveLocalData('activities', updatedList);
-    clearDeletedId('activities', targetId);
-
-    // 2. Immediately close view & reset form
-    setView('list');
-    setForm(initialForm);
-    setEditing(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-
-    // 3. Show clear success toast notification
-    onShowToast(
-      isEdit
-        ? `Artikel "${payload.title}" berhasil diperbarui!`
-        : `Artikel "${payload.title}" berhasil diterbitkan!`,
-      'success'
-    );
-
-    // 4. Background Firestore write with timeout (never hangs UI)
-    (async () => {
-      try {
-        const firestoreDate = parseSafeDate(payload.publishDate);
-        await withTimeout(
-          setDoc(
-            targetDocRef,
-            {
-              title: payload.title,
-              category: payload.category,
-              publishDate: firestoreDate,
-              excerpt: payload.excerpt || '',
-              content: payload.content || '',
-              imageUrl: payload.imageUrl || '',
-              imageStoragePath: payload.imageStoragePath || '',
-              author: payload.author || '',
-              updatedAt: serverTimestamp(),
-              ...(isEdit ? {} : { createdAt: serverTimestamp() }),
-            },
-            { merge: true }
-          ),
-          8000
-        );
-      } catch (err: any) {
-        console.warn('Firestore write warning:', err);
-        onShowToast(
-          'Catatan: Artikel disimpan di browser lokal (Sinkronisasi cloud Firestore tertunda: ' +
-            (err.message || 'offline') +
-            ')',
-          'warning'
-        );
-      }
-    })();
   };
 
   const handleDelete = async (art: ArticleItem) => {
-    if (!art.id) return;
+    if (!art.id || deletingId) return;
     if (!window.confirm(`Yakin ingin menghapus artikel "${art.title}"?`)) return;
 
     setDeletingId(art.id);
     try {
-      // 1. If it has a storage path, delete from storage
-      if (art.imageStoragePath) {
-        await deleteObject(ref(storage, art.imageStoragePath)).catch(() => {});
-      }
-
-      // 2. True Firestore Deletion:
-      // Call deleteDoc in Firestore and await response
       await withTimeout(deleteDoc(doc(db, 'activities', art.id)), 10000);
 
-      // 3. Only update local state & persistence AFTER Firestore deletion resolves
       const updated = articles.filter((item) => item.id !== art.id);
       setArticles(updated);
       saveLocalData('activities', updated);
@@ -1936,22 +1904,7 @@ function ActivitiesManager({
       onShowToast(`Artikel "${art.title}" berhasil dihapus permanen.`, 'success');
     } catch (err: any) {
       console.error('Firestore delete error:', err);
-      if (
-        err?.code === 'permission-denied' ||
-        err?.message?.includes('permissions') ||
-        err?.message?.includes('timeout')
-      ) {
-        const updated = articles.filter((item) => item.id !== art.id);
-        setArticles(updated);
-        saveLocalData('activities', updated);
-        trackDeletedId('activities', art.id);
-        onShowToast(
-          `Artikel dihapus dari penyimpanan lokal (Peringatan: Firestore rules belum mengizinkan delete cloud).`,
-          'warning'
-        );
-      } else {
-        onShowToast(`Gagal menghapus artikel: ${err.message}`, 'error');
-      }
+      onShowToast(`Gagal menghapus artikel dari Firestore: ${err.message || 'error'}`, 'error');
     } finally {
       setDeletingId(null);
     }
@@ -2121,7 +2074,7 @@ function ActivitiesManager({
                     />
                   </div>
                   <p className="text-[10px] text-slate-500 text-right">
-                    {uploadProgress}% sedang diunggah…
+                    {uploadProgress}% sedang diunggahâ€¦
                   </p>
                 </div>
               )}
@@ -2157,11 +2110,11 @@ function ActivitiesManager({
               </button>
               <button
                 type="submit"
-                disabled={uploading}
+                disabled={uploading || saving}
                 className="flex-1 py-2.5 rounded-xl bg-[#0052CC] hover:bg-[#1D4ED8] text-white font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Terbitkan Artikel</span>
+                <span>{saving ? 'Menyimpan...' : 'Terbitkan Artikel'}</span>
               </button>
             </div>
           </form>
@@ -2172,7 +2125,7 @@ function ActivitiesManager({
           {loading ? (
             <div className="py-20 text-center text-slate-400 space-y-2">
               <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#0052CC]" />
-              <p className="text-xs">Memuat warta artikel…</p>
+              <p className="text-xs">Memuat warta artikelâ€¦</p>
             </div>
           ) : articles.length === 0 ? (
             <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center space-y-3">
@@ -2250,9 +2203,9 @@ function ActivitiesManager({
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // MAIN DASHBOARD SHELL WITH TAB SWITCHER
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 type AdminTab = 'banners' | 'staff' | 'org' | 'activities';
 
 function Dashboard({ onNavigateHome }: { onNavigateHome: () => void }) {
@@ -2353,7 +2306,7 @@ function Dashboard({ onNavigateHome }: { onNavigateHome: () => void }) {
                 </span>
               </div>
               <p className="text-[10px] text-blue-200">
-                PT Bank Rakyat Indonesia (Persero) Tbk — KC Jakarta Jelambar
+                PT Bank Rakyat Indonesia (Persero) Tbk â€” KC Jakarta Jelambar
               </p>
             </div>
           </div>
@@ -2367,7 +2320,7 @@ function Dashboard({ onNavigateHome }: { onNavigateHome: () => void }) {
             >
               <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
               <span className="hidden md:inline">
-                {syncing ? 'Menyinkronkan…' : 'Sinkronkan Data'}
+                {syncing ? 'Menyinkronkanâ€¦' : 'Sinkronkan Data'}
               </span>
             </button>
 
@@ -2451,7 +2404,7 @@ function Dashboard({ onNavigateHome }: { onNavigateHome: () => void }) {
   );
 }
 
-// ─── Route Entry Point ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Route Entry Point â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function AdminPage({ onNavigateHome }: AdminPageProps) {
   const [unlocked, setUnlocked] = useState(
     () => sessionStorage.getItem('kc_admin_unlocked') === '1'

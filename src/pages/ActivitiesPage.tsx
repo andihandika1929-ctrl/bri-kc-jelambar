@@ -18,7 +18,6 @@ import {
   ArrowLeft,
   Phone,
   Mail,
-  ShieldCheck,
   ChevronRight,
   Menu,
   X,
@@ -305,7 +304,7 @@ export default function ActivitiesPage({ onNavigateHome, onNavigateOrg, onOpenAr
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#0052CC] text-xs font-bold uppercase tracking-wider border border-blue-200">
             <BookOpen className="w-3.5 h-3.5 text-[#0052CC]" />
-            <span>Kanal Informasi Resmi</span>
+            <span>Dokumentasi &amp; Warta Cabang</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -555,10 +554,13 @@ export default function ActivitiesPage({ onNavigateHome, onNavigateOrg, onOpenAr
 
           <div className="pt-6 sm:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200">
             <p>{t.footer.copyright}</p>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white font-medium text-[11px]">
-              <ShieldCheck className="w-4 h-4 text-blue-300" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-blue-100 font-medium text-[11px] shadow-xs backdrop-blur-xs flex-shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse flex-shrink-0" />
               <span>{t.footer.legal}</span>
             </div>
+          </div>
+          <div className="pt-3 text-center text-[10px] text-blue-300/70 italic leading-relaxed">
+            {t.footer.disclaimer}
           </div>
         </div>
       </footer>

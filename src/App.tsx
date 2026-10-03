@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import TopOperationalBar from './components/TopOperationalBar';
 import HeroCarousel from './components/HeroCarousel';
@@ -20,7 +20,6 @@ import {
   Phone,
   Clock,
   MapPin,
-  ShieldCheck,
   CreditCard,
   PiggyBank,
   Store,
@@ -1087,15 +1086,18 @@ function MainApp() {
             </div>
           </div>
 
-          {/* Bottom Bar / Hak Cipta, Developer Signature & Legalitas */}
+          {/* Bottom Bar / Hak Cipta, Developer Signature & Prototype Badge */}
           <div className="pt-6 sm:pt-8 border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200 text-center md:text-left w-full">
             <p className="leading-relaxed">
               {t.footer.copyright}
             </p>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white font-medium text-[11px] shadow-xs flex-shrink-0 backdrop-blur-xs">
-              <ShieldCheck className="w-4 h-4 text-blue-300 flex-shrink-0" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-blue-100 font-medium text-[11px] shadow-xs flex-shrink-0 backdrop-blur-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse flex-shrink-0" />
               <span>{t.footer.legal}</span>
             </div>
+          </div>
+          <div className="pt-3 text-center text-[10px] text-blue-300/70 italic leading-relaxed">
+            {t.footer.disclaimer}
           </div>
         </div>
       </footer>

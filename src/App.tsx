@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import TopOperationalBar from './components/TopOperationalBar';
 import HeroCarousel from './components/HeroCarousel';
@@ -10,6 +10,7 @@ import PanduanFAQModal from './components/PanduanFAQModal';
 import LanguageSelector from './components/LanguageSelector';
 import ScrollToTop from './components/ScrollToTop';
 import ActivitiesPage from './pages/ActivitiesPage';
+import ActivityDetailPage from './pages/ActivityDetailPage';
 import OrganizationPage from './pages/OrganizationPage';
 import AdminPage from './pages/AdminPage';
 import { branchUnits, getUnitAreaTag, getUnitSpecializationLabel } from './data/units';
@@ -50,6 +51,7 @@ export type PageRoute = 'home' | 'activities' | 'org' | 'admin';
 function MainApp() {
   const { t, language } = useLanguage();
   const [currentRoute, setCurrentRoute] = useState<PageRoute>('home');
+  const [activityId, setActivityId] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [faqModalOpen, setFaqModalOpen] = useState(false);
@@ -71,6 +73,12 @@ function MainApp() {
         path.endsWith('/admin')
       ) {
         setCurrentRoute('admin');
+      } else if (/^\/(aktivitas|berita)\/[^/]+/.test(window.location.pathname)) {
+        const m = window.location.pathname.match(/^\/(?:aktivitas|berita)\/([^/]+)/i);
+        setActivityId(m ? decodeURIComponent(m[1]) : null);
+        setCurrentRoute('activities');
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        return;
       } else if (hash.includes('aktivitas') || hash.includes('berita') || path.includes('aktivitas') || path.includes('berita')) {
         setCurrentRoute('activities');
       } else if (hash.includes('struktur') || path.includes('struktur')) {
@@ -78,6 +86,7 @@ function MainApp() {
       } else {
         setCurrentRoute('home');
       }
+      setActivityId(null);
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     };
 
@@ -97,19 +106,27 @@ function MainApp() {
     document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [currentRoute]);
 
+  const openArticle = (id: string) => {
+    window.history.pushState(null, '', '/aktivitas/' + encodeURIComponent(id));
+    setActivityId(id);
+    setCurrentRoute('activities');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
   const navigateTo = (route: PageRoute) => {
+    setActivityId(null);
     setCurrentRoute(route);
     setMobileMenuOpen(false);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     if (route === 'admin') {
-      window.history.pushState(null, '', '#admin');
+      window.history.pushState(null, '', '/#admin');
     } else if (route === 'activities') {
-      window.history.pushState(null, '', '#aktivitas');
+      window.history.pushState(null, '', '/#aktivitas');
     } else if (route === 'org') {
-      window.history.pushState(null, '', '#struktur');
+      window.history.pushState(null, '', '/#struktur');
     } else {
-      window.history.pushState(null, '', '#beranda');
+      window.history.pushState(null, '', '/#beranda');
     }
   };
 
@@ -143,9 +160,20 @@ function MainApp() {
   }
 
   // If in Activities page route
+  if (currentRoute === 'activities' && activityId) {
+    return (
+      <ActivityDetailPage
+        articleId={activityId}
+        onNavigateHome={() => navigateTo('home')}
+        onBackToList={() => navigateTo('activities')}
+      />
+    );
+  }
+
   if (currentRoute === 'activities') {
     return (
       <ActivitiesPage
+        onOpenArticle={openArticle}
         onNavigateHome={() => navigateTo('home')}
         onNavigateOrg={() => navigateTo('org')}
       />
@@ -493,7 +521,7 @@ function MainApp() {
                 }`}
               >
                 <Phone className="w-4 h-4 text-[#0052CC]" />
-                <span>{t.location.hours} • (021) 56981105</span>
+                <span>{t.location.hours} â€¢ (021) 56981105</span>
               </a>
 
               <a
